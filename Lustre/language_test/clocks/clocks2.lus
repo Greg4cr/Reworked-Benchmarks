@@ -11,8 +11,10 @@ var c : choice;b1, b2:entier;
 let
   a = PI fby (a+1);
   c = if a=x then One else Two;
-  b1 = 1 when One(c);
-  b2 = 2 when Two(c);
+  -- b1 = 1 when One(c);
+  b1 = if One(c) then 1 else pre(b1);
+  -- b2 = 2 when Two(c);
+  b2 = if Two(c) then 2 else pre(b2);
   y = merge c (One -> b1) (Two -> b2);
 tel
 

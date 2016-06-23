@@ -9,9 +9,11 @@ node g(c:bool; x:int) returns (out:int)
 var t, cpt , y, last_y :int;
 let
   (cpt , y) = f(t);
-  t = merge c (true -> x) (false -> last_y when false(c));
+  -- t = merge c (true -> x) (false -> last_y when false(c));
+  t = merge c (true -> x) (false -> if false(c) then last_y else pre(false));
   last_y = 0 fby y;
-  out = y when false(c);
+  -- out = y when false(c);
+  out = if false(c) then y else pre(out);
 tel
 (*
 node main (x:int) returns (out:int; c:bool)

@@ -1,15 +1,18 @@
 
 node toto (x:int; d:bool) returns (y:int)
 let
-  y = x when d;
+  -- y = x when d;
+  y = if d then x else pre(y);
 tel
 
 node test(i:int) returns (o:int)
 var c,d : bool;
  l : int;
 let
-  c = i=1 when d;
+  -- c = i=1 when d;
+  c = if d then i=1 else i=pre(i);
   d = i=0;
-  l = toto(i,d) when c;
+  -- l = toto(i,d) when c;
+  l = if c then toto(i,d) else pre(l);
   o = 1;
 tel
