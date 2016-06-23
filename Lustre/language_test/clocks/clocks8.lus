@@ -2,7 +2,7 @@
 type choice = enum { On, Off };
 
 node toto (x:int) returns (e:int)
-var c:choice clock; a,b1,b2,d : int;
+var c:choice; a,b1,b2,d : int;
 let
   a = 2*x;
   b1 = a + 1 when On(c);

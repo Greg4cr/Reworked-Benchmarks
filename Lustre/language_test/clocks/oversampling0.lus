@@ -1,11 +1,11 @@
 
-node f(x:int) returns (cpt, y:int )
+node f(x:int) returns (cpt, y:int)
 let
   y = x + 1;
   cpt = (0 fby cpt) + 1;
 tel
 
-node g(c:bool clock; x:int) returns (out:int )
+node g(c:bool; x:int) returns (out:int)
 var t, cpt , y, last_y :int;
 let
   (cpt , y) = f(t);
@@ -17,7 +17,7 @@ tel
 node main (x:int) returns (out:int; c:bool)
 var toto:int;
 let
-  toto = 1 ;
+  toto = 1;
   c = toto = 0 (*true fby false fby c*);
   out = g(x,toto=0);
 tel
