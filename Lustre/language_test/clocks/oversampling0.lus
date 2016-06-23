@@ -2,7 +2,8 @@
 node f(x:int) returns (cpt, y:int)
 let
   y = x + 1;
-  cpt = (0 fby cpt) + 1;
+  -- cpt = (0 fby cpt) + 1;
+  cpt = (0 -> pre(cpt)) + 1;
 tel
 
 node g(c:bool; x:int) returns (out:int)
@@ -11,7 +12,8 @@ let
   (cpt , y) = f(t);
   -- t = merge c (true -> x) (false -> last_y when false(c));
   t = merge c (true -> x) (false -> if false(c) then last_y else pre(false));
-  last_y = 0 fby y;
+  -- last_y = 0 fby y;
+  last_y = 0 -> pre(y);
   -- out = y when false(c);
   out = if false(c) then y else pre(out);
 tel
@@ -20,7 +22,8 @@ node main (x:int) returns (out:int; c:bool)
 var toto:int;
 let
   toto = 1;
-  c = toto = 0 (*true fby false fby c*);
+  -- c = toto = 0 (*true fby false fby c*);
+  c = toto = 0 (*true -> pre(false -> pre(c))*);
   out = g(x,toto=0);
 tel
 *)

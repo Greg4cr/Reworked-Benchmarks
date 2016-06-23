@@ -9,7 +9,7 @@ const choix = One;
 node toto (x:int) returns (a:int;y:int)
 var c : choice;b1, b2:entier;
 let
-  a = PI fby (a+1);
+  a = PI -> pre(a+1);
   c = if a=x then One else Two;
   -- b1 = 1 when One(c);
   b1 = if One(c) then 1 else pre(b1);
