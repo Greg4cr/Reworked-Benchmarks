@@ -1,49 +1,108 @@
-node First( X : int ) returns ( First : int );
-let
-    First = X -> pre First;
-tel
-node Sofar( X : bool ) returns ( Sofar : bool );
-let
-    Sofar = X -> X and pre Sofar;
-tel
-node excludes3( X1, X2, X3 : bool ) returns ( excludes : bool );
-let
-    excludes = not ( X1 and X2 or X1 and X3 or X2 and X3 );
-tel
-node synapse(e_s1, e_s2, e_s3 : bool; init_invalid_s : int) 
-returns(invalid_s, valid_s, dirty_s : int; mem_init_s : int );
+
+node top(e_s1: bool; 
+      e_s2: bool; 
+      e_s3: bool; 
+      init_invalid_s: int)
+   returns (OK: bool);
+
 var
-	garde_s1, garde_s2, garde_s3 : bool;
-let
-	garde_s1 = pre invalid_s>=1;
-	garde_s2 = pre valid_s>=1;
-	garde_s3 = pre invalid_s>=1;
-	mem_init_s = init_invalid_s -> pre mem_init_s;
-	invalid_s = mem_init_s -> 
-	if(e_s1) then if(garde_s1) then pre invalid_s +1+ pre dirty_s -1 else pre invalid_s else
-	if(e_s2) then if(garde_s2) then pre invalid_s + pre dirty_s + pre valid_s -1 else pre invalid_s else
-	if(e_s3) then if(garde_s3) then pre invalid_s + pre dirty_s + pre valid_s -1 else pre invalid_s else 
-	pre invalid_s;
-	valid_s = 0 ->
-	if(e_s1) then if(garde_s1) then pre valid_s +1 else pre valid_s else
-	if(e_s2) then if(garde_s2) then 0 else pre valid_s else
-	if(e_s3) then if(garde_s3) then 0 else pre valid_s else 
-	pre valid_s;
-	dirty_s = 0 ->
-	if(e_s1) then if(garde_s1) then 0 else pre dirty_s else 
-	if(e_s2) then if(garde_s2) then 1 else pre dirty_s else 
-	if(e_s3) then if(garde_s3) then 1 else pre dirty_s else 
-	pre dirty_s;
-tel
---@ ensures OK;
-node top(e_s1, e_s2, e_s3 : bool; init_invalid_s : int)
-returns( OK : bool );
-    var invalid_s, valid_s, dirty_s : int; mem_init_s : int;
-        env : bool;
-let
-    ( invalid_s, valid_s, dirty_s, mem_init_s ) = 
-        synapse(e_s1, e_s2, e_s3, init_invalid_s );
-    env = Sofar( excludes3(e_s1, e_s2, e_s3) and init_invalid_s >= 0 );
-    OK = env => valid_s <= First( init_invalid_s );
-  --%MAIN;
-tel
+   synapse_garde_s1: bool; 
+   synapse_garde_s2: bool; 
+   synapse_garde_s3: bool; 
+   synapse_invalid_s: int; 
+   synapse_valid_s: int; 
+   synapse_dirty_s: int; 
+   synapse_mem_init_s: int; 
+   Sofar_X: bool; 
+   Sofar_Sofar: bool; 
+   First_First: int;
+
+
+let 
+   synapse_garde_s1 = ((pre synapse_invalid_s) >= 1);
+
+   synapse_garde_s2 = ((pre synapse_valid_s) >= 1);
+
+   synapse_garde_s3 = ((pre synapse_invalid_s) >= 1);
+
+   synapse_mem_init_s = (init_invalid_s -> (pre synapse_mem_init_s));
+
+   synapse_invalid_s = (synapse_mem_init_s -> 
+      (if e_s1
+         then 
+               (if synapse_garde_s1
+                  then ((((pre synapse_invalid_s) + 1) + (pre synapse_dirty_s)) - 1)
+                  else (pre synapse_invalid_s))
+         else 
+      (if e_s2
+         then 
+               (if synapse_garde_s2
+                  then ((((pre synapse_invalid_s) + (pre synapse_dirty_s)) + (pre synapse_valid_s)) - 1)
+                  else (pre synapse_invalid_s))
+         else 
+      (if e_s3
+         then 
+               (if synapse_garde_s3
+                  then ((((pre synapse_invalid_s) + (pre synapse_dirty_s)) + (pre synapse_valid_s)) - 1)
+                  else (pre synapse_invalid_s))
+         else (pre synapse_invalid_s)))));
+
+   synapse_valid_s = (0 -> 
+      (if e_s1
+         then 
+               (if synapse_garde_s1
+                  then ((pre synapse_valid_s) + 1)
+                  else (pre synapse_valid_s))
+         else 
+      (if e_s2
+         then 
+               (if synapse_garde_s2
+                  then 0
+                  else (pre synapse_valid_s))
+         else 
+      (if e_s3
+         then 
+               (if synapse_garde_s3
+                  then 0
+                  else (pre synapse_valid_s))
+         else (pre synapse_valid_s)))));
+
+   synapse_dirty_s = (0 -> 
+      (if e_s1
+         then 
+               (if synapse_garde_s1
+                  then 0
+                  else (pre synapse_dirty_s))
+         else 
+      (if e_s2
+         then 
+               (if synapse_garde_s2
+                  then 1
+                  else (pre synapse_dirty_s))
+         else 
+      (if e_s3
+         then 
+               (if synapse_garde_s3
+                  then 1
+                  else (pre synapse_dirty_s))
+         else (pre synapse_dirty_s)))));
+
+   Sofar_X = ((not (((e_s1 and 
+      e_s2) or 
+      (e_s1 and 
+      e_s3)) or 
+      (e_s2 and 
+      e_s3))) and 
+      (init_invalid_s >= 0));
+
+   Sofar_Sofar = (Sofar_X -> (Sofar_X and 
+      (pre Sofar_Sofar)));
+
+   OK = ((not Sofar_Sofar) or 
+      (synapse_valid_s <= First_First));
+
+   First_First = (init_invalid_s -> (pre First_First));
+
+tel;
+
+

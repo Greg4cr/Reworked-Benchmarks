@@ -1,50 +1,62 @@
 
--- Source: Bertrand Jeannet
+node top(leak: bool; 
+      P1: bool)
+   returns (OK: bool);
+
+var
+   Age_Count3: int; 
+   Dursince_Count: int; 
+   Age_Count2: int; 
+   Age_Count1: int; 
+   RaisingEdge_res: bool; 
+   Sofar_X: bool; 
+   Sofar_Sofar: bool; 
+   Age_Count: int;
 
 
-node Sofar( X : bool ) returns ( Sofar : bool );
-let
-    Sofar = X -> X and pre Sofar;
-tel
+let 
+   OK = ((not (Sofar_Sofar and 
+      ((not RaisingEdge_res) or 
+      (300 <= Age_Count1)))) or 
+      ((Age_Count2 <= 600) or 
+      ((2 * Dursince_Count) <= Age_Count3)));
 
--- Counts the number of steps P has been continuously true
-node Age(P1: bool) returns (Count:int);
-let
-  Count = 0 -> if pre(P1) then pre(Count)+1 else 0;             
-tel 
+   Age_Count3 = (0 -> 
+      (if (pre (not P1))
+         then ((pre Age_Count3) + 1)
+         else 0));
 
--- Counts the number of time Q has been true 
--- since P has became false
-node Dursince(P1,Q:bool) returns (Count:int);
-let
-  Count = 0 -> 
-	if pre(P1) 
-	then 0
-        else (if pre(Q) then pre(Count)+1 else pre(Count));
-tel
+   Dursince_Count = (0 -> 
+      (if (pre P1)
+         then 0
+         else 
+      (if (pre leak)
+         then ((pre Dursince_Count) + 1)
+         else (pre Dursince_Count))));
 
-node RaisingEdge(P1 : bool) returns (res : bool);
-let
-  res = false -> not pre(P1) and P1;
-tel
+   Age_Count2 = (0 -> 
+      (if (pre (not P1))
+         then ((pre Age_Count2) + 1)
+         else 0));
 
--- original version
+   Age_Count1 = (0 -> 
+      (if (pre (not leak))
+         then ((pre Age_Count1) + 1)
+         else 0));
 
--- leak is an input indicating a leak
--- P is a an input used to define the start of an observation
+   RaisingEdge_res = (false -> ((not (pre P1)) and 
+      P1));
 
--- Not provable?
---@ ensures OK;
-node top (leak,P1:bool) returns (OK : bool);
-   var env : bool;
-let
- -- we suppose that a leak lasts at most 10 steps,
- -- and that a raising edge of P implies
- -- no leak has happened since at least 300 steps.
-    env = Sofar( Age(leak) <= 10) and
-                 (not RaisingEdge(P1) or (300 <= Age(not leak)) );
+   Sofar_X = (Age_Count <= 10);
 
-     OK = env => ( (Age(not P1) <= 600) or
-                   (2*Dursince(P1,leak) <= Age(not P1)));
-     --%MAIN;
- tel
+   Sofar_Sofar = (Sofar_X -> (Sofar_X and 
+      (pre Sofar_Sofar)));
+
+   Age_Count = (0 -> 
+      (if (pre leak)
+         then ((pre Age_Count) + 1)
+         else 0));
+
+tel;
+
+

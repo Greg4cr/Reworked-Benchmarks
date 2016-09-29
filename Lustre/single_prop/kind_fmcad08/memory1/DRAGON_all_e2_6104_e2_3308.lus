@@ -1,110 +1,447 @@
 
-node First( X : int ) returns ( First : int );
-let
-    First = X -> pre First;
-tel
-node Sofar( X : bool ) returns ( Sofar : bool );
-let
-    Sofar = X -> X and pre Sofar;
-tel
-node excludes12( X1, X2, X3, X4, X5, X6, X7, X8, X9, X10, X11, X12 : bool ) returns ( excludes : bool );
-let
-    excludes = not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-                  X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and     X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and     X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and     X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and     X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and     X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and     X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and     X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and     X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and     X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and     X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and     X12;
-tel
-node DRAGON(e01, e02, e03, e04, e05, e06, e07, e08, e09, e10, e11, e12 : bool;
-init_invalid : int)
-returns(exclusive, shared, shared_dirty, dirty, invalid : int; erreur : bool);
+node top(e01: bool; 
+      e02: bool; 
+      e03: bool; 
+      e04: bool; 
+      e05: bool; 
+      e06: bool; 
+      e07: bool; 
+      e08: bool; 
+      e09: bool; 
+      e10: bool; 
+      e11: bool; 
+      e12: bool; 
+      init_invalid: int)
+   returns (OK: bool);
+
 var
-   g01, g02, g03, g04, g05, g06, g07, g08, g09, g10, g11, g12 : bool;
-   mem_init : int;
-let
-   mem_init = init_invalid -> pre mem_init;
-   erreur = if(exclusive >= 2) then true else false;
-   g01 = pre invalid>=1 and pre dirty=0 and pre shared=0 and pre exclusive=0 and pre shared_dirty=0;
-   g02 = pre invalid>=1 and pre dirty -1+ pre shared -1+ pre exclusive + pre shared_dirty>=1;
-   g03 = pre exclusive>=1;
-   g04 = pre shared_dirty=1 and pre shared=0;
-   g05 = pre shared_dirty=0 and pre shared=1;
-   g06 = pre shared_dirty + pre shared>=2;
-   g07 = pre invalid>=1 and pre dirty=0 and pre shared=0 and pre exclusive=0 and pre shared_dirty=0;
-   g08 = pre invalid>=1 and pre dirty + pre shared + pre exclusive + pre shared_dirty>=1;
-   g09 = pre dirty>=1;
-   g10 = pre shared>=1;
-   g11 = pre shared_dirty>=1;
-   g12 = pre exclusive>=1;
-   exclusive = 0 -> 
-   if(e01) then if(g01) then pre exclusive+1 else pre exclusive else 
-   if(e02) then if(g02) then 0 else pre exclusive else 
-   if(e03) then if(g03) then pre exclusive-1 else pre exclusive else 
-   if(e08) then if(g08) then 0 else pre exclusive else 
-   if(e12) then if(g12) then pre exclusive-1 else pre exclusive else 
-   pre exclusive;
-   shared = 0 -> 
-   if(e02) then if(g02) then pre shared+pre exclusive+1 else pre shared else 
-   if(e05) then if(g05) then 0 else pre shared else 
-   if(e06) then if(g06) then pre shared+pre shared_dirty-1 else pre shared else
-   if(e08) then if(g08) then pre shared+pre exclusive+pre shared_dirty+pre dirty else pre shared else 
-   if(e10) then if(g10) then pre shared-1 else pre shared else 
-   pre shared;
-   shared_dirty = 0 -> 
-   if(e02) then if(g02) then pre shared_dirty+pre dirty else pre shared_dirty else 
-   if(e04) then if(g04) then 0 else pre shared_dirty else 
-   if(e06) then if(g06) then 1 else pre shared_dirty else 
-   if(e08) then if(g08) then 1 else pre shared_dirty else 
-   if(e11) then if(g11) then pre shared_dirty-1 else pre shared_dirty else 
-   pre shared_dirty;
-   dirty = 0 -> 
-   if(e02) then if(g02) then 0 else pre dirty else 
-   if(e03) then if(g03) then pre dirty+1 else pre dirty else 
-   if(e04) then if(g04) then pre dirty+1 else pre dirty else 
-   if(e05) then if(g05) then pre dirty+1 else pre dirty else 
-   if(e07) then if(g07) then pre dirty+1 else pre dirty else 
-   if(e08) then if(g08) then 0 else pre dirty else 
-   if(e09) then if(g09) then pre dirty-1 else pre dirty else 
-   pre dirty;
-   invalid = mem_init -> 
-   if(e01) then if(g01) then pre invalid-1 else pre invalid else 
-   if(e02) then if(g02) then pre invalid-1 else pre invalid else 
-   if(e07) then if(g07) then pre invalid-1 else pre invalid else 
-   if(e08) then if(g08) then pre invalid-1 else pre invalid else 
-   if(e09) then if(g09) then pre invalid+1 else pre invalid else 
-   if(e10) then if(g10) then pre invalid+1 else pre invalid else 
-   if(e11) then if(g11) then pre invalid+1 else pre invalid else 
-   if(e12) then if(g12) then pre invalid+1 else pre invalid else 
-   pre invalid;
-tel
---@ ensures OK;
-node top( e01, e02, e03, e04, e05, e06, e07, e08, e09, e10, e11, e12 : bool;
-             init_invalid : int )
-returns ( OK : bool );
-    var exclusive, shared, shared_dirty, dirty, invalid : int;
-        erreur : bool;
-        env : bool;
-let
-    ( exclusive, shared, shared_dirty, dirty, invalid, erreur ) =
-        DRAGON( e01, e02, e03, e04, e05, e06, e07, e08, e09, e10, e11, e12,
-                init_invalid );
-    env = Sofar( excludes12( e01, e02, e03, e04, e05, e06, e07, e08, e09, e10,
-                            e11, e12 ) and
-                 init_invalid > 0 );
-    OK = env =>
-      not erreur and
-      ((true -> (exclusive+shared+shared_dirty+dirty+invalid) =
-                pre(exclusive+shared+shared_dirty+dirty+invalid))) and
-      exclusive + shared + shared_dirty + dirty + invalid =
-      First( init_invalid ) and
-      exclusive >= 0;
-  --%MAIN;
-tel
+   DRAGON_g01: bool; 
+   DRAGON_g02: bool; 
+   DRAGON_g03: bool; 
+   DRAGON_g04: bool; 
+   DRAGON_g05: bool; 
+   DRAGON_g06: bool; 
+   DRAGON_g07: bool; 
+   DRAGON_g08: bool; 
+   DRAGON_g09: bool; 
+   DRAGON_g10: bool; 
+   DRAGON_g11: bool; 
+   DRAGON_g12: bool; 
+   DRAGON_mem_init: int; 
+   DRAGON_exclusive: int; 
+   DRAGON_shared: int; 
+   DRAGON_shared_dirty: int; 
+   DRAGON_dirty: int; 
+   DRAGON_invalid: int; 
+   DRAGON_erreur: bool; 
+   Sofar_X: bool; 
+   Sofar_Sofar: bool; 
+   First_First: int;
+
+
+let 
+   DRAGON_mem_init = (init_invalid -> (pre DRAGON_mem_init));
+
+   DRAGON_erreur = 
+      (if (DRAGON_exclusive >= 2)
+         then true
+         else false);
+
+   DRAGON_g01 = ((((((pre DRAGON_invalid) >= 1) and 
+      ((pre DRAGON_dirty) = 0)) and 
+      ((pre DRAGON_shared) = 0)) and 
+      ((pre DRAGON_exclusive) = 0)) and 
+      ((pre DRAGON_shared_dirty) = 0));
+
+   DRAGON_g02 = (((pre DRAGON_invalid) >= 1) and 
+      (((((((pre DRAGON_dirty) - 1) + (pre DRAGON_shared)) - 1) + (pre DRAGON_exclusive)) + (pre DRAGON_shared_dirty)) >= 1));
+
+   DRAGON_g03 = ((pre DRAGON_exclusive) >= 1);
+
+   DRAGON_g04 = (((pre DRAGON_shared_dirty) = 1) and 
+      ((pre DRAGON_shared) = 0));
+
+   DRAGON_g05 = (((pre DRAGON_shared_dirty) = 0) and 
+      ((pre DRAGON_shared) = 1));
+
+   DRAGON_g06 = (((pre DRAGON_shared_dirty) + (pre DRAGON_shared)) >= 2);
+
+   DRAGON_g07 = ((((((pre DRAGON_invalid) >= 1) and 
+      ((pre DRAGON_dirty) = 0)) and 
+      ((pre DRAGON_shared) = 0)) and 
+      ((pre DRAGON_exclusive) = 0)) and 
+      ((pre DRAGON_shared_dirty) = 0));
+
+   DRAGON_g08 = (((pre DRAGON_invalid) >= 1) and 
+      (((((pre DRAGON_dirty) + (pre DRAGON_shared)) + (pre DRAGON_exclusive)) + (pre DRAGON_shared_dirty)) >= 1));
+
+   DRAGON_g09 = ((pre DRAGON_dirty) >= 1);
+
+   DRAGON_g10 = ((pre DRAGON_shared) >= 1);
+
+   DRAGON_g11 = ((pre DRAGON_shared_dirty) >= 1);
+
+   DRAGON_g12 = ((pre DRAGON_exclusive) >= 1);
+
+   DRAGON_exclusive = (0 -> 
+      (if e01
+         then 
+               (if DRAGON_g01
+                  then ((pre DRAGON_exclusive) + 1)
+                  else (pre DRAGON_exclusive))
+         else 
+      (if e02
+         then 
+               (if DRAGON_g02
+                  then 0
+                  else (pre DRAGON_exclusive))
+         else 
+      (if e03
+         then 
+               (if DRAGON_g03
+                  then ((pre DRAGON_exclusive) - 1)
+                  else (pre DRAGON_exclusive))
+         else 
+      (if e08
+         then 
+               (if DRAGON_g08
+                  then 0
+                  else (pre DRAGON_exclusive))
+         else 
+      (if e12
+         then 
+               (if DRAGON_g12
+                  then ((pre DRAGON_exclusive) - 1)
+                  else (pre DRAGON_exclusive))
+         else (pre DRAGON_exclusive)))))));
+
+   DRAGON_shared = (0 -> 
+      (if e02
+         then 
+               (if DRAGON_g02
+                  then (((pre DRAGON_shared) + (pre DRAGON_exclusive)) + 1)
+                  else (pre DRAGON_shared))
+         else 
+      (if e05
+         then 
+               (if DRAGON_g05
+                  then 0
+                  else (pre DRAGON_shared))
+         else 
+      (if e06
+         then 
+               (if DRAGON_g06
+                  then (((pre DRAGON_shared) + (pre DRAGON_shared_dirty)) - 1)
+                  else (pre DRAGON_shared))
+         else 
+      (if e08
+         then 
+               (if DRAGON_g08
+                  then ((((pre DRAGON_shared) + (pre DRAGON_exclusive)) + (pre DRAGON_shared_dirty)) + (pre DRAGON_dirty))
+                  else (pre DRAGON_shared))
+         else 
+      (if e10
+         then 
+               (if DRAGON_g10
+                  then ((pre DRAGON_shared) - 1)
+                  else (pre DRAGON_shared))
+         else (pre DRAGON_shared)))))));
+
+   DRAGON_shared_dirty = (0 -> 
+      (if e02
+         then 
+               (if DRAGON_g02
+                  then ((pre DRAGON_shared_dirty) + (pre DRAGON_dirty))
+                  else (pre DRAGON_shared_dirty))
+         else 
+      (if e04
+         then 
+               (if DRAGON_g04
+                  then 0
+                  else (pre DRAGON_shared_dirty))
+         else 
+      (if e06
+         then 
+               (if DRAGON_g06
+                  then 1
+                  else (pre DRAGON_shared_dirty))
+         else 
+      (if e08
+         then 
+               (if DRAGON_g08
+                  then 1
+                  else (pre DRAGON_shared_dirty))
+         else 
+      (if e11
+         then 
+               (if DRAGON_g11
+                  then ((pre DRAGON_shared_dirty) - 1)
+                  else (pre DRAGON_shared_dirty))
+         else (pre DRAGON_shared_dirty)))))));
+
+   DRAGON_dirty = (0 -> 
+      (if e02
+         then 
+               (if DRAGON_g02
+                  then 0
+                  else (pre DRAGON_dirty))
+         else 
+      (if e03
+         then 
+               (if DRAGON_g03
+                  then ((pre DRAGON_dirty) + 1)
+                  else (pre DRAGON_dirty))
+         else 
+      (if e04
+         then 
+               (if DRAGON_g04
+                  then ((pre DRAGON_dirty) + 1)
+                  else (pre DRAGON_dirty))
+         else 
+      (if e05
+         then 
+               (if DRAGON_g05
+                  then ((pre DRAGON_dirty) + 1)
+                  else (pre DRAGON_dirty))
+         else 
+      (if e07
+         then 
+               (if DRAGON_g07
+                  then ((pre DRAGON_dirty) + 1)
+                  else (pre DRAGON_dirty))
+         else 
+      (if e08
+         then 
+               (if DRAGON_g08
+                  then 0
+                  else (pre DRAGON_dirty))
+         else 
+      (if e09
+         then 
+               (if DRAGON_g09
+                  then ((pre DRAGON_dirty) - 1)
+                  else (pre DRAGON_dirty))
+         else (pre DRAGON_dirty)))))))));
+
+   DRAGON_invalid = (DRAGON_mem_init -> 
+      (if e01
+         then 
+               (if DRAGON_g01
+                  then ((pre DRAGON_invalid) - 1)
+                  else (pre DRAGON_invalid))
+         else 
+      (if e02
+         then 
+               (if DRAGON_g02
+                  then ((pre DRAGON_invalid) - 1)
+                  else (pre DRAGON_invalid))
+         else 
+      (if e07
+         then 
+               (if DRAGON_g07
+                  then ((pre DRAGON_invalid) - 1)
+                  else (pre DRAGON_invalid))
+         else 
+      (if e08
+         then 
+               (if DRAGON_g08
+                  then ((pre DRAGON_invalid) - 1)
+                  else (pre DRAGON_invalid))
+         else 
+      (if e09
+         then 
+               (if DRAGON_g09
+                  then ((pre DRAGON_invalid) + 1)
+                  else (pre DRAGON_invalid))
+         else 
+      (if e10
+         then 
+               (if DRAGON_g10
+                  then ((pre DRAGON_invalid) + 1)
+                  else (pre DRAGON_invalid))
+         else 
+      (if e11
+         then 
+               (if DRAGON_g11
+                  then ((pre DRAGON_invalid) + 1)
+                  else (pre DRAGON_invalid))
+         else 
+      (if e12
+         then 
+               (if DRAGON_g12
+                  then ((pre DRAGON_invalid) + 1)
+                  else (pre DRAGON_invalid))
+         else (pre DRAGON_invalid))))))))));
+
+   Sofar_X = (((((((((((((((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12)) or 
+      (((((((((((e01 and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      e02) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      e03) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      e04) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      e05) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      e06) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      e07) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      e08) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      e09) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      e10) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      e11) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      e12)) and 
+      (init_invalid > 0));
+
+   Sofar_Sofar = (Sofar_X -> (Sofar_X and 
+      (pre Sofar_Sofar)));
+
+   OK = ((not Sofar_Sofar) or 
+      ((((not DRAGON_erreur) and 
+      (true -> (((((DRAGON_exclusive + DRAGON_shared) + DRAGON_shared_dirty) + DRAGON_dirty) + DRAGON_invalid) = (pre ((((DRAGON_exclusive + DRAGON_shared) + DRAGON_shared_dirty) + DRAGON_dirty) + DRAGON_invalid))))) and 
+      (((((DRAGON_exclusive + DRAGON_shared) + DRAGON_shared_dirty) + DRAGON_dirty) + DRAGON_invalid) = First_First)) and 
+      (DRAGON_exclusive >= 0)));
+
+   First_First = (init_invalid -> (pre First_First));
+
+tel;
+
+

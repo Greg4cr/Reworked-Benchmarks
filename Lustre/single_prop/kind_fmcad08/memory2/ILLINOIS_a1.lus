@@ -1,93 +1,308 @@
 
-node Sofar( X : bool ) returns ( Sofar : bool );
-let
-    Sofar = X -> X and pre Sofar;
-tel
+node top(e1: bool; 
+      e2: bool; 
+      e3: bool; 
+      e4: bool; 
+      e5: bool; 
+      e6: bool; 
+      e7: bool; 
+      e8: bool; 
+      e9: bool; 
+      init_invalid: int)
+   returns (OK: bool);
 
-node excludes9( X1, X2, X3, X4, X5, X6, X7, X8, X9 : bool ) returns ( excludes : bool );
-let
-    excludes = not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 or
-                  X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 or
-              not X1 and     X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 or
-              not X1 and not X2 and     X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 or
-              not X1 and not X2 and not X3 and     X4 and not X5 and not X6 and not X7 and not X8 and not X9 or
-              not X1 and not X2 and not X3 and not X4 and     X5 and not X6 and not X7 and not X8 and not X9 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and     X6 and not X7 and not X8 and not X9 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and     X7 and not X8 and not X9 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and     X8 and not X9 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and     X9;
-tel
-
-node illinois(e1, e2, e3, e4, e5, e6, e7, e8, e9 : bool; init_invalid : int)
-returns(invalid, dirty, exclusive, shared : int);
 var
-   g1, g2, g3, g4, g5, g6, g7, g8, g9 : bool;
-let
+   illinois_g1: bool; 
+   illinois_g2: bool; 
+   illinois_g3: bool; 
+   illinois_g4: bool; 
+   illinois_g5: bool; 
+   illinois_g6: bool; 
+   illinois_g7: bool; 
+   illinois_g8: bool; 
+   illinois_g9: bool; 
+   illinois_invalid: int; 
+   illinois_dirty: int; 
+   illinois_exclusive: int; 
+   illinois_shared: int; 
+   Sofar_X: bool; 
+   Sofar_Sofar: bool;
 
-   g1 = pre invalid>=1 and pre dirty=0 and pre shared=0 and pre exclusive=0;
-   g2 = pre invalid>=1 and pre dirty>=1;
-   g3 = pre invalid>=1 and pre shared+pre exclusive>=1;
-   g4 = pre exclusive>=1;
-   g5 = pre shared>=1;
-   g6 = pre invalid>=1;
-   g7 = pre dirty>=1;
-   g8 = pre shared>=1;
-   g9 = pre exclusive>=1;
 
-   invalid = (if(init_invalid>0) then init_invalid else 1-init_invalid) ->
-   if(e1) then if(g1) then pre invalid-1 else pre invalid else 
-   if(e2) then if(g2) then pre invalid-1 else pre invalid else 
-   if(e3) then if(g3) then pre invalid-1 else pre invalid else 
-   if(e5) then if(g5) then pre invalid+pre shared-1 else pre invalid else 
-   if(e6) then if(g6) then pre invalid+pre dirty+pre shared+pre exclusive-1 else pre invalid else 
-   if(e7) then if(g7) then pre invalid+1 else pre invalid else 
-   if(e8) then if(g8) then pre invalid+1 else pre invalid else 
-   if(e9) then if(g9) then pre invalid+1 else pre invalid else 
-   pre invalid;
+let 
+   illinois_g1 = (((((pre illinois_invalid) >= 1) and 
+      ((pre illinois_dirty) = 0)) and 
+      ((pre illinois_shared) = 0)) and 
+      ((pre illinois_exclusive) = 0));
 
-   dirty = 0 -> 
-   if(e2) then if(g2) then pre dirty-1 else pre dirty else 
-   if(e4) then if(g4) then pre dirty+1 else pre dirty else 
-   if(e5) then if(g5) then pre dirty+1 else pre dirty else 
-   if(e6) then if(g6) then 1 else pre dirty else 
-   if(e7) then if(g7) then pre dirty-1 else pre dirty else 
-   pre dirty;
+   illinois_g2 = (((pre illinois_invalid) >= 1) and 
+      ((pre illinois_dirty) >= 1));
 
-   exclusive = 0 -> 
-   if(e1) then if(g1) then pre exclusive+1 else pre exclusive else 
-   if(e3) then if(g3) then pre 0 else pre exclusive else 
-   if(e4) then if(g4) then pre exclusive-1 else pre exclusive else 
-   if(e6) then if(g6) then 0 else pre exclusive else 
-   if(e9) then if(g9) then pre exclusive-1 else pre exclusive else 
-   pre exclusive;
+   illinois_g3 = (((pre illinois_invalid) >= 1) and 
+      (((pre illinois_shared) + (pre illinois_exclusive)) >= 1));
 
-   shared = 0 -> 
-   if(e2) then if(g2) then pre shared+2 else pre shared else 
-   if(e3) then if(g3) then pre shared+pre exclusive+1 else pre shared else 
-   if(e5) then if(g5) then 0 else pre shared else 
-   if(e6) then if(g6) then 0 else pre shared else 
-   if(e8) then if(g8) then pre shared-1 else pre shared else 
-   pre shared;
+   illinois_g4 = ((pre illinois_exclusive) >= 1);
 
-tel
+   illinois_g5 = ((pre illinois_shared) >= 1);
 
--- NOTE: Not provable!
---@ ensures OK;
-node top(e1, e2, e3, e4, e5, e6, e7, e8, e9 : bool; init_invalid : int)
-returns( OK : bool);
-    var invalid, dirty, exclusive, shared : int;
-        R3, A1, A2, A3 : bool;
-        env : bool;
-let
-    ( invalid, dirty, exclusive, shared ) =
-        illinois( e1, e2, e3, e4, e5, e6, e7, e8, e9, init_invalid );
+   illinois_g6 = ((pre illinois_invalid) >= 1);
 
-    env = Sofar( excludes9( e1, e2, e3, e4, e5, e6, e7, e8, e9 ) );
+   illinois_g7 = ((pre illinois_dirty) >= 1);
 
-    A1 = true; --env => invalid >= 0; -- incorrect
-    A2 = env => dirty >= 0;
-    A3 = env => exclusive >= 0;
-    R3 = env => dirty < 2;
-    OK = A1 and A1 and A3 and R3;
-    --%MAIN;
-tel
+   illinois_g8 = ((pre illinois_shared) >= 1);
+
+   illinois_g9 = ((pre illinois_exclusive) >= 1);
+
+   illinois_invalid = (
+      (if (init_invalid > 0)
+         then init_invalid
+         else (1 - init_invalid)) -> 
+      (if e1
+         then 
+               (if illinois_g1
+                  then ((pre illinois_invalid) - 1)
+                  else (pre illinois_invalid))
+         else 
+      (if e2
+         then 
+               (if illinois_g2
+                  then ((pre illinois_invalid) - 1)
+                  else (pre illinois_invalid))
+         else 
+      (if e3
+         then 
+               (if illinois_g3
+                  then ((pre illinois_invalid) - 1)
+                  else (pre illinois_invalid))
+         else 
+      (if e5
+         then 
+               (if illinois_g5
+                  then (((pre illinois_invalid) + (pre illinois_shared)) - 1)
+                  else (pre illinois_invalid))
+         else 
+      (if e6
+         then 
+               (if illinois_g6
+                  then (((((pre illinois_invalid) + (pre illinois_dirty)) + (pre illinois_shared)) + (pre illinois_exclusive)) - 1)
+                  else (pre illinois_invalid))
+         else 
+      (if e7
+         then 
+               (if illinois_g7
+                  then ((pre illinois_invalid) + 1)
+                  else (pre illinois_invalid))
+         else 
+      (if e8
+         then 
+               (if illinois_g8
+                  then ((pre illinois_invalid) + 1)
+                  else (pre illinois_invalid))
+         else 
+      (if e9
+         then 
+               (if illinois_g9
+                  then ((pre illinois_invalid) + 1)
+                  else (pre illinois_invalid))
+         else (pre illinois_invalid))))))))));
+
+   illinois_dirty = (0 -> 
+      (if e2
+         then 
+               (if illinois_g2
+                  then ((pre illinois_dirty) - 1)
+                  else (pre illinois_dirty))
+         else 
+      (if e4
+         then 
+               (if illinois_g4
+                  then ((pre illinois_dirty) + 1)
+                  else (pre illinois_dirty))
+         else 
+      (if e5
+         then 
+               (if illinois_g5
+                  then ((pre illinois_dirty) + 1)
+                  else (pre illinois_dirty))
+         else 
+      (if e6
+         then 
+               (if illinois_g6
+                  then 1
+                  else (pre illinois_dirty))
+         else 
+      (if e7
+         then 
+               (if illinois_g7
+                  then ((pre illinois_dirty) - 1)
+                  else (pre illinois_dirty))
+         else (pre illinois_dirty)))))));
+
+   illinois_exclusive = (0 -> 
+      (if e1
+         then 
+               (if illinois_g1
+                  then ((pre illinois_exclusive) + 1)
+                  else (pre illinois_exclusive))
+         else 
+      (if e3
+         then 
+               (if illinois_g3
+                  then (pre 0)
+                  else (pre illinois_exclusive))
+         else 
+      (if e4
+         then 
+               (if illinois_g4
+                  then ((pre illinois_exclusive) - 1)
+                  else (pre illinois_exclusive))
+         else 
+      (if e6
+         then 
+               (if illinois_g6
+                  then 0
+                  else (pre illinois_exclusive))
+         else 
+      (if e9
+         then 
+               (if illinois_g9
+                  then ((pre illinois_exclusive) - 1)
+                  else (pre illinois_exclusive))
+         else (pre illinois_exclusive)))))));
+
+   illinois_shared = (0 -> 
+      (if e2
+         then 
+               (if illinois_g2
+                  then ((pre illinois_shared) + 2)
+                  else (pre illinois_shared))
+         else 
+      (if e3
+         then 
+               (if illinois_g3
+                  then (((pre illinois_shared) + (pre illinois_exclusive)) + 1)
+                  else (pre illinois_shared))
+         else 
+      (if e5
+         then 
+               (if illinois_g5
+                  then 0
+                  else (pre illinois_shared))
+         else 
+      (if e6
+         then 
+               (if illinois_g6
+                  then 0
+                  else (pre illinois_shared))
+         else 
+      (if e8
+         then 
+               (if illinois_g8
+                  then ((pre illinois_shared) - 1)
+                  else (pre illinois_shared))
+         else (pre illinois_shared)))))));
+
+   Sofar_X = ((((((((((((((((((not e1) and 
+      (not e2)) and 
+      (not e3)) and 
+      (not e4)) and 
+      (not e5)) and 
+      (not e6)) and 
+      (not e7)) and 
+      (not e8)) and 
+      (not e9)) or 
+      ((((((((e1 and 
+      (not e2)) and 
+      (not e3)) and 
+      (not e4)) and 
+      (not e5)) and 
+      (not e6)) and 
+      (not e7)) and 
+      (not e8)) and 
+      (not e9))) or 
+      (((((((((not e1) and 
+      e2) and 
+      (not e3)) and 
+      (not e4)) and 
+      (not e5)) and 
+      (not e6)) and 
+      (not e7)) and 
+      (not e8)) and 
+      (not e9))) or 
+      (((((((((not e1) and 
+      (not e2)) and 
+      e3) and 
+      (not e4)) and 
+      (not e5)) and 
+      (not e6)) and 
+      (not e7)) and 
+      (not e8)) and 
+      (not e9))) or 
+      (((((((((not e1) and 
+      (not e2)) and 
+      (not e3)) and 
+      e4) and 
+      (not e5)) and 
+      (not e6)) and 
+      (not e7)) and 
+      (not e8)) and 
+      (not e9))) or 
+      (((((((((not e1) and 
+      (not e2)) and 
+      (not e3)) and 
+      (not e4)) and 
+      e5) and 
+      (not e6)) and 
+      (not e7)) and 
+      (not e8)) and 
+      (not e9))) or 
+      (((((((((not e1) and 
+      (not e2)) and 
+      (not e3)) and 
+      (not e4)) and 
+      (not e5)) and 
+      e6) and 
+      (not e7)) and 
+      (not e8)) and 
+      (not e9))) or 
+      (((((((((not e1) and 
+      (not e2)) and 
+      (not e3)) and 
+      (not e4)) and 
+      (not e5)) and 
+      (not e6)) and 
+      e7) and 
+      (not e8)) and 
+      (not e9))) or 
+      (((((((((not e1) and 
+      (not e2)) and 
+      (not e3)) and 
+      (not e4)) and 
+      (not e5)) and 
+      (not e6)) and 
+      (not e7)) and 
+      e8) and 
+      (not e9))) or 
+      (((((((((not e1) and 
+      (not e2)) and 
+      (not e3)) and 
+      (not e4)) and 
+      (not e5)) and 
+      (not e6)) and 
+      (not e7)) and 
+      (not e8)) and 
+      e9));
+
+   Sofar_Sofar = (Sofar_X -> (Sofar_X and 
+      (pre Sofar_Sofar)));
+
+   OK = (((true and 
+      true) and 
+      ((not Sofar_Sofar) or 
+      (illinois_exclusive >= 0))) and 
+      ((not Sofar_Sofar) or 
+      (illinois_dirty < 2)));
+
+tel;
+
+

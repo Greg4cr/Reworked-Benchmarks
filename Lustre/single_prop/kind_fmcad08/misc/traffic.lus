@@ -1,31 +1,34 @@
---
--- Source: Koen Classen
---
 
--- given
+node top(Delta: int)
+   returns (OK: bool);
 
-node Sofar( X : bool ) returns ( Y : bool );
-let
-  Y = (true -> pre Y) and X;
-tel
+var
+   Store_Prev: int; 
+   Store_Total: int; 
+   Sofar_Y: bool;
 
--- assignment other
 
-node Store( Delta : int ) returns ( Total : int );
-var Prev : int;
-let
-  Prev  = 0 -> pre Total;
-  Total = if Delta < 0 and Prev > 0  then Prev+Delta
-     else if Delta > 0 and Prev < 10 then Prev+Delta
-     else Prev;
-tel
+let 
+   Store_Prev = (0 -> (pre Store_Total));
 
---@ ensures OK;
-node top( Delta : int ) returns ( OK : bool );
-var Total : int;
-let
-  Total = Store( Delta );
-  
-  OK = Sofar( -1 <= Delta and Delta <= 1 ) => 0 <= Total and Total <= 20; 
-  --%MAIN;
-tel
+   Store_Total = 
+      (if ((Delta < 0) and 
+         (Store_Prev > 0))
+         then (Store_Prev + Delta)
+         else 
+      (if ((Delta > 0) and 
+         (Store_Prev < 10))
+         then (Store_Prev + Delta)
+         else Store_Prev));
+
+   OK = ((not Sofar_Y) or 
+      ((0 <= Store_Total) and 
+      (Store_Total <= 20)));
+
+   Sofar_Y = ((true -> (pre Sofar_Y)) and 
+      (((-1) <= Delta) and 
+      (Delta <= 1)));
+
+tel;
+
+

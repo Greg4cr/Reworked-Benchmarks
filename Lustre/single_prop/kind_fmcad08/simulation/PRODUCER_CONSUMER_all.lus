@@ -1,66 +1,103 @@
-node First( X : int ) returns ( First : int );
-let
-    First = X -> pre First;
-tel
 
-node FirstB( X : bool ) returns ( First : bool );
-let
-    First = X -> pre First;
-tel
+node top(etat1: bool; 
+      etat2: bool; 
+      etat3: bool; 
+      a_init: int)
+   returns (OK: bool);
 
-node Sofar( X : bool ) returns ( Sofar : bool );
-let
-    Sofar = X -> X and pre Sofar;
-tel
-
-node excludes3( X1, X2, X3 : bool ) returns ( excludes : bool );
-let
-    excludes = not ( X1 and X2 or X1 and X3 or X2 and X3 );
-tel
-
-node PRODUCER_CONSUMMER(etat1, etat2, etat3 : bool; a_init : int
-) returns(i, b, a, o1, o2 : int);
 var
-	garde1, garde2, garde3 : bool;
-let
-	garde1 = pre i >= 1;
-	garde2 = pre b >= 1;
-	garde3 = pre b >= 1;
+   PRODUCER_CONSUMMER_garde1: bool; 
+   PRODUCER_CONSUMMER_garde2: bool; 
+   PRODUCER_CONSUMMER_garde3: bool; 
+   PRODUCER_CONSUMMER_i: int; 
+   PRODUCER_CONSUMMER_b: int; 
+   PRODUCER_CONSUMMER_a: int; 
+   PRODUCER_CONSUMMER_o1: int; 
+   PRODUCER_CONSUMMER_o2: int; 
+   First_First: int; 
+   FirstB_First: bool; 
+   Sofar_X: bool; 
+   Sofar_Sofar: bool;
 
-	i = a ->
-	if(etat1) then if(garde1) then pre i -1 else pre i else 
-	pre i;
 
-	b = 0 -> 
-	if(etat1) then if(garde1) then pre b+1 else pre b else 
-	if(etat2) then if(garde2) then pre b-1 else pre b else 
-	if(garde3) then pre b-1 else pre b;
+let 
+   PRODUCER_CONSUMMER_garde1 = ((pre PRODUCER_CONSUMMER_i) >= 1);
 
-	a = a_init -> pre a;
+   PRODUCER_CONSUMMER_garde2 = ((pre PRODUCER_CONSUMMER_b) >= 1);
 
-	o1 = 0 -> 
-	if(etat2) then if(garde2) then pre o1+1 else pre o1 else 
-	pre o1;
+   PRODUCER_CONSUMMER_garde3 = ((pre PRODUCER_CONSUMMER_b) >= 1);
 
-	o2 = 0 -> 
-	if(etat3) then if(garde3) then pre o2+1 else pre o2 else
-	pre o2;
+   PRODUCER_CONSUMMER_i = (PRODUCER_CONSUMMER_a -> 
+      (if etat1
+         then 
+               (if PRODUCER_CONSUMMER_garde1
+                  then ((pre PRODUCER_CONSUMMER_i) - 1)
+                  else (pre PRODUCER_CONSUMMER_i))
+         else (pre PRODUCER_CONSUMMER_i)));
 
-tel
+   PRODUCER_CONSUMMER_b = (0 -> 
+      (if etat1
+         then 
+               (if PRODUCER_CONSUMMER_garde1
+                  then ((pre PRODUCER_CONSUMMER_b) + 1)
+                  else (pre PRODUCER_CONSUMMER_b))
+         else 
+      (if etat2
+         then 
+               (if PRODUCER_CONSUMMER_garde2
+                  then ((pre PRODUCER_CONSUMMER_b) - 1)
+                  else (pre PRODUCER_CONSUMMER_b))
+         else 
+      (if PRODUCER_CONSUMMER_garde3
+         then ((pre PRODUCER_CONSUMMER_b) - 1)
+         else (pre PRODUCER_CONSUMMER_b)))));
 
---@ ensures OK;
-node top(etat1, etat2, etat3 : bool; a_init : int) returns ( OK : bool );
-    var i, b, a, o1, o2 : int;
-        env : bool;
-let
-   ( i, b, a, o1, o2 ) = PRODUCER_CONSUMMER(etat1, etat2, etat3, a_init );
-   env = Sofar( excludes3( etat1, etat2, etat3 ) or
-                not ( etat1 or etat2 or etat3 ) ) and
-         FirstB( not ( etat1 or etat2 or etat3 ) ) and
-         First( a_init ) > 0;
+   PRODUCER_CONSUMMER_a = (a_init -> (pre PRODUCER_CONSUMMER_a));
 
-   OK = env => i >= 0 and
-                 (true -> pre etat1 and etat2 =>
-                          (o1 = pre o1+1 or o1 = pre o1));
-    --%MAIN;
-tel
+   PRODUCER_CONSUMMER_o1 = (0 -> 
+      (if etat2
+         then 
+               (if PRODUCER_CONSUMMER_garde2
+                  then ((pre PRODUCER_CONSUMMER_o1) + 1)
+                  else (pre PRODUCER_CONSUMMER_o1))
+         else (pre PRODUCER_CONSUMMER_o1)));
+
+   PRODUCER_CONSUMMER_o2 = (0 -> 
+      (if etat3
+         then 
+               (if PRODUCER_CONSUMMER_garde3
+                  then ((pre PRODUCER_CONSUMMER_o2) + 1)
+                  else (pre PRODUCER_CONSUMMER_o2))
+         else (pre PRODUCER_CONSUMMER_o2)));
+
+   OK = ((not ((Sofar_Sofar and 
+      FirstB_First) and 
+      (First_First > 0))) or 
+      ((PRODUCER_CONSUMMER_i >= 0) and 
+      (true -> ((not ((pre etat1) and 
+      etat2)) or 
+      ((PRODUCER_CONSUMMER_o1 = ((pre PRODUCER_CONSUMMER_o1) + 1)) or 
+      (PRODUCER_CONSUMMER_o1 = (pre PRODUCER_CONSUMMER_o1)))))));
+
+   First_First = (a_init -> (pre First_First));
+
+   FirstB_First = ((not ((etat1 or 
+      etat2) or 
+      etat3)) -> (pre FirstB_First));
+
+   Sofar_X = ((not (((etat1 and 
+      etat2) or 
+      (etat1 and 
+      etat3)) or 
+      (etat2 and 
+      etat3))) or 
+      (not ((etat1 or 
+      etat2) or 
+      etat3)));
+
+   Sofar_Sofar = (Sofar_X -> (Sofar_X and 
+      (pre Sofar_Sofar)));
+
+tel;
+
+

@@ -1,95 +1,126 @@
 
-node edge(X: bool) returns (edge: bool);
-let
-  edge = false -> X or not pre(X);
-tel
-node switch (init, on, off: bool) returns (value: bool);
-let
-  value = if on then true
-          else if off then false
-               else init -> pre(value);
-tel
-node jafter(X: bool) returns (after: bool);
-let
-  after = false -> pre(X);
-tel
-node once_from_to(A, B, X: bool) returns (OK: bool);
+node top(request_door: bool; 
+      warning_start: bool; 
+      in_station: bool; 
+      door_is_open: bool)
+   returns (OK: bool);
+
 var
-  between_A_and_X: bool;
-let
-  between_A_and_X = switch(false, A, jafter(X));
-  OK = not (between_A_and_X and B);
-tel
-node controller(request_door, warning_start, in_station, door_is_open: bool)
-returns (open_door, close_door, door_ok: bool);
-var
-  req_pending: bool;
-let
-  req_pending = switch(false, request_door and not warning_start, door_is_open);
-  open_door = req_pending and in_station;
-  close_door = warning_start and door_is_open;
-  door_ok = not door_is_open and warning_start;
-tel
-node environment(door_is_open, open_door, close_door, in_station, door_ok, warning_start: bool)
-returns (env_always_ok: bool);
-var
-  env_ok: bool;
-  door_doesnt_close_if_not_asked: bool;
-  door_doesnt_open_if_not_asked: bool;
-  tramway_doesnt_start_if_not_door_ok: bool;
-  door_initially_closed: bool;
-  initially_not_in_station: bool;
-  warning_start_and_in_station_go_down_simultaneously: bool;
-  warning_start_only_in_station: bool;
-  warning_start_cant_become_true_when_door_is_opening: bool;
-let
-  env_always_ok = env_ok -> env_ok and pre(env_always_ok);
-  env_ok = door_doesnt_open_if_not_asked and
-    door_doesnt_close_if_not_asked and
-      tramway_doesnt_start_if_not_door_ok and door_initially_closed and
-        initially_not_in_station and
-          warning_start_and_in_station_go_down_simultaneously and
-            warning_start_only_in_station and
-              warning_start_cant_become_true_when_door_is_opening;
-  door_doesnt_close_if_not_asked = edge(door_is_open) => open_door;
-  door_doesnt_open_if_not_asked = edge(not door_is_open) => close_door;
-  tramway_doesnt_start_if_not_door_ok =
-    edge(not in_station) => jafter(door_ok);
-  door_initially_closed = not door_is_open -> true;
-  initially_not_in_station = not in_station -> true;
-  warning_start_and_in_station_go_down_simultaneously =
-    (edge(not in_station) = edge(not warning_start));
-  warning_start_only_in_station = warning_start => in_station;
-  warning_start_cant_become_true_when_door_is_opening =
-    edge(warning_start) => not open_door;
-tel
-node properties(door_is_open, in_station, request_door, warning_start: bool)
-returns (OK: bool);
-var
-  door_doesnt_open_out_of_station: bool;
-  door_opens_before_leaving_station: bool;
-let
-  OK = door_doesnt_open_out_of_station and door_opens_before_leaving_station;
-  door_doesnt_open_out_of_station = door_is_open => in_station;
-  door_opens_before_leaving_station =
-    once_from_to(jafter(request_door and not warning_start),
-                 edge(not in_station),
-                 jafter(door_is_open));
-tel
---@ ensures OK;
-node top(request_door, warning_start, in_station, door_is_open: bool)
-returns (OK: bool);
-var
-  env_always_ok, prop_ok: bool;
-  open_door, close_door, door_ok: bool;
-let
-  OK = env_always_ok => prop_ok;
-  prop_ok = 
-    properties(door_is_open, in_station, request_door, warning_start);
-  env_always_ok =
-    environment(door_is_open, open_door, close_door,
-                in_station, door_ok, warning_start);
-  (open_door, close_door, door_ok) =
-    controller(request_door, warning_start, in_station, door_is_open);
-  --%MAIN;
-tel
+   switch_value1: bool; 
+   jafter_after2: bool; 
+   jafter_after1: bool; 
+   edge_X6: bool; 
+   edge_edge6: bool; 
+   jafter_after3: bool; 
+   edge_edge5: bool; 
+   edge_X4: bool; 
+   edge_edge4: bool; 
+   edge_X3: bool; 
+   edge_edge3: bool; 
+   jafter_after: bool; 
+   edge_X2: bool; 
+   edge_edge2: bool; 
+   edge_X1: bool; 
+   edge_edge1: bool; 
+   edge_edge: bool; 
+   environment_env_ok: bool; 
+   environment_door_initially_closed: bool; 
+   environment_initially_not_in_station: bool; 
+   environment_env_always_ok: bool; 
+   switch_value: bool; 
+   controller_open_door: bool;
+
+
+let 
+   OK = ((not environment_env_always_ok) or 
+      (((not door_is_open) or 
+      in_station) and 
+      (not (switch_value1 and 
+      edge_edge6))));
+
+   switch_value1 = 
+      (if jafter_after3
+         then true
+         else 
+      (if jafter_after2
+         then false
+         else (false -> (pre switch_value1))));
+
+   jafter_after2 = (false -> (pre jafter_after1));
+
+   jafter_after1 = (false -> (pre door_is_open));
+
+   edge_X6 = (not in_station);
+
+   edge_edge6 = (false -> (edge_X6 or 
+      (not (pre edge_X6))));
+
+   jafter_after3 = (false -> (pre (request_door and 
+      (not warning_start))));
+
+   environment_env_always_ok = (environment_env_ok -> (environment_env_ok and 
+      (pre environment_env_always_ok)));
+
+   environment_env_ok = (((((((((not edge_edge1) or 
+      (warning_start and 
+      door_is_open)) and 
+      ((not edge_edge) or 
+      controller_open_door)) and 
+      ((not edge_edge2) or 
+      jafter_after)) and 
+      environment_door_initially_closed) and 
+      environment_initially_not_in_station) and 
+      (edge_edge3 = edge_edge4)) and 
+      ((not warning_start) or 
+      in_station)) and 
+      ((not edge_edge5) or 
+      (not controller_open_door)));
+
+   environment_door_initially_closed = ((not door_is_open) -> true);
+
+   environment_initially_not_in_station = ((not in_station) -> true);
+
+   edge_edge5 = (false -> (warning_start or 
+      (not (pre warning_start))));
+
+   edge_X4 = (not warning_start);
+
+   edge_edge4 = (false -> (edge_X4 or 
+      (not (pre edge_X4))));
+
+   edge_X3 = (not in_station);
+
+   edge_edge3 = (false -> (edge_X3 or 
+      (not (pre edge_X3))));
+
+   jafter_after = (false -> (pre ((not door_is_open) and 
+      warning_start)));
+
+   edge_X2 = (not in_station);
+
+   edge_edge2 = (false -> (edge_X2 or 
+      (not (pre edge_X2))));
+
+   edge_X1 = (not door_is_open);
+
+   edge_edge1 = (false -> (edge_X1 or 
+      (not (pre edge_X1))));
+
+   edge_edge = (false -> (door_is_open or 
+      (not (pre door_is_open))));
+
+   switch_value = 
+      (if (request_door and 
+         (not warning_start))
+         then true
+         else 
+      (if door_is_open
+         then false
+         else (false -> (pre switch_value))));
+
+   controller_open_door = (switch_value and 
+      in_station);
+
+tel;
+
+

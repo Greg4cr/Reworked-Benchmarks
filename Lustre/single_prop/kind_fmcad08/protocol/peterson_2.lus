@@ -1,133 +1,494 @@
 
-node Sofar( X : bool ) returns ( Sofar : bool );
-let
-    Sofar = X -> X and pre Sofar;
-tel
+node top(e01: bool; 
+      e02: bool; 
+      e03: bool; 
+      e04: bool; 
+      e05: bool; 
+      e06: bool; 
+      e07: bool; 
+      e08: bool; 
+      e09: bool; 
+      e10: bool; 
+      e11: bool; 
+      e12: bool)
+   returns (OK: bool);
 
-node excludes12( X1, X2, X3, X4, X5, X6, X7, X8, X9, X10, X11, X12 : bool ) returns ( excludes : bool );
-let
-    excludes = not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-                  X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and     X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and     X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and     X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and     X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and     X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and     X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and     X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and     X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and     X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and     X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and     X12;
-tel
-
-node peterson(e01, e02, e03, e04, e05, e06, e07, e08, e09, e10, e11, e12 : bool) returns (x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13 : int);
 var
-   g01, g02, g03, g04, g05, g06, g07, g08, g09, g10, g11, g12 : bool;
-let
+   peterson_g01: bool; 
+   peterson_g02: bool; 
+   peterson_g03: bool; 
+   peterson_g04: bool; 
+   peterson_g05: bool; 
+   peterson_g06: bool; 
+   peterson_g07: bool; 
+   peterson_g08: bool; 
+   peterson_g09: bool; 
+   peterson_g10: bool; 
+   peterson_g11: bool; 
+   peterson_g12: bool; 
+   peterson_x0: int; 
+   peterson_x1: int; 
+   peterson_x2: int; 
+   peterson_x3: int; 
+   peterson_x4: int; 
+   peterson_x5: int; 
+   peterson_x6: int; 
+   peterson_x7: int; 
+   peterson_x8: int; 
+   peterson_x9: int; 
+   peterson_x10: int; 
+   peterson_x11: int; 
+   peterson_x12: int; 
+   peterson_x13: int; 
+   Sofar_X: bool; 
+   Sofar_Sofar: bool;
 
-   g01 = pre x0>=1 and pre x4>=1;
-   g02 = pre x1 >= 1 and pre x6 >= 1;
-   g03 = pre x1>=1 and pre x7>=1;
-   g04 = pre x2>=1 and pre x9>=1;
-   g05 = pre x2>=1 and pre x6>=1;
-   g06 = pre x3>=1 and pre x5>=1;
-   g07 = pre x9>=1 and pre x10>=1;
-   g08 = pre x7>=1 and pre x11>=1;
-   g09 = pre x6>=1 and pre x11>=1;
-   g10 = pre x4>=1 and pre x12>=1;
-   g11 = pre x7>=1 and pre x12>=1;
-   g12 = pre x8>=1 and pre x13>=1;
 
-   x0 = 1 -> 
-   if(e01) then if(g01) then pre x0-1 else pre x0 else 
-   if(e06) then if(g06) then pre x0+1 else pre x0 else 
-   pre x0;
+let 
+   peterson_g01 = (((pre peterson_x0) >= 1) and 
+      ((pre peterson_x4) >= 1));
 
-   x1 = 0 -> 
-   if(e01) then if(g01) then pre x1+1 else pre x1 else 
-   if(e02) then if(g02) then pre x1-1 else pre x1 else 
-   if(e03) then if(g03) then pre x1-1 else pre x1 else 
-   pre x1;
+   peterson_g02 = (((pre peterson_x1) >= 1) and 
+      ((pre peterson_x6) >= 1));
 
-   x2 = 0 -> 
-   if(e02) then if(g02) then pre x2+1 else pre x2 else 
-   if(e03) then if(g03) then pre x2+1 else pre x2 else 
-   if(e04) then if(g04) then pre x2-1 else pre x2 else 
-   if(e05) then if(g05) then pre x2-1 else pre x2 else 
-   pre x2;
+   peterson_g03 = (((pre peterson_x1) >= 1) and 
+      ((pre peterson_x7) >= 1));
 
-   x3 = 0 -> 
-   if(e04) then if(g04) then pre x3+1 else pre x3 else 
-   if(e05) then if(g05) then pre x3+1 else pre x3 else 
-   if(e06) then if(g06) then pre x3-1 else pre x3 else 
-   pre x3;
+   peterson_g04 = (((pre peterson_x2) >= 1) and 
+      ((pre peterson_x9) >= 1));
 
-   x4 = 1 -> 
-   if(e01) then if(g01) then pre x4-1 else pre x4 else 
-   if(e06) then if(g06) then pre x4+1 else pre x4 else 
-   pre x4;
+   peterson_g05 = (((pre peterson_x2) >= 1) and 
+      ((pre peterson_x6) >= 1));
 
-   x5 = 0 -> 
-   if(e01) then if(g01) then pre x5+1 else pre x5 else 
-   if(e06) then if(g06) then pre x5-1 else pre x5 else 
-   pre x5;
+   peterson_g06 = (((pre peterson_x3) >= 1) and 
+      ((pre peterson_x5) >= 1));
 
-   x6 = 0 -> 
-   if(e02) then if(g02) then pre x6-1 else pre x6 else 
-   if(e08) then if(g08) then pre x6+1 else pre x6 else 
-   pre x6;
+   peterson_g07 = (((pre peterson_x9) >= 1) and 
+      ((pre peterson_x10) >= 1));
 
-   x7 = 1 -> 
-   if(e02) then if(g02) then pre x7+1 else pre x7 else 
-   if(e08) then if(g08) then pre x7-1 else pre x7 else 
-   pre x7;
+   peterson_g08 = (((pre peterson_x7) >= 1) and 
+      ((pre peterson_x11) >= 1));
 
-   x8 = 0 -> 
-   if(e07) then if(g07) then pre x8+1 else pre x8 else 
-   if(e12) then if(g12) then pre x8-1 else pre x8 else 
-   pre x8;
+   peterson_g09 = (((pre peterson_x6) >= 1) and 
+      ((pre peterson_x11) >= 1));
 
-   x9 = 1 -> 
-   if(e07) then if(g07) then pre x9-1 else pre x9 else 
-   if(e12) then if(g12) then pre x9+1 else pre x9 else 
-   pre x9;
+   peterson_g10 = (((pre peterson_x4) >= 1) and 
+      ((pre peterson_x12) >= 1));
 
-   x10 = 1 -> 
-   if(e07) then if(g07) then pre x10-1 else pre x10 else 
-   if(e12) then if(g12) then pre x10+1 else pre x10 else 
-   pre x10;
+   peterson_g11 = (((pre peterson_x7) >= 1) and 
+      ((pre peterson_x12) >= 1));
 
-   x11 = 0 -> 
-   if(e07) then if(g07) then pre x11+1 else pre x11 else 
-   if(e08) then if(g08) then pre x11-1 else pre x11 else 
-   if(e09) then if(g09) then pre x11-1 else pre x11 else 
-   pre x11;
+   peterson_g12 = (((pre peterson_x8) >= 1) and 
+      ((pre peterson_x13) >= 1));
 
-   x12 = 0 -> 
-   if(e08) then if(g08) then pre x12+1 else pre x12 else 
-   if(e09) then if(g09) then pre x12+1 else pre x12 else 
-   if(e10) then if(g10) then pre x12-1 else pre x12 else 
-   if(e11) then if(g11) then pre x12-1 else pre x12 else 
-   pre x12;
+   peterson_x0 = (1 -> 
+      (if e01
+         then 
+               (if peterson_g01
+                  then ((pre peterson_x0) - 1)
+                  else (pre peterson_x0))
+         else 
+      (if e06
+         then 
+               (if peterson_g06
+                  then ((pre peterson_x0) + 1)
+                  else (pre peterson_x0))
+         else (pre peterson_x0))));
 
-   x13 = 0 -> 
-   if(e10) then if(g10) then pre x13+1 else pre x13 else 
-   if(e11) then if(g11) then pre x13+1 else pre x13 else 
-   if(e12) then if(g12) then pre x13-1 else pre x13 else 
-   pre x13;
+   peterson_x1 = (0 -> 
+      (if e01
+         then 
+               (if peterson_g01
+                  then ((pre peterson_x1) + 1)
+                  else (pre peterson_x1))
+         else 
+      (if e02
+         then 
+               (if peterson_g02
+                  then ((pre peterson_x1) - 1)
+                  else (pre peterson_x1))
+         else 
+      (if e03
+         then 
+               (if peterson_g03
+                  then ((pre peterson_x1) - 1)
+                  else (pre peterson_x1))
+         else (pre peterson_x1)))));
 
-tel
+   peterson_x2 = (0 -> 
+      (if e02
+         then 
+               (if peterson_g02
+                  then ((pre peterson_x2) + 1)
+                  else (pre peterson_x2))
+         else 
+      (if e03
+         then 
+               (if peterson_g03
+                  then ((pre peterson_x2) + 1)
+                  else (pre peterson_x2))
+         else 
+      (if e04
+         then 
+               (if peterson_g04
+                  then ((pre peterson_x2) - 1)
+                  else (pre peterson_x2))
+         else 
+      (if e05
+         then 
+               (if peterson_g05
+                  then ((pre peterson_x2) - 1)
+                  else (pre peterson_x2))
+         else (pre peterson_x2))))));
 
---@ ensures OK;
-node top(e01, e02, e03, e04, e05, e06, e07, e08, e09, e10, e11, e12 : bool)
-returns ( OK : bool );
-    var x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13 : int;
-        env : bool;
-let
-   (x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13) = peterson(e01, e02, e03, e04, e05, e06, e07, e08, e09, e10, e11, e12);
+   peterson_x3 = (0 -> 
+      (if e04
+         then 
+               (if peterson_g04
+                  then ((pre peterson_x3) + 1)
+                  else (pre peterson_x3))
+         else 
+      (if e05
+         then 
+               (if peterson_g05
+                  then ((pre peterson_x3) + 1)
+                  else (pre peterson_x3))
+         else 
+      (if e06
+         then 
+               (if peterson_g06
+                  then ((pre peterson_x3) - 1)
+                  else (pre peterson_x3))
+         else (pre peterson_x3)))));
 
-    env = Sofar( excludes12( e01, e02, e03, e04, e05, e06, e07, e08, e09, e10, e11, e12 ) and x1 < 32767 );
-    OK = env => x1 >= 0;
-    --%MAIN;
-tel
+   peterson_x4 = (1 -> 
+      (if e01
+         then 
+               (if peterson_g01
+                  then ((pre peterson_x4) - 1)
+                  else (pre peterson_x4))
+         else 
+      (if e06
+         then 
+               (if peterson_g06
+                  then ((pre peterson_x4) + 1)
+                  else (pre peterson_x4))
+         else (pre peterson_x4))));
+
+   peterson_x5 = (0 -> 
+      (if e01
+         then 
+               (if peterson_g01
+                  then ((pre peterson_x5) + 1)
+                  else (pre peterson_x5))
+         else 
+      (if e06
+         then 
+               (if peterson_g06
+                  then ((pre peterson_x5) - 1)
+                  else (pre peterson_x5))
+         else (pre peterson_x5))));
+
+   peterson_x6 = (0 -> 
+      (if e02
+         then 
+               (if peterson_g02
+                  then ((pre peterson_x6) - 1)
+                  else (pre peterson_x6))
+         else 
+      (if e08
+         then 
+               (if peterson_g08
+                  then ((pre peterson_x6) + 1)
+                  else (pre peterson_x6))
+         else (pre peterson_x6))));
+
+   peterson_x7 = (1 -> 
+      (if e02
+         then 
+               (if peterson_g02
+                  then ((pre peterson_x7) + 1)
+                  else (pre peterson_x7))
+         else 
+      (if e08
+         then 
+               (if peterson_g08
+                  then ((pre peterson_x7) - 1)
+                  else (pre peterson_x7))
+         else (pre peterson_x7))));
+
+   peterson_x8 = (0 -> 
+      (if e07
+         then 
+               (if peterson_g07
+                  then ((pre peterson_x8) + 1)
+                  else (pre peterson_x8))
+         else 
+      (if e12
+         then 
+               (if peterson_g12
+                  then ((pre peterson_x8) - 1)
+                  else (pre peterson_x8))
+         else (pre peterson_x8))));
+
+   peterson_x9 = (1 -> 
+      (if e07
+         then 
+               (if peterson_g07
+                  then ((pre peterson_x9) - 1)
+                  else (pre peterson_x9))
+         else 
+      (if e12
+         then 
+               (if peterson_g12
+                  then ((pre peterson_x9) + 1)
+                  else (pre peterson_x9))
+         else (pre peterson_x9))));
+
+   peterson_x10 = (1 -> 
+      (if e07
+         then 
+               (if peterson_g07
+                  then ((pre peterson_x10) - 1)
+                  else (pre peterson_x10))
+         else 
+      (if e12
+         then 
+               (if peterson_g12
+                  then ((pre peterson_x10) + 1)
+                  else (pre peterson_x10))
+         else (pre peterson_x10))));
+
+   peterson_x11 = (0 -> 
+      (if e07
+         then 
+               (if peterson_g07
+                  then ((pre peterson_x11) + 1)
+                  else (pre peterson_x11))
+         else 
+      (if e08
+         then 
+               (if peterson_g08
+                  then ((pre peterson_x11) - 1)
+                  else (pre peterson_x11))
+         else 
+      (if e09
+         then 
+               (if peterson_g09
+                  then ((pre peterson_x11) - 1)
+                  else (pre peterson_x11))
+         else (pre peterson_x11)))));
+
+   peterson_x12 = (0 -> 
+      (if e08
+         then 
+               (if peterson_g08
+                  then ((pre peterson_x12) + 1)
+                  else (pre peterson_x12))
+         else 
+      (if e09
+         then 
+               (if peterson_g09
+                  then ((pre peterson_x12) + 1)
+                  else (pre peterson_x12))
+         else 
+      (if e10
+         then 
+               (if peterson_g10
+                  then ((pre peterson_x12) - 1)
+                  else (pre peterson_x12))
+         else 
+      (if e11
+         then 
+               (if peterson_g11
+                  then ((pre peterson_x12) - 1)
+                  else (pre peterson_x12))
+         else (pre peterson_x12))))));
+
+   peterson_x13 = (0 -> 
+      (if e10
+         then 
+               (if peterson_g10
+                  then ((pre peterson_x13) + 1)
+                  else (pre peterson_x13))
+         else 
+      (if e11
+         then 
+               (if peterson_g11
+                  then ((pre peterson_x13) + 1)
+                  else (pre peterson_x13))
+         else 
+      (if e12
+         then 
+               (if peterson_g12
+                  then ((pre peterson_x13) - 1)
+                  else (pre peterson_x13))
+         else (pre peterson_x13)))));
+
+   Sofar_X = (((((((((((((((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12)) or 
+      (((((((((((e01 and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      e02) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      e03) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      e04) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      e05) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      e06) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      e07) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      e08) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      e09) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      e10) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      e11) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      e12)) and 
+      (peterson_x1 < 32767));
+
+   Sofar_Sofar = (Sofar_X -> (Sofar_X and 
+      (pre Sofar_Sofar)));
+
+   OK = ((not Sofar_Sofar) or 
+      (peterson_x1 >= 0));
+
+tel;
+
+

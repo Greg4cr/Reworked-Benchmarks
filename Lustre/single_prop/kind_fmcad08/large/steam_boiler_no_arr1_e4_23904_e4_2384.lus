@@ -1,687 +1,833 @@
 
-node REDGE(S:bool) returns(REDGE:bool); 
+node top(stop: bool; 
+      steam_boiler_waiting: bool; 
+      physical_units_ready: bool; 
+      level: int; 
+      steam: int; 
+      pump_state_0: int; 
+      pump_state_1: int; 
+      pump_state_2: int; 
+      pump_state_3: int; 
+      pump_control_state_0: bool; 
+      pump_control_state_1: bool; 
+      pump_control_state_2: bool; 
+      pump_control_state_3: bool; 
+      pump_repaired_0: bool; 
+      pump_repaired_1: bool; 
+      pump_repaired_2: bool; 
+      pump_repaired_3: bool; 
+      pump_control_repaired_0: bool; 
+      pump_control_repaired_1: bool; 
+      pump_control_repaired_2: bool; 
+      pump_control_repaired_3: bool; 
+      level_repaired: bool; 
+      steam_repaired: bool; 
+      pump_failure_acknowledgement_0: bool; 
+      pump_failure_acknowledgement_1: bool; 
+      pump_failure_acknowledgement_2: bool; 
+      pump_failure_acknowledgement_3: bool; 
+      pump_control_failure_acknowledgement_0: bool; 
+      pump_control_failure_acknowledgement_1: bool; 
+      pump_control_failure_acknowledgement_2: bool; 
+      pump_control_failure_acknowledgement_3: bool; 
+      level_failure_acknowledgement: bool; 
+      steam_failure_acknowledgement: bool)
+   returns (OK: bool);
+
+var
+   Operator_nb_stops: int; 
+   PumpDefect_pump_status3: int; 
+   Defect_statein14: int; 
+   Defect_stateout14: int; 
+   Defect_statein5: int; 
+   Defect_stateout5: int; 
+   PumpDefect_PumpDefect3: int; 
+   PumpDefect_PumpControlDefect3: int; 
+   PumpDefect_pump_status2: int; 
+   Defect_statein13: int; 
+   Defect_stateout13: int; 
+   Defect_statein4: int; 
+   Defect_stateout4: int; 
+   PumpDefect_PumpDefect2: int; 
+   PumpDefect_PumpControlDefect2: int; 
+   PumpDefect_pump_status1: int; 
+   Defect_statein12: int; 
+   Defect_stateout12: int; 
+   Defect_statein3: int; 
+   Defect_stateout3: int; 
+   PumpDefect_PumpDefect1: int; 
+   PumpDefect_PumpControlDefect1: int; 
+   PumpDefect_pump_status: int; 
+   Defect_statein11: int; 
+   Defect_stateout11: int; 
+   Defect_statein2: int; 
+   Defect_stateout2: int; 
+   PumpDefect_PumpDefect: int; 
+   PumpDefect_PumpControlDefect: int; 
+   Dynamics_valve_state: int; 
+   Dynamics_q: int; 
+   Dynamics_v: int; 
+   Dynamics_p_0: int; 
+   Dynamics_p_1: int; 
+   Dynamics_p_2: int; 
+   Dynamics_p_3: int; 
+   operate_pumps_pump_status_0: int; 
+   operate_pumps_pump_status_1: int; 
+   operate_pumps_pump_status_2: int; 
+   operate_pumps_pump_status_3: int; 
+   operate_pumps_operate_pumps_0: int; 
+   operate_pumps_operate_pumps_1: int; 
+   operate_pumps_operate_pumps_2: int; 
+   operate_pumps_operate_pumps_3: int; 
+   PumpsStatus_n_pumps_flow: int; 
+   PumpsStatus_n_pumps_to_open: int; 
+   PumpsStatus_pump_status_0: int; 
+   PumpsStatus_pump_status_1: int; 
+   PumpsStatus_pump_status_2: int; 
+   PumpsStatus_pump_status_3: int; 
+   Valve_valve: bool; 
+   Valve_valve_state: int; 
+   PumpsOutput_close_pump_0: bool; 
+   PumpsOutput_close_pump_1: bool; 
+   PumpsOutput_close_pump_2: bool; 
+   PumpsOutput_close_pump_3: bool; 
+   critical_failure_op_mode: int; 
+   ControlMode_op_mode: int; 
+   PumpsDecision_n_pumps: int; 
+   Defect_statein1: int; 
+   Defect_stateout1: int; 
+   SteamDefect_SteamDefect: int; 
+   Defect_statein: int; 
+   LevelDefect_rlt_Defect_stateout: int; 
+   LevelDefect_LevelDefect: int; 
+   BoilerController_op_mode: int; 
+   BoilerController_q: int; 
+   BoilerController_v: int; 
+   BoilerController_p_0: int; 
+   BoilerController_p_1: int; 
+   BoilerController_p_2: int; 
+   BoilerController_p_3: int; 
+   BoilerController_valve_state: int; 
+   BoilerController_n_pumps: int; 
+   BoilerController_pump_status_0: int; 
+   BoilerController_pump_status_1: int; 
+   BoilerController_pump_status_2: int; 
+   BoilerController_pump_status_3: int; 
+   BoilerController_level_defect: int; 
+   BoilerController_steam_defect: int; 
+   BoilerController_pump_defect_0: int; 
+   BoilerController_pump_defect_1: int; 
+   BoilerController_pump_defect_2: int; 
+   BoilerController_pump_defect_3: int; 
+   BoilerController_pump_control_defect_0: int; 
+   BoilerController_pump_control_defect_1: int; 
+   BoilerController_pump_control_defect_2: int; 
+   BoilerController_pump_control_defect_3: int; 
+   BoilerController_flow_0: bool; 
+   BoilerController_flow_1: bool; 
+   BoilerController_flow_2: bool; 
+   BoilerController_flow_3: bool; 
+   BoilerController_program_ready: bool; 
+   BoilerController_mode: int; 
+   BoilerController_valve: bool; 
+   BoilerController_level_failure_detection: bool; 
+   BoilerController_steam_outcome_failure_detection: bool; 
+   BoilerController_level_repaired_acknowledgement: bool; 
+   BoilerController_steam_outcome_repaired_acknowledgement: bool;
+
+
 let 
-  REDGE= S -> S and not(pre(S)); 
-tel
-node sum(a_0,a_1,a_2,a_3:int) returns(sum:int); 
-let 
-  sum = a_0 + a_1 + a_2 + a_3; 
-tel
-node AND(a_0,a_1,a_2,a_3:bool) returns(AND:bool); 
-let 
-  AND = a_0 and a_1 and a_2 and a_3;
-tel
-node OR(a_0,a_1,a_2,a_3:bool) returns(OR:bool); 
-let 
-  OR = a_0 or a_1 or a_2 or a_3;
-tel
-node NOT(a_0,a_1,a_2,a_3:bool) returns(NOT_0,NOT_1,NOT_2,NOT_3:bool); 
-let 
-  NOT_0 = not a_0;
-  NOT_1 = not a_1;
-  NOT_2 = not a_2;
-  NOT_3 = not a_3;
-tel
-node FEDGE1(S:bool) returns(FEDGE1:bool); 
-let 
-  FEDGE1= not(S) -> not(S) and pre(S); 
-tel
-node FEDGE2(S:bool) returns(FEDGE2:bool); 
-let 
-  FEDGE2= REDGE(not(S)); 
-tel
-node Verification(S1,S2:bool) returns(property_ok:bool); 
-var property1,property2:bool; 
-let 
-  property1=FEDGE1(S1)=FEDGE2(S1); 
-  property2= FEDGE1(S1)=REDGE(S2); 
-  property_ok=
-if S2=not(S1) then
-property1 and property2
- else true
-; 
-tel
-node Operator(stop:bool) returns (stop_request:bool); 
-var nb_stops:int; 
-let 
-  nb_stops = (if stop then 1 else 0) -> 
-    if stop then pre(nb_stops)+1 else 0; 
-  stop_request = (nb_stops>=3); 
-tel
-node Defect(statein:int; fail_cond,ack_chan,repair_chan:bool) 
-  returns(stateout:int); 
-let 
-  stateout = if (statein=0) then 
-    if fail_cond then 1 else 0 
-    else 
-      if (statein=1) then 
-        if ack_chan then 2 else 1 
-      else 
-        if repair_chan then 0 else 2; 
-tel
-node level_failure_detect(level:int) returns(level_failure_detect:bool); 
-let 
-  level_failure_detect = ((level < 0) or (level > 1000)); 
-tel
-node steam_failure_detect(steam:int) returns(steam_failure_detect:bool); 
-let 
-  steam_failure_detect = ((steam < 0) or (steam > 25)); 
-tel
-node LevelDefect(level_failure_acknowledgement,level_repaired:bool; 
-  level:int) 
-  returns( LevelDefect:int); 
-let 
-  LevelDefect = 0 -> 
-    Defect(pre(LevelDefect), level_failure_detect(level), level_failure_acknowledgement, level_repaired); 
-tel
-node SteamDefect(steam_failure_acknowledgement,steam_repaired:bool; 
-  steam:int) 
-  returns( SteamDefect:int); 
-let 
-  SteamDefect = 0 -> 
-    Defect(pre(SteamDefect), steam_failure_detect(steam), steam_failure_acknowledgement, steam_repaired); 
-tel
-node pump_failure_detect(pump_status,pump_state:int; 
-  pump_control_state:bool) 
-  returns(pump_failure_detect,pump_control_failure_detect,flow:bool); 
-let 
-  pump_failure_detect = ((pump_status=0) and pump_state=1) 
-    or (((pump_status=1) or (pump_status=2))and pump_state=0); 
-  pump_control_failure_detect = (((pump_status=0) or 
-    (pump_status=2)) and pump_state=0 and pump_control_state) 
-    or ((pump_status=1) and pump_state=1 and not(pump_control_state)) 
-    or ((pump_status=2) and pump_state=1 and pump_control_state); 
-  flow = ((pump_status=0) and pump_state=1 and pump_control_state) 
-    or ((pump_status=1) and pump_state=0 and pump_control_state) 
-    or ((pump_status=1) and pump_state=1); 
-tel
-node PumpDefect( 
-  pump_failure_acknowledgement,pump_repaired, 
-  pump_control_failure_acknowledgement,pump_control_repaired:bool; 
-  pump_status,pump_state:int; 
-  pump_control_state:bool) 
-  returns(PumpDefect,PumpControlDefect:int;Flow:bool); 
-var 
-  pump_failure_d, pump_control_failure_d:bool; 
-let 
-  (pump_failure_d, pump_control_failure_d, Flow) = pump_failure_detect(pump_status, pump_state, pump_control_state); 
-  PumpDefect = 0 -> 
-    Defect(pre(PumpDefect), pump_failure_d, pump_failure_acknowledgement, pump_repaired); 
-  PumpControlDefect = 0 -> 
-    Defect(pre(PumpControlDefect), pump_control_failure_d, pump_control_failure_acknowledgement, pump_control_repaired); 
-tel
-node level_failure(level_defect:int) returns(level_failure:bool); 
-let 
-  level_failure = (level_defect<>0); 
-tel
-node steam_failure(steam_defect:int) returns(steam_failure:bool); 
-let 
-  steam_failure = (steam_defect<>0); 
-tel
-node pump_failure(pump_defect:int) returns(pump_failure:bool); 
-let 
-  pump_failure = (pump_defect<>0); 
-tel
-node pump_control_failure(pump_defect:int) returns(pump_failure:bool); 
-let 
-  pump_failure = (pump_defect<>0); 
-tel
-node Dynamics(valve_state,level,steam,level_defect,steam_defect:int; 
-  flow_0,flow_1,flow_2,flow_3:bool) 
-  returns (q,v:int; p_0,p_1,p_2,p_3:int); 
-let 
-  q = level-> 
-    if level_failure(level_defect) then 
-      pre(q) +1- steam*5 + sum(p_0,p_1,p_2,p_3)*5 +1- (if valve_state=1 then 10*5 else 0) 
-    else 
-      level; 
-  v = steam-> 
-    if steam_failure(steam_defect) then 
-      (pre(q) -q) div 5 + sum(p_0,p_1,p_2,p_3)*5 
-    else 
-      steam; 
-  p_0 = 0-> 
-    if (not(flow_0)) then 
-      0 
-    else 
-      15; 
-  p_1 = 0-> 
-    if (not(flow_1)) then 
-      0 
-    else 
-      15; 
-  p_2 = 0-> 
-    if (not(flow_2)) then 
-      0 
-    else 
-      15; 
-  p_3 = 0-> 
-    if (not(flow_3)) then 
-      0 
-    else 
-      15; 
-tel
-node PumpsDecision(q,v:int) returns (n_pumps:int); 
-let 
-  n_pumps = if q>600 then 
-      (v div 15) 
-    else 
-      if q<400 then 
-        (v div 15) +1 
-      else 
-        pre(n_pumps) ; 
-tel
-node operate_pumps( n, n_pumps_to_open:int; 
-  pump_status_0,pump_status_1,pump_status_2,pump_status_3,
-  pump_defect_0,pump_defect_1,pump_defect_2,pump_defect_3:int; 
-  flow_0,flow_1,flow_2,flow_3:bool) 
-  returns(operate_pumps_0,operate_pumps_1,operate_pumps_2,operate_pumps_3:int); 
-let 
-  operate_pumps_0 =  
-      if ((n_pumps_to_open>0) and 
-        not(flow_0) and 
-        not(pump_failure(pump_defect_0)) and 
-        (pump_status_0=0)) then 
-        2 
-      else 
-        if ((n_pumps_to_open<0) and 
-          flow_0 and 
-          not(pump_failure(pump_defect_0)) and 
-          (pump_status_0=1)) then 
-          0 
-        else 
-          if (pump_status_0=2) then 
-            1 
-          else 
-            if (pre(pump_defect_0)=2 and 
-              pump_defect_0=0) then 
-              if pump_status_0=1 then 
-                0 
-              else 
-                1 
-            else 
-              pump_status_0; 
-  operate_pumps_1 =  
-      if ((n_pumps_to_open>0) and 
-        not(flow_1) and 
-        not(pump_failure(pump_defect_1)) and 
-        (pump_status_1=0)) then 
-        2 
-      else 
-        if ((n_pumps_to_open<0) and 
-          flow_1 and 
-          not(pump_failure(pump_defect_1)) and 
-          (pump_status_1=1)) then 
-          0 
-        else 
-          if (pump_status_1=2) then 
-            1 
-          else 
-            if (pre(pump_defect_1)=2 and 
-              pump_defect_1=0) then 
-              if pump_status_1=1 then 
-                0 
-              else 
-                1 
-            else 
-              pump_status_1; 
-  operate_pumps_2 =  
-      if ((n_pumps_to_open>0) and 
-        not(flow_2) and 
-        not(pump_failure(pump_defect_2)) and 
-        (pump_status_2=0)) then 
-        2 
-      else 
-        if ((n_pumps_to_open<0) and 
-          flow_2 and 
-          not(pump_failure(pump_defect_2)) and 
-          (pump_status_2=1)) then 
-          0 
-        else 
-          if (pump_status_2=2) then 
-            1 
-          else 
-            if (pre(pump_defect_2)=2 and 
-              pump_defect_2=0) then 
-              if pump_status_2=1 then 
-                0 
-              else 
-                1 
-            else 
-              pump_status_2; 
-  operate_pumps_3 =  
-      if ((n_pumps_to_open>0) and 
-        not(flow_3) and 
-        not(pump_failure(pump_defect_3)) and 
-        (pump_status_3=0)) then 
-        2 
-      else 
-        if ((n_pumps_to_open<0) and 
-          flow_3 and 
-          not(pump_failure(pump_defect_3)) and 
-          (pump_status_3=1)) then 
-          0 
-        else 
-          if (pump_status_3=2) then 
-            1 
-          else 
-            if (pre(pump_defect_3)=2 and 
-              pump_defect_3=0) then 
-              if pump_status_3=1 then 
-                0 
-              else 
-                1 
-            else 
-              pump_status_3; 
-tel
-node PumpsStatus( 
-  n_pumps:int; 
-  pump_defect_0,pump_defect_1,pump_defect_2,pump_defect_3:int; 
-  flow_0,flow_1,flow_2,flow_3:bool) 
-  returns(pump_status_0,pump_status_1,pump_status_2,pump_status_3:int); 
-var 
-  n_pumps_flow,n_pumps_to_open:int; 
-  t0,t1,t2,t3:int;
-let 
-  n_pumps_flow = (if flow_0 then 1 else 0) + (if flow_1 then 1 else 0) + 
-    (if flow_2 then 1 else 0) + (if flow_3 then 1 else 0); 
-  n_pumps_to_open = n_pumps-n_pumps_flow; 
-  pump_status_0 = 0 ->t0;
-  pump_status_1 = 0 ->t1;
-  pump_status_2 = 0 ->t2;
-  pump_status_3 = 0 ->t3;
-  (t0,t1,t2,t3) =
-    operate_pumps(4, n_pumps_to_open, 
-      pre(pump_status_0),pre(pump_status_1),pre(pump_status_2),pre(pump_status_3), 
-      pump_defect_0,pump_defect_1,pump_defect_2,pump_defect_3, 
-      flow_0,flow_1,flow_2,flow_3); 
-tel
-node transmission_failure(pump_state_0,pump_state_1,pump_state_2,pump_state_3:int) 
-  returns(transmission_failure:bool); 
-let 
-  transmission_failure = pump_state_0=3 or pump_state_1=3 or pump_state_2=3 or pump_state_3=3; 
-tel
-node steam_failure_startup(steam:int) returns(steam_failure_startup:bool); 
-let 
-  steam_failure_startup=(steam<>0); 
-tel
-node dangerous_level(q:int) returns(dangerous_level:bool); 
-let 
-  dangerous_level = (q <= 150) or (q >= 850); 
-tel
-node critical_failure( 
-  op_mode,steam,level_defect,steam_defect:int; 
-  pump_defect_0,pump_defect_1,pump_defect_2,pump_defect_3:int; 
-  q:int; 
-  pump_state_0,pump_state_1,pump_state_2,pump_state_3:int) 
-  returns(critical_failure:bool); 
-let 
-  critical_failure = transmission_failure(pump_state_0,pump_state_1,pump_state_2,pump_state_3) or 
-    (op_mode=1 and steam_failure_startup(steam)) or 
-    (op_mode=2 and (level_failure(level_defect) or steam_failure(steam_defect))) or 
-    (op_mode=3 and dangerous_level(q)) or 
-    (op_mode=4 and dangerous_level(q)) or 
-    (op_mode=5 and (dangerous_level(q) or steam_failure(steam_defect) or AND(pump_failure(pump_defect_0),pump_failure(pump_defect_1),pump_failure(pump_defect_2),pump_failure(pump_defect_3)))); 
-tel
-node failure( 
-  level_defect,steam_defect:int; 
-  pump_defect_0,pump_defect_1,pump_defect_2,pump_defect_3,pump_control_defect_0,pump_control_defect_1,pump_control_defect_2,pump_control_defect_3:int) 
-  returns(failure:bool); 
-let 
-  failure = level_failure(level_defect) or 
-    steam_failure(steam_defect) or 
-    OR(pump_failure(pump_defect_0),pump_failure(pump_defect_1),pump_failure(pump_defect_2),pump_failure(pump_defect_3)) or 
-    OR(pump_control_failure(pump_control_defect_0),pump_control_failure(pump_control_defect_1),pump_control_failure(pump_control_defect_2),pump_control_failure(pump_control_defect_3)); 
-tel
-node ControlMode( 
-  steam_boiler_waiting,physical_units_ready,stop_request:bool; 
-  steam,level_defect,steam_defect:int; 
-  pump_defect_0,pump_defect_1,pump_defect_2,pump_defect_3,pump_control_defect_0,pump_control_defect_1,pump_control_defect_2,pump_control_defect_3:int; 
-  q:int; 
-  pump_state_0,pump_state_1,pump_state_2,pump_state_3:int) 
-  returns(op_mode :int); 
-let 
-  op_mode= 1-> 
-    if (critical_failure(pre(op_mode), 
-      steam, level_defect, steam_defect, pump_defect_0,pump_defect_1,pump_defect_2,pump_defect_3, q, pump_state_0,pump_state_1,pump_state_2,pump_state_3) or 
-      stop_request or pre(op_mode)=6) then 
-      6 
-    else 
-      if (pre(op_mode)=1) then 
-        if steam_boiler_waiting then 2 else 1 
-      else 
-        if (pre(op_mode)=2 and not physical_units_ready) then 
-          2 
-        else 
-          if level_failure(level_defect) then 
-            5 
-          else 
-            if failure(level_defect, steam_defect, pump_defect_0,pump_defect_1,pump_defect_2,pump_defect_3, pump_control_defect_0,pump_control_defect_1,pump_control_defect_2,pump_control_defect_3) then 
-              4 
-            else 
-              3; 
-tel
-node Valve(op_mode:int;q:int) returns (valve:bool;valve_state:int); 
-let 
-  valve_state=0-> 
-    if (op_mode=2) then 
-      if (q>600) then 
-        1 
-      else 
-        if (q<=600) then 0 else pre(valve_state) 
-    else 
-      pre(valve_state); 
-  valve =false-> 
-    (valve_state<>pre(valve_state)); 
-tel
-node initialization_complete(op_mode,level:int;valve:bool) 
-  returns(initialization_complete:bool); 
-let 
-  initialization_complete =(op_mode=2) and 
-    ((400<=level) and (level<=600))and 
-    not(valve); 
-tel
-node ControlOutput(op_mode,level:int;valve:bool) 
-  returns(program_ready:bool;mode:int); 
-let 
-  program_ready=initialization_complete(op_mode,level,valve); 
-  mode =op_mode; 
-tel
-node SteamOutput(op_mode,steam_defect:int; steam_repaired:bool) 
-  returns (steam_outcome_failure_detection, 
-steam_outcome_repaired_acknowledgement : bool); 
-let 
-  steam_outcome_failure_detection= 
-    not ((op_mode=6) or (op_mode=1)) and 
-    (steam_defect=1); 
-  steam_outcome_repaired_acknowledgement = 
-    not ((op_mode=6) or (op_mode=1)) and 
-    steam_repaired; 
-tel
-node LevelOutput(op_mode,level_defect:int; level_repaired:bool) 
-  returns (level_outcome_failure_detection, 
-level_outcome_repaired_acknowledgement : bool); 
-let 
-  level_outcome_failure_detection= 
-    not ((op_mode=6) or (op_mode=1)) and 
-    (level_defect=1); 
-  level_outcome_repaired_acknowledgement = 
-    not ((op_mode=6) or (op_mode=1)) and 
-    level_repaired; 
-tel
-node PumpsOutput(op_mode:int; 
-  pump_status_0,pump_status_1,pump_status_2,pump_status_3,
-  pump_defect_0,pump_defect_1,pump_defect_2,pump_defect_3,
-  pump_control_defect_0,pump_control_defect_1,pump_control_defect_2,pump_control_defect_3:int; 
-  pump_repaired_0,pump_repaired_1,pump_repaired_2,pump_repaired_3,
-  pump_control_repaired_0,pump_control_repaired_1,pump_control_repaired_2,pump_control_repaired_3:bool) 
-  returns (open_pump_0,open_pump_1,open_pump_2,open_pump_3,
-  close_pump_0,close_pump_1,close_pump_2,close_pump_3,
-  pump_failure_detection_0,pump_failure_detection_1,pump_failure_detection_2,pump_failure_detection_3, 
-  pump_repaired_acknowledgement_0,pump_repaired_acknowledgement_1,pump_repaired_acknowledgement_2,pump_repaired_acknowledgement_3,
-  pump_control_failure_detection_0,pump_control_failure_detection_1,pump_control_failure_detection_2,pump_control_failure_detection_3, 
-  pump_control_repaired_acknowledgement_0,pump_control_repaired_acknowledgement_1,pump_control_repaired_acknowledgement_2,pump_control_repaired_acknowledgement_3 : bool); 
-let 
-  open_pump_0 = 
-     op_mode<>6 and op_mode<>1 and pump_status_0=2;
-  open_pump_1 = 
-     op_mode<>6 and op_mode<>1 and pump_status_1=2;
-  open_pump_2 = 
-     op_mode<>6 and op_mode<>1 and pump_status_2=2;
-  open_pump_3 = 
-     op_mode<>6 and op_mode<>1 and pump_status_3=2; 
-    
-  close_pump_0 = 
-     op_mode<>6 and op_mode<>1 and pump_status_0=0 and pre(pump_status_0)<>0 and pump_defect_0=0 and pre(pump_defect_0)=0;
-  close_pump_1 = 
-     op_mode<>6 and op_mode<>1 and pump_status_0=0 and pre(pump_status_1)<>0 and pump_defect_0=0 and pre(pump_defect_1)=0;
-  close_pump_2 = 
-     op_mode<>6 and op_mode<>1 and pump_status_0=0 and pre(pump_status_2)<>0 and pump_defect_0=0 and pre(pump_defect_2)=0;
-  close_pump_3 = 
-     op_mode<>6 and op_mode<>1 and pump_status_0=0 and pre(pump_status_3)<>0 and pump_defect_0=0 and pre(pump_defect_3)=0;
-    
-  pump_failure_detection_0 = 
-    op_mode<>6 and op_mode<>1 and pump_defect_0=1;
-  pump_failure_detection_1 = 
-     op_mode<>6 and op_mode<>1 and pump_defect_1=1;
-  pump_failure_detection_2 = 
-     op_mode<>6 and op_mode<>1 and pump_defect_2=1;
-  pump_failure_detection_3 = 
-     op_mode<>6 and op_mode<>1 and pump_defect_3=1;
-    
-  pump_repaired_acknowledgement_0 = 
-    op_mode<>6 and op_mode<>1 and pump_repaired_0;
-  pump_repaired_acknowledgement_1 = 
-     op_mode<>6 and op_mode<>1 and pump_repaired_1;
-  pump_repaired_acknowledgement_2 = 
-     op_mode<>6 and op_mode<>1 and pump_repaired_2;
-  pump_repaired_acknowledgement_3 = 
-     op_mode<>6 and op_mode<>1 and pump_repaired_3;
-    
-  pump_control_failure_detection_0 = 
-    op_mode<>6 and op_mode<>1 and pump_control_defect_0=1;
-  pump_control_failure_detection_1 = 
-    op_mode<>6 and op_mode<>1 and pump_control_defect_1=1;
-  pump_control_failure_detection_2 = 
-    op_mode<>6 and op_mode<>1 and pump_control_defect_2=1;
-  pump_control_failure_detection_3 = 
-    op_mode<>6 and op_mode<>1 and pump_control_defect_3=1;
-    
-  pump_control_repaired_acknowledgement_0 = 
-    op_mode<>6 and op_mode<>1 and pump_control_repaired_0;
-  pump_control_repaired_acknowledgement_1 = 
-    op_mode<>6 and op_mode<>1 and pump_control_repaired_1;
-  pump_control_repaired_acknowledgement_2 = 
-    op_mode<>6 and op_mode<>1 and pump_control_repaired_2;
-  pump_control_repaired_acknowledgement_3 = 
-    op_mode<>6 and op_mode<>1 and pump_control_repaired_3;
-tel
-node BoilerController( 
-  stop, 
-  steam_boiler_waiting, 
-  physical_units_ready : bool; 
-  level : int; 
-  steam : int; 
-  pump_state_0,pump_state_1,pump_state_2,pump_state_3 : int; 
-  pump_control_state_0,pump_control_state_1,pump_control_state_2,pump_control_state_3 : bool; 
-  pump_repaired_0,pump_repaired_1,pump_repaired_2,pump_repaired_3 : bool; 
-  pump_control_repaired_0,pump_control_repaired_1,pump_control_repaired_2,pump_control_repaired_3 : bool; 
-  level_repaired : bool; 
-  steam_repaired : bool; 
-  pump_failure_acknowledgement_0,pump_failure_acknowledgement_1,pump_failure_acknowledgement_2,pump_failure_acknowledgement_3 : bool; 
-  pump_control_failure_acknowledgement_0,pump_control_failure_acknowledgement_1,pump_control_failure_acknowledgement_2,pump_control_failure_acknowledgement_3 : bool; 
-  level_failure_acknowledgement : bool; 
-  steam_failure_acknowledgement : bool) 
-  returns(
-  program_ready : bool; 
-  mode : int; 
-  valve : bool; 
-  open_pump_0,open_pump_1,open_pump_2,open_pump_3 : bool; 
-  close_pump_0,close_pump_1,close_pump_2,close_pump_3 : bool; 
-  pump_failure_detection_0,pump_failure_detection_1,pump_failure_detection_2,pump_failure_detection_3 : bool; 
-  pump_control_failure_detection_0,pump_control_failure_detection_1,pump_control_failure_detection_2,pump_control_failure_detection_3 : bool; 
-  level_failure_detection : bool; 
-  steam_outcome_failure_detection : bool; 
-  pump_repaired_acknowledgement_0,pump_repaired_acknowledgement_1,pump_repaired_acknowledgement_2,pump_repaired_acknowledgement_3 : bool; 
-  pump_control_repaired_acknowledgement_0,pump_control_repaired_acknowledgement_1,pump_control_repaired_acknowledgement_2,pump_control_repaired_acknowledgement_3 : bool; 
-  level_repaired_acknowledgement : bool; 
-  steam_outcome_repaired_acknowledgement: bool); 
-var 
-  stop_request : bool; 
-  op_mode : int; 
-  q : int; 
-  v : int; 
-  p_0,p_1,p_2,p_3 : int; 
-  valve_state : int; 
-  n_pumps : int; 
-  pump_status_0,pump_status_1,pump_status_2,pump_status_3 : int; 
-  level_defect : int; 
-  steam_defect : int; 
-  pump_defect_0,pump_defect_1,pump_defect_2,pump_defect_3 : int; 
-  pump_control_defect_0,pump_control_defect_1,pump_control_defect_2,pump_control_defect_3 : int; 
-  flow_0,flow_1,flow_2,flow_3 : bool; 
-  t00,t01,t10,t20,t30,t11,t21,t31:int;
-  t02,t12,t22,t32,u4,u6:bool;
-  t4,t5,t6,t7,t8,t9,u0,u1,u2,u3,u5,u7:int;
-  a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24:bool;
-  b0,b1,b2,b3:bool;
-let 
-  stop_request = Operator(stop); 
-  level_defect = 0-> 
-    LevelDefect(level_failure_acknowledgement, level_repaired, level); 
-  steam_defect = 0-> 
-    SteamDefect(steam_failure_acknowledgement, steam_repaired, steam); 
-  pump_defect_0 = 0 -> t00;
-  pump_control_defect_0 = 0 -> t01;
-  flow_0 = false -> t02;
-  (t00,t01,t02) =
-       PumpDefect(pump_failure_acknowledgement_0, pump_repaired_0, 
-         pump_control_failure_acknowledgement_0, pump_control_repaired_0,
-         pre(pump_status_0), pump_state_0, pump_control_state_0); 
-  pump_defect_1 = 0 -> t10;
-  pump_control_defect_1 = 0 -> t11;
-  flow_1 = false -> t12;
-  (t10,t11,t12) =
-       PumpDefect(pump_failure_acknowledgement_1, pump_repaired_1, 
-         pump_control_failure_acknowledgement_1, pump_control_repaired_1,
-         pre(pump_status_1), pump_state_1, pump_control_state_1); 
-  pump_defect_2 = 0 -> t20;
-  pump_control_defect_2 = 0 -> t21;
-  flow_2 = false -> t22;
-  (t20,t21,t22) =
-       PumpDefect(pump_failure_acknowledgement_2, pump_repaired_2, 
-         pump_control_failure_acknowledgement_2, pump_control_repaired_2,
-         pre(pump_status_2), pump_state_2, pump_control_state_2); 
-  pump_defect_3 = 0 -> t30;
-  pump_control_defect_3 = 0 -> t31;
-  flow_3 = false -> t32;
-  (t30,t31,t32) =
-       PumpDefect(pump_failure_acknowledgement_3, pump_repaired_3, 
-         pump_control_failure_acknowledgement_3, pump_control_repaired_3,
-         pre(pump_status_3), pump_state_3, pump_control_state_3); 
-  q = level -> t4;
-  v = steam -> t5;
-  p_0 = 0 -> t6;
-  p_1 = 0 -> t7;
-  p_2 = 0 -> t8;
-  p_3 = 0 -> t9;
-  (t4,t5,t6,t7,t8,t9) =
-    Dynamics(pre(valve_state), level, steam, level_defect, steam_defect, flow_0,flow_1,flow_2,flow_3); 
-  n_pumps = 0-> PumpsDecision(q,v); 
-  pump_status_0 = 0 -> u0;
-  pump_status_1 = 0 -> u1;
-  pump_status_2 = 0 -> u2;
-  pump_status_3 = 0 -> u3;
-  (u0,u1,u2,u3) =
-    PumpsStatus(n_pumps, pump_defect_0,pump_defect_1,pump_defect_2,pump_defect_3,
-      flow_0,flow_1,flow_2,flow_3); 
-  op_mode = 1-> 
-    ControlMode( steam_boiler_waiting, physical_units_ready, stop_request, steam, level_defect, steam_defect, pump_defect_0,pump_defect_1,pump_defect_2,pump_defect_3, pump_control_defect_0,pump_control_defect_1,pump_control_defect_2,pump_control_defect_3, q, pump_state_0,pump_state_1,pump_state_2,pump_state_3); 
-  valve = false -> u4;
-  valve_state = 0 -> u5;
-  (u4,u5) =
-    Valve(op_mode,q); 
-  program_ready = false -> u6;
-  mode = 1-> u7;
-  (u6,u7) =
-    ControlOutput(op_mode,level,valve); 
-  open_pump_0=a1;
-  open_pump_1=a2;
-  open_pump_2=a3;
-  open_pump_3=a4;
-  close_pump_0=a5;
-  close_pump_1=a6;
-  close_pump_2=a7;
-  close_pump_3=a8;
-  pump_failure_detection_0=a9;
-  pump_failure_detection_1=a10;
-  pump_failure_detection_2=a11;
-  pump_failure_detection_3=a12;
-  pump_repaired_acknowledgement_0=a13;
-  pump_repaired_acknowledgement_1=a14;
-  pump_repaired_acknowledgement_2=a15;
-  pump_repaired_acknowledgement_3=a16;
-  pump_control_failure_detection_0=a17;
-  pump_control_failure_detection_1=a18;
-  pump_control_failure_detection_2=a19;
-  pump_control_failure_detection_3=a20;
-  pump_control_repaired_acknowledgement_0=a21;
-  pump_control_repaired_acknowledgement_1=a22;
-  pump_control_repaired_acknowledgement_2=a23;
-  pump_control_repaired_acknowledgement_3=a24;
-   (a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24)=
-      PumpsOutput(op_mode, pump_status_0,pump_status_1,pump_status_2,pump_status_3,
-        pump_defect_0,pump_defect_1,pump_defect_2,pump_defect_3,
-        pump_control_defect_0,pump_control_defect_1,pump_control_defect_2,pump_control_defect_3,
-        pump_repaired_0,pump_repaired_1,pump_repaired_2,pump_repaired_3,
-        pump_control_repaired_0,pump_control_repaired_1,pump_control_repaired_2,pump_control_repaired_3); 
-  level_failure_detection = false -> b0;
-  level_repaired_acknowledgement = false -> b1;
-  (b0,b1)=
-    LevelOutput(op_mode,level_defect,level_repaired); 
-  steam_outcome_failure_detection = false -> b2;
-  steam_outcome_repaired_acknowledgement = false -> b3;
-  (b2,b3)=
-    SteamOutput(op_mode,steam_defect,steam_repaired); 
-tel
---@ ensures OK;
-node top( 
-  stop, 
-  steam_boiler_waiting, 
-  physical_units_ready : bool; 
-  level : int; 
-  steam : int; 
-  pump_state_0,pump_state_1,pump_state_2,pump_state_3 : int; 
-  pump_control_state_0,pump_control_state_1,pump_control_state_2,pump_control_state_3 : bool; 
-  pump_repaired_0,pump_repaired_1,pump_repaired_2,pump_repaired_3 : bool; 
-  pump_control_repaired_0,pump_control_repaired_1,pump_control_repaired_2,pump_control_repaired_3 : bool; 
-  level_repaired : bool; 
-  steam_repaired : bool; 
-  pump_failure_acknowledgement_0,pump_failure_acknowledgement_1,pump_failure_acknowledgement_2,pump_failure_acknowledgement_3 : bool; 
-  pump_control_failure_acknowledgement_0,pump_control_failure_acknowledgement_1,pump_control_failure_acknowledgement_2,pump_control_failure_acknowledgement_3 : bool; 
-  level_failure_acknowledgement : bool; 
-  steam_failure_acknowledgement : bool) 
-  returns(OK:bool); 
-var 
-  program_ready,mode_ok,mode_normal_then_no_failure,mode_normal_then_valve_off : bool; 
-  mode : int; 
-  valve : bool; 
-  open_pump_0,open_pump_1,open_pump_2,open_pump_3 : bool; 
-  close_pump_0,close_pump_1,close_pump_2,close_pump_3 : bool; 
-  pump_failure_detection_0,pump_failure_detection_1,pump_failure_detection_2,pump_failure_detection_3 : bool; 
-  pump_control_failure_detection_0,pump_control_failure_detection_1,pump_control_failure_detection_2,pump_control_failure_detection_3 : bool; 
-  level_failure_detection : bool; 
-  steam_outcome_failure_detection : bool; 
-  pump_repaired_acknowledgement_0,pump_repaired_acknowledgement_1,pump_repaired_acknowledgement_2,pump_repaired_acknowledgement_3 : bool; 
-  pump_control_repaired_acknowledgement_0,pump_control_repaired_acknowledgement_1,pump_control_repaired_acknowledgement_2,pump_control_repaired_acknowledgement_3 : bool; 
-  level_repaired_acknowledgement : bool; 
-  steam_outcome_repaired_acknowledgement : bool;
-let 
-  (program_ready, mode, valve, open_pump_0,open_pump_1,open_pump_2,open_pump_3, close_pump_0,close_pump_1,close_pump_2,close_pump_3, pump_failure_detection_0,pump_failure_detection_1,pump_failure_detection_2,pump_failure_detection_3, pump_control_failure_detection_0,pump_control_failure_detection_1,pump_control_failure_detection_2,pump_control_failure_detection_3,
-      level_failure_detection, steam_outcome_failure_detection, pump_repaired_acknowledgement_0,pump_repaired_acknowledgement_1,pump_repaired_acknowledgement_2,pump_repaired_acknowledgement_3,
-      pump_control_repaired_acknowledgement_0,pump_control_repaired_acknowledgement_1,pump_control_repaired_acknowledgement_2,pump_control_repaired_acknowledgement_3, level_repaired_acknowledgement, 
-      steam_outcome_repaired_acknowledgement) = 
-    BoilerController(stop, steam_boiler_waiting, physical_units_ready, level, steam, pump_state_0,pump_state_1,pump_state_2,pump_state_3, 
-      pump_control_state_0,pump_control_state_1,pump_control_state_2,pump_control_state_3, pump_repaired_0,pump_repaired_1,pump_repaired_2,pump_repaired_3, pump_control_repaired_0,pump_control_repaired_1,pump_control_repaired_2,pump_control_repaired_3, level_repaired, steam_repaired, 
-      pump_failure_acknowledgement_0,pump_failure_acknowledgement_1,pump_failure_acknowledgement_2,pump_failure_acknowledgement_3, pump_control_failure_acknowledgement_0,pump_control_failure_acknowledgement_1,pump_control_failure_acknowledgement_2,pump_control_failure_acknowledgement_3, level_failure_acknowledgement, 
-      steam_failure_acknowledgement); 
-  OK= 
-    mode_ok and 
-    mode_normal_then_no_failure and 
-    mode_normal_then_valve_off; 
-  mode_ok = 
-    mode=1 or 
-    mode=2 or 
-    mode=3 or 
-    mode=4 or 
-    mode=5 or 
-    mode=6; 
-  mode_normal_then_valve_off = mode=3 => not(valve); 
-  mode_normal_then_no_failure = 
-    (mode=3 =>
-      not(level_failure_detection) and 
-      not(steam_outcome_failure_detection) and 
-      AND(not(pump_failure_detection_0),not(pump_failure_detection_1),not(pump_failure_detection_2),not(pump_failure_detection_3)) and 
-      AND(not(pump_control_failure_detection_0),not(pump_control_failure_detection_1),not(pump_control_failure_detection_2),not(pump_control_failure_detection_3))); 
-  --%MAIN;
-tel
+   Operator_nb_stops = (
+      (if stop
+         then 1
+         else 0) -> 
+      (if stop
+         then ((pre Operator_nb_stops) + 1)
+         else 0));
+
+   BoilerController_level_defect = (0 -> LevelDefect_LevelDefect);
+
+   BoilerController_steam_defect = (0 -> SteamDefect_SteamDefect);
+
+   BoilerController_pump_defect_0 = (0 -> PumpDefect_PumpDefect3);
+
+   BoilerController_pump_control_defect_0 = (0 -> PumpDefect_PumpControlDefect3);
+
+   BoilerController_flow_0 = (false -> (((((PumpDefect_pump_status3 = 0) and 
+      (pump_state_0 = 1)) and 
+      pump_control_state_0) or 
+      (((PumpDefect_pump_status3 = 1) and 
+      (pump_state_0 = 0)) and 
+      pump_control_state_0)) or 
+      ((PumpDefect_pump_status3 = 1) and 
+      (pump_state_0 = 1))));
+
+   PumpDefect_pump_status3 = (pre BoilerController_pump_status_0);
+
+   PumpDefect_PumpDefect3 = (0 -> Defect_stateout5);
+
+   PumpDefect_PumpControlDefect3 = (0 -> Defect_stateout14);
+
+   Defect_statein14 = (pre PumpDefect_PumpControlDefect3);
+
+   Defect_stateout14 = 
+      (if (Defect_statein14 = 0)
+         then 
+               (if ((((((PumpDefect_pump_status3 = 0) or 
+                  (PumpDefect_pump_status3 = 2)) and 
+                  (pump_state_0 = 0)) and 
+                  pump_control_state_0) or 
+                  (((PumpDefect_pump_status3 = 1) and 
+                  (pump_state_0 = 1)) and 
+                  (not pump_control_state_0))) or 
+                  (((PumpDefect_pump_status3 = 2) and 
+                  (pump_state_0 = 1)) and 
+                  pump_control_state_0))
+                  then 1
+                  else 0)
+         else 
+      (if (Defect_statein14 = 1)
+         then 
+               (if pump_control_failure_acknowledgement_0
+                  then 2
+                  else 1)
+         else 
+      (if pump_control_repaired_0
+         then 0
+         else 2)));
+
+   Defect_statein5 = (pre PumpDefect_PumpDefect3);
+
+   Defect_stateout5 = 
+      (if (Defect_statein5 = 0)
+         then 
+               (if (((PumpDefect_pump_status3 = 0) and 
+                  (pump_state_0 = 1)) or 
+                  (((PumpDefect_pump_status3 = 1) or 
+                  (PumpDefect_pump_status3 = 2)) and 
+                  (pump_state_0 = 0)))
+                  then 1
+                  else 0)
+         else 
+      (if (Defect_statein5 = 1)
+         then 
+               (if pump_failure_acknowledgement_0
+                  then 2
+                  else 1)
+         else 
+      (if pump_repaired_0
+         then 0
+         else 2)));
+
+   BoilerController_pump_defect_1 = (0 -> PumpDefect_PumpDefect2);
+
+   BoilerController_pump_control_defect_1 = (0 -> PumpDefect_PumpControlDefect2);
+
+   BoilerController_flow_1 = (false -> (((((PumpDefect_pump_status2 = 0) and 
+      (pump_state_1 = 1)) and 
+      pump_control_state_1) or 
+      (((PumpDefect_pump_status2 = 1) and 
+      (pump_state_1 = 0)) and 
+      pump_control_state_1)) or 
+      ((PumpDefect_pump_status2 = 1) and 
+      (pump_state_1 = 1))));
+
+   PumpDefect_pump_status2 = (pre BoilerController_pump_status_1);
+
+   PumpDefect_PumpDefect2 = (0 -> Defect_stateout4);
+
+   PumpDefect_PumpControlDefect2 = (0 -> Defect_stateout13);
+
+   Defect_statein13 = (pre PumpDefect_PumpControlDefect2);
+
+   Defect_stateout13 = 
+      (if (Defect_statein13 = 0)
+         then 
+               (if ((((((PumpDefect_pump_status2 = 0) or 
+                  (PumpDefect_pump_status2 = 2)) and 
+                  (pump_state_1 = 0)) and 
+                  pump_control_state_1) or 
+                  (((PumpDefect_pump_status2 = 1) and 
+                  (pump_state_1 = 1)) and 
+                  (not pump_control_state_1))) or 
+                  (((PumpDefect_pump_status2 = 2) and 
+                  (pump_state_1 = 1)) and 
+                  pump_control_state_1))
+                  then 1
+                  else 0)
+         else 
+      (if (Defect_statein13 = 1)
+         then 
+               (if pump_control_failure_acknowledgement_1
+                  then 2
+                  else 1)
+         else 
+      (if pump_control_repaired_1
+         then 0
+         else 2)));
+
+   Defect_statein4 = (pre PumpDefect_PumpDefect2);
+
+   Defect_stateout4 = 
+      (if (Defect_statein4 = 0)
+         then 
+               (if (((PumpDefect_pump_status2 = 0) and 
+                  (pump_state_1 = 1)) or 
+                  (((PumpDefect_pump_status2 = 1) or 
+                  (PumpDefect_pump_status2 = 2)) and 
+                  (pump_state_1 = 0)))
+                  then 1
+                  else 0)
+         else 
+      (if (Defect_statein4 = 1)
+         then 
+               (if pump_failure_acknowledgement_1
+                  then 2
+                  else 1)
+         else 
+      (if pump_repaired_1
+         then 0
+         else 2)));
+
+   BoilerController_pump_defect_2 = (0 -> PumpDefect_PumpDefect1);
+
+   BoilerController_pump_control_defect_2 = (0 -> PumpDefect_PumpControlDefect1);
+
+   BoilerController_flow_2 = (false -> (((((PumpDefect_pump_status1 = 0) and 
+      (pump_state_2 = 1)) and 
+      pump_control_state_2) or 
+      (((PumpDefect_pump_status1 = 1) and 
+      (pump_state_2 = 0)) and 
+      pump_control_state_2)) or 
+      ((PumpDefect_pump_status1 = 1) and 
+      (pump_state_2 = 1))));
+
+   PumpDefect_pump_status1 = (pre BoilerController_pump_status_2);
+
+   PumpDefect_PumpDefect1 = (0 -> Defect_stateout3);
+
+   PumpDefect_PumpControlDefect1 = (0 -> Defect_stateout12);
+
+   Defect_statein12 = (pre PumpDefect_PumpControlDefect1);
+
+   Defect_stateout12 = 
+      (if (Defect_statein12 = 0)
+         then 
+               (if ((((((PumpDefect_pump_status1 = 0) or 
+                  (PumpDefect_pump_status1 = 2)) and 
+                  (pump_state_2 = 0)) and 
+                  pump_control_state_2) or 
+                  (((PumpDefect_pump_status1 = 1) and 
+                  (pump_state_2 = 1)) and 
+                  (not pump_control_state_2))) or 
+                  (((PumpDefect_pump_status1 = 2) and 
+                  (pump_state_2 = 1)) and 
+                  pump_control_state_2))
+                  then 1
+                  else 0)
+         else 
+      (if (Defect_statein12 = 1)
+         then 
+               (if pump_control_failure_acknowledgement_2
+                  then 2
+                  else 1)
+         else 
+      (if pump_control_repaired_2
+         then 0
+         else 2)));
+
+   Defect_statein3 = (pre PumpDefect_PumpDefect1);
+
+   Defect_stateout3 = 
+      (if (Defect_statein3 = 0)
+         then 
+               (if (((PumpDefect_pump_status1 = 0) and 
+                  (pump_state_2 = 1)) or 
+                  (((PumpDefect_pump_status1 = 1) or 
+                  (PumpDefect_pump_status1 = 2)) and 
+                  (pump_state_2 = 0)))
+                  then 1
+                  else 0)
+         else 
+      (if (Defect_statein3 = 1)
+         then 
+               (if pump_failure_acknowledgement_2
+                  then 2
+                  else 1)
+         else 
+      (if pump_repaired_2
+         then 0
+         else 2)));
+
+   BoilerController_pump_defect_3 = (0 -> PumpDefect_PumpDefect);
+
+   BoilerController_pump_control_defect_3 = (0 -> PumpDefect_PumpControlDefect);
+
+   BoilerController_flow_3 = (false -> (((((PumpDefect_pump_status = 0) and 
+      (pump_state_3 = 1)) and 
+      pump_control_state_3) or 
+      (((PumpDefect_pump_status = 1) and 
+      (pump_state_3 = 0)) and 
+      pump_control_state_3)) or 
+      ((PumpDefect_pump_status = 1) and 
+      (pump_state_3 = 1))));
+
+   PumpDefect_pump_status = (pre BoilerController_pump_status_3);
+
+   PumpDefect_PumpDefect = (0 -> Defect_stateout2);
+
+   PumpDefect_PumpControlDefect = (0 -> Defect_stateout11);
+
+   Defect_statein11 = (pre PumpDefect_PumpControlDefect);
+
+   Defect_stateout11 = 
+      (if (Defect_statein11 = 0)
+         then 
+               (if ((((((PumpDefect_pump_status = 0) or 
+                  (PumpDefect_pump_status = 2)) and 
+                  (pump_state_3 = 0)) and 
+                  pump_control_state_3) or 
+                  (((PumpDefect_pump_status = 1) and 
+                  (pump_state_3 = 1)) and 
+                  (not pump_control_state_3))) or 
+                  (((PumpDefect_pump_status = 2) and 
+                  (pump_state_3 = 1)) and 
+                  pump_control_state_3))
+                  then 1
+                  else 0)
+         else 
+      (if (Defect_statein11 = 1)
+         then 
+               (if pump_control_failure_acknowledgement_3
+                  then 2
+                  else 1)
+         else 
+      (if pump_control_repaired_3
+         then 0
+         else 2)));
+
+   Defect_statein2 = (pre PumpDefect_PumpDefect);
+
+   Defect_stateout2 = 
+      (if (Defect_statein2 = 0)
+         then 
+               (if (((PumpDefect_pump_status = 0) and 
+                  (pump_state_3 = 1)) or 
+                  (((PumpDefect_pump_status = 1) or 
+                  (PumpDefect_pump_status = 2)) and 
+                  (pump_state_3 = 0)))
+                  then 1
+                  else 0)
+         else 
+      (if (Defect_statein2 = 1)
+         then 
+               (if pump_failure_acknowledgement_3
+                  then 2
+                  else 1)
+         else 
+      (if pump_repaired_3
+         then 0
+         else 2)));
+
+   BoilerController_q = (level -> Dynamics_q);
+
+   BoilerController_v = (steam -> Dynamics_v);
+
+   BoilerController_p_0 = (0 -> Dynamics_p_0);
+
+   BoilerController_p_1 = (0 -> Dynamics_p_1);
+
+   BoilerController_p_2 = (0 -> Dynamics_p_2);
+
+   BoilerController_p_3 = (0 -> Dynamics_p_3);
+
+   Dynamics_valve_state = (pre BoilerController_valve_state);
+
+   Dynamics_q = (level -> 
+      (if (BoilerController_level_defect <> 0)
+         then ((((((pre Dynamics_q) + 1) - (steam * 5)) + ((((Dynamics_p_0 + Dynamics_p_1) + Dynamics_p_2) + Dynamics_p_3) * 5)) + 1) - 
+               (if (Dynamics_valve_state = 1)
+                  then (10 * 5)
+                  else 0))
+         else level));
+
+   Dynamics_v = (steam -> 
+      (if (BoilerController_steam_defect <> 0)
+         then ((((pre Dynamics_q) - Dynamics_q) div 5) + ((((Dynamics_p_0 + Dynamics_p_1) + Dynamics_p_2) + Dynamics_p_3) * 5))
+         else steam));
+
+   Dynamics_p_0 = (0 -> 
+      (if (not BoilerController_flow_0)
+         then 0
+         else 15));
+
+   Dynamics_p_1 = (0 -> 
+      (if (not BoilerController_flow_1)
+         then 0
+         else 15));
+
+   Dynamics_p_2 = (0 -> 
+      (if (not BoilerController_flow_2)
+         then 0
+         else 15));
+
+   Dynamics_p_3 = (0 -> 
+      (if (not BoilerController_flow_3)
+         then 0
+         else 15));
+
+   BoilerController_n_pumps = (0 -> PumpsDecision_n_pumps);
+
+   BoilerController_pump_status_0 = (0 -> PumpsStatus_pump_status_0);
+
+   BoilerController_pump_status_1 = (0 -> PumpsStatus_pump_status_1);
+
+   BoilerController_pump_status_2 = (0 -> PumpsStatus_pump_status_2);
+
+   BoilerController_pump_status_3 = (0 -> PumpsStatus_pump_status_3);
+
+   PumpsStatus_n_pumps_flow = (((
+      (if BoilerController_flow_0
+         then 1
+         else 0) + 
+      (if BoilerController_flow_1
+         then 1
+         else 0)) + 
+      (if BoilerController_flow_2
+         then 1
+         else 0)) + 
+      (if BoilerController_flow_3
+         then 1
+         else 0));
+
+   PumpsStatus_n_pumps_to_open = (BoilerController_n_pumps - PumpsStatus_n_pumps_flow);
+
+   PumpsStatus_pump_status_0 = (0 -> operate_pumps_operate_pumps_0);
+
+   PumpsStatus_pump_status_1 = (0 -> operate_pumps_operate_pumps_1);
+
+   PumpsStatus_pump_status_2 = (0 -> operate_pumps_operate_pumps_2);
+
+   PumpsStatus_pump_status_3 = (0 -> operate_pumps_operate_pumps_3);
+
+   operate_pumps_pump_status_0 = (pre PumpsStatus_pump_status_0);
+
+   operate_pumps_pump_status_1 = (pre PumpsStatus_pump_status_1);
+
+   operate_pumps_pump_status_2 = (pre PumpsStatus_pump_status_2);
+
+   operate_pumps_pump_status_3 = (pre PumpsStatus_pump_status_3);
+
+   operate_pumps_operate_pumps_0 = 
+      (if ((((PumpsStatus_n_pumps_to_open > 0) and 
+         (not BoilerController_flow_0)) and 
+         (not (BoilerController_pump_defect_0 <> 0))) and 
+         (operate_pumps_pump_status_0 = 0))
+         then 2
+         else 
+      (if ((((PumpsStatus_n_pumps_to_open < 0) and 
+         BoilerController_flow_0) and 
+         (not (BoilerController_pump_defect_0 <> 0))) and 
+         (operate_pumps_pump_status_0 = 1))
+         then 0
+         else 
+      (if (operate_pumps_pump_status_0 = 2)
+         then 1
+         else 
+      (if (((pre BoilerController_pump_defect_0) = 2) and 
+         (BoilerController_pump_defect_0 = 0))
+         then 
+               (if (operate_pumps_pump_status_0 = 1)
+                  then 0
+                  else 1)
+         else operate_pumps_pump_status_0))));
+
+   operate_pumps_operate_pumps_1 = 
+      (if ((((PumpsStatus_n_pumps_to_open > 0) and 
+         (not BoilerController_flow_1)) and 
+         (not (BoilerController_pump_defect_1 <> 0))) and 
+         (operate_pumps_pump_status_1 = 0))
+         then 2
+         else 
+      (if ((((PumpsStatus_n_pumps_to_open < 0) and 
+         BoilerController_flow_1) and 
+         (not (BoilerController_pump_defect_1 <> 0))) and 
+         (operate_pumps_pump_status_1 = 1))
+         then 0
+         else 
+      (if (operate_pumps_pump_status_1 = 2)
+         then 1
+         else 
+      (if (((pre BoilerController_pump_defect_1) = 2) and 
+         (BoilerController_pump_defect_1 = 0))
+         then 
+               (if (operate_pumps_pump_status_1 = 1)
+                  then 0
+                  else 1)
+         else operate_pumps_pump_status_1))));
+
+   operate_pumps_operate_pumps_2 = 
+      (if ((((PumpsStatus_n_pumps_to_open > 0) and 
+         (not BoilerController_flow_2)) and 
+         (not (BoilerController_pump_defect_2 <> 0))) and 
+         (operate_pumps_pump_status_2 = 0))
+         then 2
+         else 
+      (if ((((PumpsStatus_n_pumps_to_open < 0) and 
+         BoilerController_flow_2) and 
+         (not (BoilerController_pump_defect_2 <> 0))) and 
+         (operate_pumps_pump_status_2 = 1))
+         then 0
+         else 
+      (if (operate_pumps_pump_status_2 = 2)
+         then 1
+         else 
+      (if (((pre BoilerController_pump_defect_2) = 2) and 
+         (BoilerController_pump_defect_2 = 0))
+         then 
+               (if (operate_pumps_pump_status_2 = 1)
+                  then 0
+                  else 1)
+         else operate_pumps_pump_status_2))));
+
+   operate_pumps_operate_pumps_3 = 
+      (if ((((PumpsStatus_n_pumps_to_open > 0) and 
+         (not BoilerController_flow_3)) and 
+         (not (BoilerController_pump_defect_3 <> 0))) and 
+         (operate_pumps_pump_status_3 = 0))
+         then 2
+         else 
+      (if ((((PumpsStatus_n_pumps_to_open < 0) and 
+         BoilerController_flow_3) and 
+         (not (BoilerController_pump_defect_3 <> 0))) and 
+         (operate_pumps_pump_status_3 = 1))
+         then 0
+         else 
+      (if (operate_pumps_pump_status_3 = 2)
+         then 1
+         else 
+      (if (((pre BoilerController_pump_defect_3) = 2) and 
+         (BoilerController_pump_defect_3 = 0))
+         then 
+               (if (operate_pumps_pump_status_3 = 1)
+                  then 0
+                  else 1)
+         else operate_pumps_pump_status_3))));
+
+   BoilerController_op_mode = (1 -> ControlMode_op_mode);
+
+   BoilerController_valve = (false -> Valve_valve);
+
+   BoilerController_valve_state = (0 -> Valve_valve_state);
+
+   Valve_valve_state = (0 -> 
+      (if (BoilerController_op_mode = 2)
+         then 
+               (if (BoilerController_q > 600)
+                  then 1
+                  else 
+               (if (BoilerController_q <= 600)
+                  then 0
+                  else (pre Valve_valve_state)))
+         else (pre Valve_valve_state)));
+
+   Valve_valve = (false -> (Valve_valve_state <> (pre Valve_valve_state)));
+
+   BoilerController_program_ready = (false -> (((BoilerController_op_mode = 2) and 
+      ((400 <= level) and 
+      (level <= 600))) and 
+      (not BoilerController_valve)));
+
+   BoilerController_mode = (1 -> BoilerController_op_mode);
+
+   PumpsOutput_close_pump_0 = ((((((BoilerController_op_mode <> 6) and 
+      (BoilerController_op_mode <> 1)) and 
+      (BoilerController_pump_status_0 = 0)) and 
+      ((pre BoilerController_pump_status_0) <> 0)) and 
+      (BoilerController_pump_defect_0 = 0)) and 
+      ((pre BoilerController_pump_defect_0) = 0));
+
+   PumpsOutput_close_pump_1 = ((((((BoilerController_op_mode <> 6) and 
+      (BoilerController_op_mode <> 1)) and 
+      (BoilerController_pump_status_0 = 0)) and 
+      ((pre BoilerController_pump_status_1) <> 0)) and 
+      (BoilerController_pump_defect_0 = 0)) and 
+      ((pre BoilerController_pump_defect_1) = 0));
+
+   PumpsOutput_close_pump_2 = ((((((BoilerController_op_mode <> 6) and 
+      (BoilerController_op_mode <> 1)) and 
+      (BoilerController_pump_status_0 = 0)) and 
+      ((pre BoilerController_pump_status_2) <> 0)) and 
+      (BoilerController_pump_defect_0 = 0)) and 
+      ((pre BoilerController_pump_defect_2) = 0));
+
+   PumpsOutput_close_pump_3 = ((((((BoilerController_op_mode <> 6) and 
+      (BoilerController_op_mode <> 1)) and 
+      (BoilerController_pump_status_0 = 0)) and 
+      ((pre BoilerController_pump_status_3) <> 0)) and 
+      (BoilerController_pump_defect_0 = 0)) and 
+      ((pre BoilerController_pump_defect_3) = 0));
+
+   BoilerController_level_failure_detection = (false -> ((not ((BoilerController_op_mode = 6) or 
+      (BoilerController_op_mode = 1))) and 
+      (BoilerController_level_defect = 1)));
+
+   BoilerController_level_repaired_acknowledgement = (false -> ((not ((BoilerController_op_mode = 6) or 
+      (BoilerController_op_mode = 1))) and 
+      level_repaired));
+
+   BoilerController_steam_outcome_failure_detection = (false -> ((not ((BoilerController_op_mode = 6) or 
+      (BoilerController_op_mode = 1))) and 
+      (BoilerController_steam_defect = 1)));
+
+   BoilerController_steam_outcome_repaired_acknowledgement = (false -> ((not ((BoilerController_op_mode = 6) or 
+      (BoilerController_op_mode = 1))) and 
+      steam_repaired));
+
+   ControlMode_op_mode = (1 -> 
+      (if (((((((((((pump_state_0 = 3) or 
+         (pump_state_1 = 3)) or 
+         (pump_state_2 = 3)) or 
+         (pump_state_3 = 3)) or 
+         ((critical_failure_op_mode = 1) and 
+         (steam <> 0))) or 
+         ((critical_failure_op_mode = 2) and 
+         ((BoilerController_level_defect <> 0) or 
+         (BoilerController_steam_defect <> 0)))) or 
+         ((critical_failure_op_mode = 3) and 
+         ((BoilerController_q <= 150) or 
+         (BoilerController_q >= 850)))) or 
+         ((critical_failure_op_mode = 4) and 
+         ((BoilerController_q <= 150) or 
+         (BoilerController_q >= 850)))) or 
+         ((critical_failure_op_mode = 5) and 
+         ((((BoilerController_q <= 150) or 
+         (BoilerController_q >= 850)) or 
+         (BoilerController_steam_defect <> 0)) or 
+         ((((BoilerController_pump_defect_0 <> 0) and 
+         (BoilerController_pump_defect_1 <> 0)) and 
+         (BoilerController_pump_defect_2 <> 0)) and 
+         (BoilerController_pump_defect_3 <> 0))))) or 
+         (Operator_nb_stops >= 3)) or 
+         ((pre ControlMode_op_mode) = 6))
+         then 6
+         else 
+      (if ((pre ControlMode_op_mode) = 1)
+         then 
+               (if steam_boiler_waiting
+                  then 2
+                  else 1)
+         else 
+      (if (((pre ControlMode_op_mode) = 2) and 
+         (not physical_units_ready))
+         then 2
+         else 
+      (if (BoilerController_level_defect <> 0)
+         then 5
+         else 
+      (if ((((BoilerController_level_defect <> 0) or 
+         (BoilerController_steam_defect <> 0)) or 
+         ((((BoilerController_pump_defect_0 <> 0) or 
+         (BoilerController_pump_defect_1 <> 0)) or 
+         (BoilerController_pump_defect_2 <> 0)) or 
+         (BoilerController_pump_defect_3 <> 0))) or 
+         ((((BoilerController_pump_control_defect_0 <> 0) or 
+         (BoilerController_pump_control_defect_1 <> 0)) or 
+         (BoilerController_pump_control_defect_2 <> 0)) or 
+         (BoilerController_pump_control_defect_3 <> 0)))
+         then 4
+         else 3))))));
+
+   critical_failure_op_mode = (pre ControlMode_op_mode);
+
+   PumpsDecision_n_pumps = 
+      (if (BoilerController_q > 600)
+         then (BoilerController_v div 15)
+         else 
+      (if (BoilerController_q < 400)
+         then ((BoilerController_v div 15) + 1)
+         else (pre PumpsDecision_n_pumps)));
+
+   SteamDefect_SteamDefect = (0 -> Defect_stateout1);
+
+   Defect_statein1 = (pre SteamDefect_SteamDefect);
+
+   Defect_stateout1 = 
+      (if (Defect_statein1 = 0)
+         then 
+               (if ((steam < 0) or 
+                  (steam > 25))
+                  then 1
+                  else 0)
+         else 
+      (if (Defect_statein1 = 1)
+         then 
+               (if steam_failure_acknowledgement
+                  then 2
+                  else 1)
+         else 
+      (if steam_repaired
+         then 0
+         else 2)));
+
+   LevelDefect_LevelDefect = (0 -> LevelDefect_rlt_Defect_stateout);
+
+   Defect_statein = (pre LevelDefect_LevelDefect);
+
+   LevelDefect_rlt_Defect_stateout = 
+      (if (Defect_statein = 0)
+         then 
+               (if ((level < 0) or 
+                  (level > 1000))
+                  then 1
+                  else 0)
+         else 
+      (if (Defect_statein = 1)
+         then 
+               (if level_failure_acknowledgement
+                  then 2
+                  else 1)
+         else 
+      (if level_repaired
+         then 0
+         else 2)));
+
+   OK = ((((((((BoilerController_mode = 1) or 
+      (BoilerController_mode = 2)) or 
+      (BoilerController_mode = 3)) or 
+      (BoilerController_mode = 4)) or 
+      (BoilerController_mode = 5)) or 
+      (BoilerController_mode = 6)) and 
+      ((not (BoilerController_mode = 3)) or 
+      ((((not BoilerController_level_failure_detection) and 
+      (not BoilerController_steam_outcome_failure_detection)) and 
+      ((((not (((BoilerController_op_mode <> 6) and 
+      (BoilerController_op_mode <> 1)) and 
+      (BoilerController_pump_defect_0 = 1))) and 
+      (not (((BoilerController_op_mode <> 6) and 
+      (BoilerController_op_mode <> 1)) and 
+      (BoilerController_pump_defect_1 = 1)))) and 
+      (not (((BoilerController_op_mode <> 6) and 
+      (BoilerController_op_mode <> 1)) and 
+      (BoilerController_pump_defect_2 = 1)))) and 
+      (not (((BoilerController_op_mode <> 6) and 
+      (BoilerController_op_mode <> 1)) and 
+      (BoilerController_pump_defect_3 = 1))))) and 
+      ((((not (((BoilerController_op_mode <> 6) and 
+      (BoilerController_op_mode <> 1)) and 
+      (BoilerController_pump_control_defect_0 = 1))) and 
+      (not (((BoilerController_op_mode <> 6) and 
+      (BoilerController_op_mode <> 1)) and 
+      (BoilerController_pump_control_defect_1 = 1)))) and 
+      (not (((BoilerController_op_mode <> 6) and 
+      (BoilerController_op_mode <> 1)) and 
+      (BoilerController_pump_control_defect_2 = 1)))) and 
+      (not (((BoilerController_op_mode <> 6) and 
+      (BoilerController_op_mode <> 1)) and 
+      (BoilerController_pump_control_defect_3 = 1))))))) and 
+      ((not (BoilerController_mode = 3)) or 
+      (not BoilerController_valve)));
+
+tel;
+
+

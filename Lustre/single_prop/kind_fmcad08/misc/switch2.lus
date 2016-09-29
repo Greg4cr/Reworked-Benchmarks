@@ -1,24 +1,38 @@
-node SWITCH1 (set,reset,initial:bool) returns (level:bool);
-let
-  level = initial -> if set then true 
-                     else if reset then false 
-                     else pre(level);
-tel
 
-node SWITCH (set,reset,initial:bool) returns (level:bool);
-let
-  level = initial -> if set and not pre(level) then true
-                     else if reset then false
-                     else pre(level);
-tel
+node top(set: bool; 
+      treset: bool; 
+      initial: bool)
+   returns (OK: bool);
 
---requires assert to be true
---@ ensures OK;
-node top(set, treset, initial:bool) returns (OK:bool);
-var level,level1:bool;
-let
-  level = SWITCH(set,treset,initial);
-  level1 = SWITCH1(set,treset,initial);
-  OK = if not(set and treset) then(level = level1) else true;
---  assert not(set and treset);
-tel
+var
+   SWITCH_level: bool; 
+   SWITCH1_level: bool;
+
+
+let 
+   SWITCH_level = (initial -> 
+      (if (set and 
+         (not (pre SWITCH_level)))
+         then true
+         else 
+      (if treset
+         then false
+         else (pre SWITCH_level))));
+
+   SWITCH1_level = (initial -> 
+      (if set
+         then true
+         else 
+      (if treset
+         then false
+         else (pre SWITCH1_level))));
+
+   OK = 
+      (if (not (set and 
+         treset))
+         then (SWITCH_level = SWITCH1_level)
+         else true);
+
+tel;
+
+

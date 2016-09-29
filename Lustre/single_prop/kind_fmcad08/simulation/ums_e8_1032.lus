@@ -1,74 +1,246 @@
 
-node Sofar( X : bool ) returns ( Sofar : bool );
-let
-    Sofar = X -> X and pre Sofar;
-tel
-node edge(X: bool) returns(Y: bool);
-let
-    Y = X -> X and not pre(X);
-tel
-node after(A: bool) returns(afterA: bool);
-let
-    afterA = false -> pre(A and afterA);
-tel
-node always_since(B, A: bool) returns(alwaysBsinceA: bool);
-let
-    alwaysBsinceA = if A then B else if after(A) then
-                           B and pre(alwaysBsinceA) else true;
-tel
-node once_since(C, A: bool) returns(onceCsinceA: bool);
-let
-    onceCsinceA = if A then C else if after(A) then
-                          C or pre(onceCsinceA) else true;
-tel
-node implies(A, B: bool) returns(AimpliesB: bool);
-let
-    AimpliesB = not A or B;
-tel
-node always_from_to(B, A, C: bool) returns(X: bool);
-let
-    X = implies(after(A), always_since(B, A) or once_since(C, A));
-tel
-node UMS(on_A, on_B, on_C, ack_AB, ack_BC: bool)
-returns(grant_access, grant_exit, do_AB, do_BC: bool);
+node top(on_A: bool; 
+      on_B: bool; 
+      on_C: bool; 
+      ack_AB: bool; 
+      ack_BC: bool)
+   returns (OK: bool);
+
 var
-   empty_section, only_on_B: bool;
-let
-   grant_access = empty_section and ack_AB;
-   grant_exit = only_on_B and ack_BC;
-   do_AB = not ack_AB and empty_section;
-   do_BC = not ack_BC and only_on_B;
-   empty_section = not(on_A or on_B or on_C);
-   only_on_B = on_B and not(on_A or on_C);
-tel
---@ ensures OK;
-node top(on_A, on_B, on_C, ack_AB, ack_BC: bool)
-returns(OK: bool);
-var
-   grant_access, grant_exit: bool;
-   do_AB, do_BC: bool;
-   no_collision, exclusive_req: bool;
-   no_derail_AB, no_derail_BC: bool;
-   empty_section, only_on_B: bool;
-   env : bool;
-let
-   empty_section = not(on_A or on_B or on_C);
-   only_on_B = on_B and not(on_A or on_C);
-   (grant_access, grant_exit, do_AB, do_BC) =
-       UMS(on_A, on_B, on_C, ack_AB, ack_BC);
-   env = Sofar( not(ack_AB and ack_BC) and
-               always_from_to(ack_AB, ack_AB, do_BC) and
-               always_from_to(ack_BC, ack_BC, do_AB) and
-               (empty_section -> true) and
-               (true -> implies(edge(not empty_section), pre grant_access)) and
-               (true -> implies(edge(on_C), pre grant_exit)) and
-               implies(edge(not on_A), on_B) and
-               implies(edge(not on_B), on_A or on_C) );
-   no_collision = implies(grant_access, empty_section);
-   exclusive_req = not(do_AB and do_BC);
-   no_derail_AB = always_from_to(ack_AB, grant_access, only_on_B);
-   no_derail_BC = always_from_to(ack_BC, grant_exit, empty_section);
-   OK = env => no_collision and exclusive_req and
-                     no_derail_AB and no_derail_BC;
-  --%MAIN;
-tel
+   UMS_empty_section: bool; 
+   UMS_only_on_B: bool; 
+   UMS_grant_access: bool; 
+   UMS_grant_exit: bool; 
+   UMS_do_AB: bool; 
+   UMS_do_BC: bool; 
+   Sofar_X: bool; 
+   Sofar_Sofar: bool; 
+   after_afterA23: bool; 
+   once_since_onceCsinceA3: bool; 
+   after_afterA13: bool; 
+   always_since_alwaysBsinceA3: bool; 
+   after_afterA5: bool; 
+   after_afterA22: bool; 
+   once_since_onceCsinceA2: bool; 
+   after_afterA12: bool; 
+   always_since_alwaysBsinceA2: bool; 
+   after_afterA4: bool; 
+   edge_X3: bool; 
+   edge_Y3: bool; 
+   edge_X2: bool; 
+   edge_Y2: bool; 
+   implies_B3: bool; 
+   edge_Y1: bool; 
+   implies_B2: bool; 
+   edge_X: bool; 
+   edge_Y: bool; 
+   after_afterA21: bool; 
+   once_since_onceCsinceA1: bool; 
+   after_afterA11: bool; 
+   always_since_alwaysBsinceA1: bool; 
+   after_afterA3: bool; 
+   after_afterA2: bool; 
+   once_since_onceCsinceA: bool; 
+   after_afterA1: bool; 
+   always_since_alwaysBsinceA: bool; 
+   after_afterA: bool; 
+   empty_section: bool; 
+   only_on_B: bool;
+
+
+let 
+   empty_section = (not ((on_A or 
+      on_B) or 
+      on_C));
+
+   only_on_B = (on_B and 
+      (not (on_A or 
+      on_C)));
+
+   UMS_grant_access = (UMS_empty_section and 
+      ack_AB);
+
+   UMS_grant_exit = (UMS_only_on_B and 
+      ack_BC);
+
+   UMS_do_AB = ((not ack_AB) and 
+      UMS_empty_section);
+
+   UMS_do_BC = ((not ack_BC) and 
+      UMS_only_on_B);
+
+   UMS_empty_section = (not ((on_A or 
+      on_B) or 
+      on_C));
+
+   UMS_only_on_B = (on_B and 
+      (not (on_A or 
+      on_C)));
+
+   Sofar_X = ((((((((not (ack_AB and 
+      ack_BC)) and 
+      ((not after_afterA) or 
+      (always_since_alwaysBsinceA or 
+      once_since_onceCsinceA))) and 
+      ((not after_afterA3) or 
+      (always_since_alwaysBsinceA1 or 
+      once_since_onceCsinceA1))) and 
+      (empty_section -> true)) and 
+      (true -> ((not edge_Y) or 
+      implies_B2))) and 
+      (true -> ((not edge_Y1) or 
+      implies_B3))) and 
+      ((not edge_Y2) or 
+      on_B)) and 
+      ((not edge_Y3) or 
+      (on_A or 
+      on_C)));
+
+   Sofar_Sofar = (Sofar_X -> (Sofar_X and 
+      (pre Sofar_Sofar)));
+
+   once_since_onceCsinceA3 = 
+      (if UMS_grant_access
+         then only_on_B
+         else 
+      (if after_afterA23
+         then (only_on_B or 
+               (pre once_since_onceCsinceA3))
+         else true));
+
+   after_afterA23 = (false -> (pre (UMS_grant_access and 
+      after_afterA23)));
+
+   always_since_alwaysBsinceA3 = 
+      (if UMS_grant_access
+         then ack_AB
+         else 
+      (if after_afterA13
+         then (ack_AB and 
+               (pre always_since_alwaysBsinceA3))
+         else true));
+
+   after_afterA13 = (false -> (pre (UMS_grant_access and 
+      after_afterA13)));
+
+   after_afterA5 = (false -> (pre (UMS_grant_access and 
+      after_afterA5)));
+
+   once_since_onceCsinceA2 = 
+      (if UMS_grant_exit
+         then empty_section
+         else 
+      (if after_afterA22
+         then (empty_section or 
+               (pre once_since_onceCsinceA2))
+         else true));
+
+   after_afterA22 = (false -> (pre (UMS_grant_exit and 
+      after_afterA22)));
+
+   always_since_alwaysBsinceA2 = 
+      (if UMS_grant_exit
+         then ack_BC
+         else 
+      (if after_afterA12
+         then (ack_BC and 
+               (pre always_since_alwaysBsinceA2))
+         else true));
+
+   after_afterA12 = (false -> (pre (UMS_grant_exit and 
+      after_afterA12)));
+
+   after_afterA4 = (false -> (pre (UMS_grant_exit and 
+      after_afterA4)));
+
+   OK = ((not Sofar_Sofar) or 
+      (((((not UMS_grant_access) or 
+      empty_section) and 
+      (not (UMS_do_AB and 
+      UMS_do_BC))) and 
+      ((not after_afterA5) or 
+      (always_since_alwaysBsinceA3 or 
+      once_since_onceCsinceA3))) and 
+      ((not after_afterA4) or 
+      (always_since_alwaysBsinceA2 or 
+      once_since_onceCsinceA2))));
+
+   edge_X3 = (not on_B);
+
+   edge_Y3 = (edge_X3 -> (edge_X3 and 
+      (not (pre edge_X3))));
+
+   edge_X2 = (not on_A);
+
+   edge_Y2 = (edge_X2 -> (edge_X2 and 
+      (not (pre edge_X2))));
+
+   implies_B3 = (pre UMS_grant_exit);
+
+   edge_Y1 = (on_C -> (on_C and 
+      (not (pre on_C))));
+
+   implies_B2 = (pre UMS_grant_access);
+
+   edge_X = (not empty_section);
+
+   edge_Y = (edge_X -> (edge_X and 
+      (not (pre edge_X))));
+
+   once_since_onceCsinceA1 = 
+      (if ack_BC
+         then UMS_do_AB
+         else 
+      (if after_afterA21
+         then (UMS_do_AB or 
+               (pre once_since_onceCsinceA1))
+         else true));
+
+   after_afterA21 = (false -> (pre (ack_BC and 
+      after_afterA21)));
+
+   always_since_alwaysBsinceA1 = 
+      (if ack_BC
+         then ack_BC
+         else 
+      (if after_afterA11
+         then (ack_BC and 
+               (pre always_since_alwaysBsinceA1))
+         else true));
+
+   after_afterA11 = (false -> (pre (ack_BC and 
+      after_afterA11)));
+
+   after_afterA3 = (false -> (pre (ack_BC and 
+      after_afterA3)));
+
+   once_since_onceCsinceA = 
+      (if ack_AB
+         then UMS_do_BC
+         else 
+      (if after_afterA2
+         then (UMS_do_BC or 
+               (pre once_since_onceCsinceA))
+         else true));
+
+   after_afterA2 = (false -> (pre (ack_AB and 
+      after_afterA2)));
+
+   always_since_alwaysBsinceA = 
+      (if ack_AB
+         then ack_AB
+         else 
+      (if after_afterA1
+         then (ack_AB and 
+               (pre always_since_alwaysBsinceA))
+         else true));
+
+   after_afterA1 = (false -> (pre (ack_AB and 
+      after_afterA1)));
+
+   after_afterA = (false -> (pre (ack_AB and 
+      after_afterA)));
+
+tel;
+
+

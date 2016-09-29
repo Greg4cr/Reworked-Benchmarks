@@ -1,43 +1,48 @@
---
--- Source Bertrand Jeannet, NBAC tutorial
---
 
-node Sofar( X : bool ) returns ( Sofar : bool );
-let
-    Sofar = X -> X and pre Sofar;
-tel
+node top(diff: int)
+   returns (OK: bool);
 
-node Environment(diff: int; plus,minus: bool) returns (ok: bool);
-let
-  ok = (-4 <= diff and diff <= 4) and 
-     (if (true -> pre plus) then diff >= 1 else true) and
-     (if (false -> pre minus) then diff <= -1 else true);
-tel
+var
+   Controller_speed: int; 
+   Environment_ok: bool; 
+   Property_cpt: int; 
+   Property_ok: bool; 
+   Sofar_X: bool; 
+   Sofar_Sofar: bool;
 
-node Controller(diff: int) returns (speed: int; plus,minus: bool);
-let
-  speed = 0 -> pre(speed)+diff;
-  plus = speed <= 9;
-  minus = speed >= 11;
-tel
 
-node Property(speed: int) returns (ok: bool);
-var cpt: int;
-    acceptable: bool;
-let
-  acceptable = 8 <= speed and speed <= 12;
-  cpt = 0 -> if acceptable then 0 else pre(cpt)+1;
-  ok = true -> (pre cpt<=7);
-tel
+let 
+   Controller_speed = (0 -> ((pre Controller_speed) + diff));
 
---@ ensures OK;
-node top(diff:int) returns (OK: bool);
-var speed: int; 
-    plus,minus,realistic: bool;
-let
-  (speed,plus,minus) = Controller(diff);
-  realistic =  Environment(diff,plus,minus);
+   Environment_ok = (((((-4) <= diff) and 
+      (diff <= 4)) and 
+      
+      (if (true -> (pre (Controller_speed <= 9)))
+         then (diff >= 1)
+         else true)) and 
+      
+      (if (false -> (pre (Controller_speed >= 11)))
+         then (diff <= (-1))
+         else true));
 
-  OK = Sofar( realistic and 0 <= speed and speed < 16 ) => Property(speed);
-  --%MAIN;
-tel
+   OK = ((not Sofar_Sofar) or 
+      Property_ok);
+
+   Property_cpt = (0 -> 
+      (if ((8 <= Controller_speed) and 
+         (Controller_speed <= 12))
+         then 0
+         else ((pre Property_cpt) + 1)));
+
+   Property_ok = (true -> ((pre Property_cpt) <= 7));
+
+   Sofar_X = ((Environment_ok and 
+      (0 <= Controller_speed)) and 
+      (Controller_speed < 16));
+
+   Sofar_Sofar = (Sofar_X -> (Sofar_X and 
+      (pre Sofar_Sofar)));
+
+tel;
+
+

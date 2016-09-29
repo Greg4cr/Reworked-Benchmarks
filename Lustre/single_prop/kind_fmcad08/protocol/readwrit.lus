@@ -1,129 +1,403 @@
-node Sofar( X : bool ) returns ( Sofar : bool );
-let
-    Sofar = X -> X and pre Sofar;
-tel
 
-node excludes9( X1, X2, X3, X4, X5, X6, X7, X8, X9 : bool ) returns ( excludes : bool );
-let
-    excludes = not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 or
-                  X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 or
-              not X1 and     X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 or
-              not X1 and not X2 and     X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 or
-              not X1 and not X2 and not X3 and     X4 and not X5 and not X6 and not X7 and not X8 and not X9 or
-              not X1 and not X2 and not X3 and not X4 and     X5 and not X6 and not X7 and not X8 and not X9 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and     X6 and not X7 and not X8 and not X9 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and     X7 and not X8 and not X9 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and     X8 and not X9 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and     X9;
-tel
+node top(etat1: bool; 
+      etat2: bool; 
+      etat3: bool; 
+      etat4: bool; 
+      etat5: bool; 
+      etat6: bool; 
+      etat7: bool; 
+      etat8: bool; 
+      etat9: bool)
+   returns (OK: bool);
 
-
-
-node readwrite(etat1, etat2, etat3, etat4, etat5, etat6, etat7, etat8, etat9 : bool)
-returns(x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12 : int);
 var
-   garde1, garde2, garde3, garde4, garde5, garde6, garde7, garde8, garde9 : bool;
-let
-   garde1 = pre x0>=1;
-   garde2 = pre x1>=1 and pre x4>=1;
-   garde3 = pre x2>=1 and pre x11>=1;
-   garde4 = pre x1>=1;
-   garde5 = pre x6>=1;
-   garde6 = pre x3>=1 and pre x7>=1;
-   garde7 = pre x8>=1 and pre x12>=1;
-   garde8 = pre x4>=5 and pre x5>=1 and pre x7>=1;
-   garde9 = pre x9>=1 and pre x10>=1;
+   readwrite_garde1: bool; 
+   readwrite_garde2: bool; 
+   readwrite_garde3: bool; 
+   readwrite_garde4: bool; 
+   readwrite_garde5: bool; 
+   readwrite_garde6: bool; 
+   readwrite_garde7: bool; 
+   readwrite_garde8: bool; 
+   readwrite_garde9: bool; 
+   readwrite_x0: int; 
+   readwrite_x1: int; 
+   readwrite_x2: int; 
+   readwrite_x3: int; 
+   readwrite_x4: int; 
+   readwrite_x5: int; 
+   readwrite_x6: int; 
+   readwrite_x7: int; 
+   readwrite_x8: int; 
+   readwrite_x9: int; 
+   readwrite_x10: int; 
+   readwrite_x11: int; 
+   readwrite_x12: int; 
+   Sofar_X: bool; 
+   Sofar_Sofar: bool;
 
-   x0 = 0 -> 
-   if(etat1) then if(garde1) then pre x0-1 else pre x0 else 
-   if(etat2) then if(garde2) then pre x0+1 else pre x0 else 
-   pre x0;
 
-   x1 = 0 -> 
-   if(etat1) then if(garde1) then pre x1+1 else pre x1 else 
-   if(etat2) then if(garde2) then pre x1-1 else pre x1 else 
-   if(etat3) then if(garde3) then pre x1+1 else pre x1 else 
-   if(etat4) then if(garde4) then pre x1-1 else pre x1 else 
-   pre x1;
+let 
+   readwrite_garde1 = ((pre readwrite_x0) >= 1);
 
-   x2 = 1 -> 
-   if(etat3) then if(garde3) then pre x2-1 else pre x2 else 
-   if(etat4) then if(garde4) then pre x2+1 else pre x2 else 
-   pre x2;
+   readwrite_garde2 = (((pre readwrite_x1) >= 1) and 
+      ((pre readwrite_x4) >= 1));
 
-   x3 = 0 -> 
-   if(etat2) then if(garde2) then pre x3+1 else pre x3 else 
-   if(etat6) then if(garde6) then pre x3-1 else pre x3 else
-   pre x3;
+   readwrite_garde3 = (((pre readwrite_x2) >= 1) and 
+      ((pre readwrite_x11) >= 1));
 
-   x4 = 0 -> 
-   if(etat2) then if(garde2) then pre x4-1 else pre x4 else 
-   if(etat6) then if(garde6) then pre x4+1 else pre x4 else 
-   if(etat7) then if(garde7) then pre x4+5 else pre x4 else 
-   if(etat8) then if(garde8) then pre x4-5 else pre x4 else 
-   pre x4;
+   readwrite_garde4 = ((pre readwrite_x1) >= 1);
 
-   x5 = 0 -> 
-   if(etat4) then if(garde5) then pre x5+1 else pre x5 else 
-   if(etat8) then if(garde8) then pre x5-1 else pre x5 else 
-   pre x5;
+   readwrite_garde5 = ((pre readwrite_x6) >= 1);
 
-   x6 = 0 -> 
-   if(etat5) then if(garde5) then pre x6-1 else pre x6 else 
-   if(etat6) then if(garde6) then pre x6+1 else pre x6 else 
-   pre x6;
+   readwrite_garde6 = (((pre readwrite_x3) >= 1) and 
+      ((pre readwrite_x7) >= 1));
 
-   x7 = 0 -> 
-   if(etat5) then if(garde5) then pre x7+1 else pre x7 else 
-   if(etat6) then if(garde6) then pre x7-1 else pre x7 else 
-   if(etat7) then if(garde7) then pre x7+1 else pre x7 else 
-   if(etat8) then if(garde8) then pre x7-1 else pre x7 else 
-   pre x7;
+   readwrite_garde7 = (((pre readwrite_x8) >= 1) and 
+      ((pre readwrite_x12) >= 1));
 
-   x8 = 1 -> 
-   if(etat7) then if(garde7) then pre x8-1 else pre x8 else 
-   if(etat8) then if(garde8) then pre x8+1 else pre x8 else 
-   pre x8;
+   readwrite_garde8 = ((((pre readwrite_x4) >= 5) and 
+      ((pre readwrite_x5) >= 1)) and 
+      ((pre readwrite_x7) >= 1));
 
-   x9 = 0 -> 
-   if(etat4) then if(garde4) then pre x9+1 else pre x9 else 
-   if(etat9) then if(garde9) then pre x9-1 else pre x9 else 
-   pre x9;
+   readwrite_garde9 = (((pre readwrite_x9) >= 1) and 
+      ((pre readwrite_x10) >= 1));
 
-   x10 = 0 -> 
-   if(etat8) then if(garde8) then pre x10+1 else pre x10 else 
-   if(etat9) then if(garde9) then pre x10-1 else pre x10 else 
-   pre x10;
+   readwrite_x0 = (0 -> 
+      (if etat1
+         then 
+               (if readwrite_garde1
+                  then ((pre readwrite_x0) - 1)
+                  else (pre readwrite_x0))
+         else 
+      (if etat2
+         then 
+               (if readwrite_garde2
+                  then ((pre readwrite_x0) + 1)
+                  else (pre readwrite_x0))
+         else (pre readwrite_x0))));
 
-   x11 = 1 -> 
-   if(etat3) then if(garde3) then pre x11-1 else pre x11 else 
-   if(etat9) then if(garde9) then pre x11+1 else pre x11 else 
-   pre x11;
+   readwrite_x1 = (0 -> 
+      (if etat1
+         then 
+               (if readwrite_garde1
+                  then ((pre readwrite_x1) + 1)
+                  else (pre readwrite_x1))
+         else 
+      (if etat2
+         then 
+               (if readwrite_garde2
+                  then ((pre readwrite_x1) - 1)
+                  else (pre readwrite_x1))
+         else 
+      (if etat3
+         then 
+               (if readwrite_garde3
+                  then ((pre readwrite_x1) + 1)
+                  else (pre readwrite_x1))
+         else 
+      (if etat4
+         then 
+               (if readwrite_garde4
+                  then ((pre readwrite_x1) - 1)
+                  else (pre readwrite_x1))
+         else (pre readwrite_x1))))));
 
-   x12 = 1 -> 
-   if(etat7) then if(garde7) then pre x12-1 else pre x12 else 
-   if(etat9) then if(garde9) then pre x12+1 else pre x12 else 
-   pre x12;
+   readwrite_x2 = (1 -> 
+      (if etat3
+         then 
+               (if readwrite_garde3
+                  then ((pre readwrite_x2) - 1)
+                  else (pre readwrite_x2))
+         else 
+      (if etat4
+         then 
+               (if readwrite_garde4
+                  then ((pre readwrite_x2) + 1)
+                  else (pre readwrite_x2))
+         else (pre readwrite_x2))));
 
-tel
+   readwrite_x3 = (0 -> 
+      (if etat2
+         then 
+               (if readwrite_garde2
+                  then ((pre readwrite_x3) + 1)
+                  else (pre readwrite_x3))
+         else 
+      (if etat6
+         then 
+               (if readwrite_garde6
+                  then ((pre readwrite_x3) - 1)
+                  else (pre readwrite_x3))
+         else (pre readwrite_x3))));
 
---@ ensures OK;
-node top(etat1, etat2, etat3, etat4, etat5, etat6, etat7, etat8, etat9 : bool)
-returns ( OK : bool );
-   var x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12 : int;
-       env : bool;
-let
-   (x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12) =
-      readwrite(etat1, etat2, etat3, etat4, etat5, etat6, etat7, etat8, etat9);
-   env =  Sofar( excludes9(etat1, etat2, etat3, etat4, etat5,
-                           etat6, etat7, etat8, etat9) and
-                 x0 > -32768 and x1 > -32768 and x2 > -32768 and
-                 x3 > -32768 and x4 > -32768 and x5 > -32768 and
-                 x6 > -32768 and x7 > -32768 and x8 > -32768 and
-                 x0 < 32767 and x1 < 32767 and x3 < 32767 and x4 < 32767 and
-                 x5 < 32767 and x6 < 32767 and x7 < 32767 and x8 < 32767 and
-                 x9 < 32767 and x10 < 32767 and x11 < 32767 and x12 < 32767);
+   readwrite_x4 = (0 -> 
+      (if etat2
+         then 
+               (if readwrite_garde2
+                  then ((pre readwrite_x4) - 1)
+                  else (pre readwrite_x4))
+         else 
+      (if etat6
+         then 
+               (if readwrite_garde6
+                  then ((pre readwrite_x4) + 1)
+                  else (pre readwrite_x4))
+         else 
+      (if etat7
+         then 
+               (if readwrite_garde7
+                  then ((pre readwrite_x4) + 5)
+                  else (pre readwrite_x4))
+         else 
+      (if etat8
+         then 
+               (if readwrite_garde8
+                  then ((pre readwrite_x4) - 5)
+                  else (pre readwrite_x4))
+         else (pre readwrite_x4))))));
 
-   OK = x0 >= 0;
-   --%MAIN;
-tel
+   readwrite_x5 = (0 -> 
+      (if etat4
+         then 
+               (if readwrite_garde5
+                  then ((pre readwrite_x5) + 1)
+                  else (pre readwrite_x5))
+         else 
+      (if etat8
+         then 
+               (if readwrite_garde8
+                  then ((pre readwrite_x5) - 1)
+                  else (pre readwrite_x5))
+         else (pre readwrite_x5))));
+
+   readwrite_x6 = (0 -> 
+      (if etat5
+         then 
+               (if readwrite_garde5
+                  then ((pre readwrite_x6) - 1)
+                  else (pre readwrite_x6))
+         else 
+      (if etat6
+         then 
+               (if readwrite_garde6
+                  then ((pre readwrite_x6) + 1)
+                  else (pre readwrite_x6))
+         else (pre readwrite_x6))));
+
+   readwrite_x7 = (0 -> 
+      (if etat5
+         then 
+               (if readwrite_garde5
+                  then ((pre readwrite_x7) + 1)
+                  else (pre readwrite_x7))
+         else 
+      (if etat6
+         then 
+               (if readwrite_garde6
+                  then ((pre readwrite_x7) - 1)
+                  else (pre readwrite_x7))
+         else 
+      (if etat7
+         then 
+               (if readwrite_garde7
+                  then ((pre readwrite_x7) + 1)
+                  else (pre readwrite_x7))
+         else 
+      (if etat8
+         then 
+               (if readwrite_garde8
+                  then ((pre readwrite_x7) - 1)
+                  else (pre readwrite_x7))
+         else (pre readwrite_x7))))));
+
+   readwrite_x8 = (1 -> 
+      (if etat7
+         then 
+               (if readwrite_garde7
+                  then ((pre readwrite_x8) - 1)
+                  else (pre readwrite_x8))
+         else 
+      (if etat8
+         then 
+               (if readwrite_garde8
+                  then ((pre readwrite_x8) + 1)
+                  else (pre readwrite_x8))
+         else (pre readwrite_x8))));
+
+   readwrite_x9 = (0 -> 
+      (if etat4
+         then 
+               (if readwrite_garde4
+                  then ((pre readwrite_x9) + 1)
+                  else (pre readwrite_x9))
+         else 
+      (if etat9
+         then 
+               (if readwrite_garde9
+                  then ((pre readwrite_x9) - 1)
+                  else (pre readwrite_x9))
+         else (pre readwrite_x9))));
+
+   readwrite_x10 = (0 -> 
+      (if etat8
+         then 
+               (if readwrite_garde8
+                  then ((pre readwrite_x10) + 1)
+                  else (pre readwrite_x10))
+         else 
+      (if etat9
+         then 
+               (if readwrite_garde9
+                  then ((pre readwrite_x10) - 1)
+                  else (pre readwrite_x10))
+         else (pre readwrite_x10))));
+
+   readwrite_x11 = (1 -> 
+      (if etat3
+         then 
+               (if readwrite_garde3
+                  then ((pre readwrite_x11) - 1)
+                  else (pre readwrite_x11))
+         else 
+      (if etat9
+         then 
+               (if readwrite_garde9
+                  then ((pre readwrite_x11) + 1)
+                  else (pre readwrite_x11))
+         else (pre readwrite_x11))));
+
+   readwrite_x12 = (1 -> 
+      (if etat7
+         then 
+               (if readwrite_garde7
+                  then ((pre readwrite_x12) - 1)
+                  else (pre readwrite_x12))
+         else 
+      (if etat9
+         then 
+               (if readwrite_garde9
+                  then ((pre readwrite_x12) + 1)
+                  else (pre readwrite_x12))
+         else (pre readwrite_x12))));
+
+   Sofar_X = (((((((((((((((((((((((((((((((((((((((not etat1) and 
+      (not etat2)) and 
+      (not etat3)) and 
+      (not etat4)) and 
+      (not etat5)) and 
+      (not etat6)) and 
+      (not etat7)) and 
+      (not etat8)) and 
+      (not etat9)) or 
+      ((((((((etat1 and 
+      (not etat2)) and 
+      (not etat3)) and 
+      (not etat4)) and 
+      (not etat5)) and 
+      (not etat6)) and 
+      (not etat7)) and 
+      (not etat8)) and 
+      (not etat9))) or 
+      (((((((((not etat1) and 
+      etat2) and 
+      (not etat3)) and 
+      (not etat4)) and 
+      (not etat5)) and 
+      (not etat6)) and 
+      (not etat7)) and 
+      (not etat8)) and 
+      (not etat9))) or 
+      (((((((((not etat1) and 
+      (not etat2)) and 
+      etat3) and 
+      (not etat4)) and 
+      (not etat5)) and 
+      (not etat6)) and 
+      (not etat7)) and 
+      (not etat8)) and 
+      (not etat9))) or 
+      (((((((((not etat1) and 
+      (not etat2)) and 
+      (not etat3)) and 
+      etat4) and 
+      (not etat5)) and 
+      (not etat6)) and 
+      (not etat7)) and 
+      (not etat8)) and 
+      (not etat9))) or 
+      (((((((((not etat1) and 
+      (not etat2)) and 
+      (not etat3)) and 
+      (not etat4)) and 
+      etat5) and 
+      (not etat6)) and 
+      (not etat7)) and 
+      (not etat8)) and 
+      (not etat9))) or 
+      (((((((((not etat1) and 
+      (not etat2)) and 
+      (not etat3)) and 
+      (not etat4)) and 
+      (not etat5)) and 
+      etat6) and 
+      (not etat7)) and 
+      (not etat8)) and 
+      (not etat9))) or 
+      (((((((((not etat1) and 
+      (not etat2)) and 
+      (not etat3)) and 
+      (not etat4)) and 
+      (not etat5)) and 
+      (not etat6)) and 
+      etat7) and 
+      (not etat8)) and 
+      (not etat9))) or 
+      (((((((((not etat1) and 
+      (not etat2)) and 
+      (not etat3)) and 
+      (not etat4)) and 
+      (not etat5)) and 
+      (not etat6)) and 
+      (not etat7)) and 
+      etat8) and 
+      (not etat9))) or 
+      (((((((((not etat1) and 
+      (not etat2)) and 
+      (not etat3)) and 
+      (not etat4)) and 
+      (not etat5)) and 
+      (not etat6)) and 
+      (not etat7)) and 
+      (not etat8)) and 
+      etat9)) and 
+      (readwrite_x0 > (-32768))) and 
+      (readwrite_x1 > (-32768))) and 
+      (readwrite_x2 > (-32768))) and 
+      (readwrite_x3 > (-32768))) and 
+      (readwrite_x4 > (-32768))) and 
+      (readwrite_x5 > (-32768))) and 
+      (readwrite_x6 > (-32768))) and 
+      (readwrite_x7 > (-32768))) and 
+      (readwrite_x8 > (-32768))) and 
+      (readwrite_x0 < 32767)) and 
+      (readwrite_x1 < 32767)) and 
+      (readwrite_x3 < 32767)) and 
+      (readwrite_x4 < 32767)) and 
+      (readwrite_x5 < 32767)) and 
+      (readwrite_x6 < 32767)) and 
+      (readwrite_x7 < 32767)) and 
+      (readwrite_x8 < 32767)) and 
+      (readwrite_x9 < 32767)) and 
+      (readwrite_x10 < 32767)) and 
+      (readwrite_x11 < 32767)) and 
+      (readwrite_x12 < 32767));
+
+   Sofar_Sofar = (Sofar_X -> (Sofar_X and 
+      (pre Sofar_Sofar)));
+
+   OK = (readwrite_x0 >= 0);
+
+tel;
+
+

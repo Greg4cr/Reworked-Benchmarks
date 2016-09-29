@@ -1,112 +1,395 @@
 
-node Sofar( X : bool ) returns ( Sofar : bool );
-let
-    Sofar = X -> X and pre Sofar;
-tel
+node top(e01: bool; 
+      e02: bool; 
+      e03: bool; 
+      e04: bool; 
+      e05: bool; 
+      e06: bool; 
+      e07: bool; 
+      e08: bool; 
+      e09: bool; 
+      e10: bool; 
+      e11: bool; 
+      e12: bool)
+   returns (OK: bool);
 
-node excludes12( X1, X2, X3, X4, X5, X6, X7, X8, X9, X10, X11, X12 : bool ) returns ( excludes : bool );
-let
-    excludes = not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-                  X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and     X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and     X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and     X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and     X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and     X6 and not X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and     X7 and not X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and     X8 and not X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and     X9 and not X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and     X10 and not X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and     X11 and not X12 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 and not X9 and not X10 and not X11 and     X12;
-tel
-
-node rtp(e01, e02, e03, e04, e05, e06, e07, e08, e09, e10, e11, e12 : bool)
-returns(X1, X2, X3, X4, X5, X6, X7, X8, X9 : int; erreur : bool);
 var
-   g01, g02, g03, g04, g05, g06, g07, g08, g09, g10, g11, g12 : bool;
-let
+   rtp_g01: bool; 
+   rtp_g02: bool; 
+   rtp_g03: bool; 
+   rtp_g04: bool; 
+   rtp_g05: bool; 
+   rtp_g06: bool; 
+   rtp_g07: bool; 
+   rtp_g08: bool; 
+   rtp_g09: bool; 
+   rtp_g10: bool; 
+   rtp_g11: bool; 
+   rtp_g12: bool; 
+   rtp_X1: int; 
+   rtp_X2: int; 
+   rtp_X3: int; 
+   rtp_X4: int; 
+   rtp_X5: int; 
+   rtp_X6: int; 
+   rtp_X7: int; 
+   rtp_X8: int; 
+   rtp_X9: int; 
+   Sofar_X: bool; 
+   Sofar_Sofar: bool;
 
-   g01 = pre X1>=1;
-   g02 = pre X2>=1;
-   g03 = pre X3>=1;
-   g04 = pre X4>=1;
-   g05 = pre X4>=1;
-   g06 = pre X5>=1;
-   g07 = pre X6>=1;
-   g08 = pre X6>=1;
-   g09 = pre X6>=1;
-   g10 = pre X7>=1;
-   g11 = pre X8>=1;
-   g12 = pre X9>=1;
 
-   erreur = if(X1>=2) then true else false;
+let 
+   rtp_g01 = ((pre rtp_X1) >= 1);
 
-   X1 = 1 ->
-   if(e01) then if(g01) then pre X1-1 else pre X1 else 
-   pre X1;
+   rtp_g02 = ((pre rtp_X2) >= 1);
 
-   X2 = 0 ->
-   if(e01) then if(g01) then pre X2+1 else pre X2 else 
-   if(e02) then if(g02) then pre X2-1 else pre X2 else 
-   if(e12) then if(g12) then pre X2+1 else pre X2 else 
-   pre X2;
+   rtp_g03 = ((pre rtp_X3) >= 1);
 
-   X3 = 0 ->
-   if(e02) then if(g02) then pre X3+1 else pre X3 else 
-   if(e03) then if(g03) then pre X3-1 else pre X3 else 
-   pre X3;
+   rtp_g04 = ((pre rtp_X4) >= 1);
 
-   X4 = 0 ->
-   if(e03) then if(g03) then pre X4+1 else pre X4 else 
-   if(e04) then if(g04) then pre X4-1 else pre X4 else 
-   if(e05) then if(g05) then pre X4-1 else pre X4 else 
-   pre X4;
+   rtp_g05 = ((pre rtp_X4) >= 1);
 
-   X5 = 0 ->
-   if(e04) then if(g04) then pre X5+1 else pre X5 else 
-   if(e06) then if(g06) then pre X5-1 else pre X5 else 
-   pre X5;
+   rtp_g06 = ((pre rtp_X5) >= 1);
 
-   X6 = 0 ->
-   if(e06) then if(g06) then pre X6+1 else pre X6 else 
-   if(e07) then if(g07) then pre X6-1 else pre X6 else 
-   if(e08) then if(g08) then pre X6-1 else pre X6 else 
-   if(e09) then if(g09) then pre X6-1 else pre X6 else 
-   pre X6;
+   rtp_g07 = ((pre rtp_X6) >= 1);
 
-   X7 = 0 ->
-   if(e08) then if(g08) then pre X7+1 else pre X7 else 
-   if(e10) then if(g10) then pre X7-1 else pre X7 else 
-   pre X7;
+   rtp_g08 = ((pre rtp_X6) >= 1);
 
-   X8 = 0 ->
-   if(e09) then if(g09) then pre X8+1 else pre X8 else 
-   if(e11) then if(g11) then pre X8-1 else pre X8 else 
-   pre X8;
+   rtp_g09 = ((pre rtp_X6) >= 1);
 
-   X9 = 0 ->
-   if(e05) then if(g05) then pre X9+1 else pre X9 else 
-   if(e07) then if(g07) then pre X9+1 else pre X9 else 
-   if(e10) then if(g10) then pre X9+1 else pre X9 else 
-   if(e11) then if(g11) then pre X9+1 else pre X9 else 
-   if(e12) then if(g12) then pre X9-1 else pre X9 else 
-   pre X9;
+   rtp_g10 = ((pre rtp_X7) >= 1);
 
-tel
+   rtp_g11 = ((pre rtp_X8) >= 1);
 
---@ ensures OK;
-node top( e01, e02, e03, e04, e05, e06, e07, e08, e09, e10, e11, e12 : bool )
-returns ( OK : bool );
-    var X1, X2, X3, X4, X5, X6, X7, X8, X9 : int;
-        erreur : bool;
-        env : bool;
-let
-    ( X1, X2, X3, X4, X5, X6, X7, X8, X9, erreur ) =
-        rtp( e01, e02, e03, e04, e05, e06, e07, e08, e09, e10, e11, e12 );
-    env = Sofar( excludes12( e01, e02, e03, e04, e05, e06, e07, e08, e09, e10,
-                            e11, e12 ) and
-                 X5 < 32767);
-    OK = env => X5 >= 0;
-    --%MAIN;
-tel
+   rtp_g12 = ((pre rtp_X9) >= 1);
+
+   rtp_X1 = (1 -> 
+      (if e01
+         then 
+               (if rtp_g01
+                  then ((pre rtp_X1) - 1)
+                  else (pre rtp_X1))
+         else (pre rtp_X1)));
+
+   rtp_X2 = (0 -> 
+      (if e01
+         then 
+               (if rtp_g01
+                  then ((pre rtp_X2) + 1)
+                  else (pre rtp_X2))
+         else 
+      (if e02
+         then 
+               (if rtp_g02
+                  then ((pre rtp_X2) - 1)
+                  else (pre rtp_X2))
+         else 
+      (if e12
+         then 
+               (if rtp_g12
+                  then ((pre rtp_X2) + 1)
+                  else (pre rtp_X2))
+         else (pre rtp_X2)))));
+
+   rtp_X3 = (0 -> 
+      (if e02
+         then 
+               (if rtp_g02
+                  then ((pre rtp_X3) + 1)
+                  else (pre rtp_X3))
+         else 
+      (if e03
+         then 
+               (if rtp_g03
+                  then ((pre rtp_X3) - 1)
+                  else (pre rtp_X3))
+         else (pre rtp_X3))));
+
+   rtp_X4 = (0 -> 
+      (if e03
+         then 
+               (if rtp_g03
+                  then ((pre rtp_X4) + 1)
+                  else (pre rtp_X4))
+         else 
+      (if e04
+         then 
+               (if rtp_g04
+                  then ((pre rtp_X4) - 1)
+                  else (pre rtp_X4))
+         else 
+      (if e05
+         then 
+               (if rtp_g05
+                  then ((pre rtp_X4) - 1)
+                  else (pre rtp_X4))
+         else (pre rtp_X4)))));
+
+   rtp_X5 = (0 -> 
+      (if e04
+         then 
+               (if rtp_g04
+                  then ((pre rtp_X5) + 1)
+                  else (pre rtp_X5))
+         else 
+      (if e06
+         then 
+               (if rtp_g06
+                  then ((pre rtp_X5) - 1)
+                  else (pre rtp_X5))
+         else (pre rtp_X5))));
+
+   rtp_X6 = (0 -> 
+      (if e06
+         then 
+               (if rtp_g06
+                  then ((pre rtp_X6) + 1)
+                  else (pre rtp_X6))
+         else 
+      (if e07
+         then 
+               (if rtp_g07
+                  then ((pre rtp_X6) - 1)
+                  else (pre rtp_X6))
+         else 
+      (if e08
+         then 
+               (if rtp_g08
+                  then ((pre rtp_X6) - 1)
+                  else (pre rtp_X6))
+         else 
+      (if e09
+         then 
+               (if rtp_g09
+                  then ((pre rtp_X6) - 1)
+                  else (pre rtp_X6))
+         else (pre rtp_X6))))));
+
+   rtp_X7 = (0 -> 
+      (if e08
+         then 
+               (if rtp_g08
+                  then ((pre rtp_X7) + 1)
+                  else (pre rtp_X7))
+         else 
+      (if e10
+         then 
+               (if rtp_g10
+                  then ((pre rtp_X7) - 1)
+                  else (pre rtp_X7))
+         else (pre rtp_X7))));
+
+   rtp_X8 = (0 -> 
+      (if e09
+         then 
+               (if rtp_g09
+                  then ((pre rtp_X8) + 1)
+                  else (pre rtp_X8))
+         else 
+      (if e11
+         then 
+               (if rtp_g11
+                  then ((pre rtp_X8) - 1)
+                  else (pre rtp_X8))
+         else (pre rtp_X8))));
+
+   rtp_X9 = (0 -> 
+      (if e05
+         then 
+               (if rtp_g05
+                  then ((pre rtp_X9) + 1)
+                  else (pre rtp_X9))
+         else 
+      (if e07
+         then 
+               (if rtp_g07
+                  then ((pre rtp_X9) + 1)
+                  else (pre rtp_X9))
+         else 
+      (if e10
+         then 
+               (if rtp_g10
+                  then ((pre rtp_X9) + 1)
+                  else (pre rtp_X9))
+         else 
+      (if e11
+         then 
+               (if rtp_g11
+                  then ((pre rtp_X9) + 1)
+                  else (pre rtp_X9))
+         else 
+      (if e12
+         then 
+               (if rtp_g12
+                  then ((pre rtp_X9) - 1)
+                  else (pre rtp_X9))
+         else (pre rtp_X9)))))));
+
+   Sofar_X = (((((((((((((((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12)) or 
+      (((((((((((e01 and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      e02) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      e03) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      e04) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      e05) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      e06) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      e07) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      e08) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      e09) and 
+      (not e10)) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      e10) and 
+      (not e11)) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      e11) and 
+      (not e12))) or 
+      ((((((((((((not e01) and 
+      (not e02)) and 
+      (not e03)) and 
+      (not e04)) and 
+      (not e05)) and 
+      (not e06)) and 
+      (not e07)) and 
+      (not e08)) and 
+      (not e09)) and 
+      (not e10)) and 
+      (not e11)) and 
+      e12)) and 
+      (rtp_X5 < 32767));
+
+   Sofar_Sofar = (Sofar_X -> (Sofar_X and 
+      (pre Sofar_Sofar)));
+
+   OK = ((not Sofar_Sofar) or 
+      (rtp_X5 >= 0));
+
+tel;
+
+

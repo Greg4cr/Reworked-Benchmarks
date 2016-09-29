@@ -1,19 +1,53 @@
 
-node Sofar( X : bool ) returns ( Sofar : bool );
-let
-    Sofar = X -> X and pre Sofar;
-tel
-node Age (p: bool) returns (age_of_p: int);
-let
- age_of_p = 0 -> if pre(p) then pre(age_of_p) + 1 else 0;
-tel
---@ ensures OK;
-node top (k0: int; p, q, r, t : bool) returns (OK: bool);
-var k: int;
-    env : bool;
-let
-    k = k0-> pre(k);
-    env = Sofar((k>=1) and (Age(p)>=k => q)  and (Age(r)>=k => t));
-    OK = env => ((Age(p and r)>=k) => (q and t));
-  --%MAIN;
-tel
+node top(k0: int; 
+      p: bool; 
+      q: bool; 
+      r: bool; 
+      t: bool)
+   returns (OK: bool);
+
+var
+   Sofar_X: bool; 
+   Sofar_Sofar: bool; 
+   Age_age_of_p2: int; 
+   Age_age_of_p1: int; 
+   Age_age_of_p: int; 
+   k: int;
+
+
+let 
+   k = (k0 -> (pre k));
+
+   Sofar_X = (((k >= 1) and 
+      ((not (Age_age_of_p >= k)) or 
+      q)) and 
+      ((not (Age_age_of_p1 >= k)) or 
+      t));
+
+   Sofar_Sofar = (Sofar_X -> (Sofar_X and 
+      (pre Sofar_Sofar)));
+
+   OK = ((not Sofar_Sofar) or 
+      ((not (Age_age_of_p2 >= k)) or 
+      (q and 
+      t)));
+
+   Age_age_of_p2 = (0 -> 
+      (if (pre (p and 
+         r))
+         then ((pre Age_age_of_p2) + 1)
+         else 0));
+
+   Age_age_of_p1 = (0 -> 
+      (if (pre r)
+         then ((pre Age_age_of_p1) + 1)
+         else 0));
+
+   Age_age_of_p = (0 -> 
+      (if (pre p)
+         then ((pre Age_age_of_p) + 1)
+         else 0));
+
+tel;
+
+

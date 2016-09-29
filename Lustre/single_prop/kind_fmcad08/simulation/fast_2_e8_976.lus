@@ -1,97 +1,215 @@
 
-node PosEdge (X: bool) returns (Y: bool);
-let
-    Y = false -> X and not pre(X);
-tel
-node Edge (X: bool) returns (Y: bool);
-let
-    Y = false -> (X and not pre(X) and not X and pre(X));
-tel
-node AtLeastOnceSince(X, Y: bool) returns (XsinceY: bool);
-let
-    XsinceY = if Y then X else (true -> X or pre(XsinceY));
-tel
-node MoreThanOneSec(X: bool) returns (Y: bool);
-let
-    Y = false -> pre(X) and X;
-tel
-node MoreThanTwoSec(X: bool) returns (Y: bool);
-let
-    Y = false -> pre(false -> pre(X) and X) and X;
-tel
-node one_button (ccseti, ccsetd, ccr: bool) returns (ob: bool);
-let
-    ob = ccseti and not ccsetd and not ccr or
-         not ccseti and ccsetd and not ccr or
-         not ccseti and not ccsetd and ccr;
-tel
-node prev_no_button (ccseti, ccsetd, ccr: bool)
-returns (pnb: bool);
-let
-    pnb = true -> pre(not ccseti and not ccsetd and not ccr);
-tel
-node one_button_accept (ccseti, ccsetd, ccr, ccont, cca: bool)
-returns (oba: bool);
+node top(igsw: bool; 
+      ccd: bool; 
+      cconoff: bool; 
+      bpa: bool; 
+      cccanc: bool; 
+      battok: bool; 
+      gearok: bool; 
+      qfok: bool; 
+      sdok: bool; 
+      accok: bool; 
+      ccseti: bool; 
+      ccsetd: bool; 
+      ccr: bool; 
+      vs: int)
+   returns (OK: bool);
+
 var
-   ob, pnb: bool;
-let
-    pnb = prev_no_button(ccseti, ccsetd, ccr);
-    ob = one_button(ccseti, ccsetd, ccr);
-    oba = if pnb and ob then
-              if not ccr then true
-              else AtLeastOnceSince(cca, PosEdge(ccont))
-          else false;
-tel
-node cc_allowed (ccont, igsw, bpa, cccanc, battok, gearok,
-         qfok, sdok, accok: bool; vs: int)
-returns (ccall: bool);
-let
-   ccall = ccont and not bpa and battok and gearok and
-           qfok and MoreThanOneSec(sdok) and 35 <= vs and
-           vs <= 200 and MoreThanTwoSec(accok) and not cccanc;
-tel
-node main (igsw, ccd, cconoff, bpa, cccanc, battok, gearok,
-     qfok, sdok, accok, ccseti, ccsetd, ccr: bool; vs: int)
-     returns (ccont, cca: bool);
-var
-  ccall: bool;
-let
-   ccont = false -> if Edge(igsw) or ccd or
-             pre(ccont) and PosEdge(cconoff) then false
-             else if pre(not ccont) and
-             PosEdge(cconoff) then true
-             else pre(ccont);
-   ccall = cc_allowed(ccont, igsw, bpa, cccanc, battok,
-                  gearok, qfok, sdok, accok, vs);
-   cca = false ->
-        if one_button_accept(ccseti, ccsetd, ccr, ccont,
-           pre(cca))
-           and ccall then true else if not ccall then false
-           else pre(cca);
-tel
---@ ensures OK;
-node top (igsw, ccd, cconoff, bpa, cccanc, battok, gearok,
-         qfok, sdok, accok, ccseti, ccsetd, ccr: bool; vs: int)
-         returns (OK: bool);
-var
-   p1, p2, p3, p4: bool;
-   ccont, cca: bool;
-   env : bool;
-let
-    env = not igsw -> true;
-    p1 = if PosEdge(cca) then PosEdge(ccseti) or
-                PosEdge(ccsetd) or PosEdge(ccr) else true;
-    p2 = if not cc_allowed(ccont, igsw, bpa, cccanc, battok,
-                           gearok, qfok, sdok, accok, vs)
-             then not cca
-         else true;
-    p3 = if PosEdge(ccont) then not Edge(igsw) and
-            not ccd and PosEdge(cconoff) else true;
-    p4 = if Edge(igsw) then not cca
-         else true;
-    (ccont, cca) = main(igsw, ccd, cconoff, bpa, cccanc, battok,
-                      gearok, qfok, sdok, accok, ccseti, ccsetd,
-                      ccr, vs);
-  --%MAIN;
-    OK = p1 and p2 and p3 and p4;
-tel
+   MoreThanTwoSec_rlt__PRE1: bool; 
+   MoreThanTwoSec_Y1: bool; 
+   MoreThanOneSec_Y1: bool; 
+   one_button_accept_cca: bool; 
+   prev_no_button_pnb: bool; 
+   AtLeastOnceSince_XsinceY: bool; 
+   PosEdge_Y21: bool; 
+   PosEdge_Y11: bool; 
+   PosEdge_Y6: bool; 
+   Edge_Y2: bool; 
+   main_ccall: bool; 
+   main_rlt_one_button_accept_oba: bool; 
+   main_ccont: bool; 
+   main_cca: bool; 
+   Edge_Y1: bool; 
+   PosEdge_Y5: bool; 
+   Edge_Y: bool; 
+   PosEdge_Y4: bool; 
+   MoreThanTwoSec_rlt__PRE: bool; 
+   MoreThanTwoSec_Y: bool; 
+   MoreThanOneSec_Y: bool; 
+   PosEdge_Y3: bool; 
+   PosEdge_Y2: bool; 
+   PosEdge_Y1: bool; 
+   PosEdge_Y: bool; 
+   p1: bool; 
+   p2: bool; 
+   p3: bool; 
+   p4: bool; 
+   env: bool;
+
+
+let 
+   env = ((not igsw) -> true);
+
+   p1 = 
+      (if PosEdge_Y
+         then ((PosEdge_Y1 or 
+               PosEdge_Y2) or 
+               PosEdge_Y3)
+         else true);
+
+   p2 = 
+      (if (not (((((((((main_ccont and 
+         (not bpa)) and 
+         battok) and 
+         gearok) and 
+         qfok) and 
+         MoreThanOneSec_Y) and 
+         (35 <= vs)) and 
+         (vs <= 200)) and 
+         MoreThanTwoSec_Y) and 
+         (not cccanc)))
+         then (not main_cca)
+         else true);
+
+   p3 = 
+      (if PosEdge_Y4
+         then (((not Edge_Y) and 
+               (not ccd)) and 
+               PosEdge_Y5)
+         else true);
+
+   p4 = 
+      (if Edge_Y1
+         then (not main_cca)
+         else true);
+
+   main_ccont = (false -> 
+      (if ((Edge_Y2 or 
+         ccd) or 
+         ((pre main_ccont) and 
+         PosEdge_Y6))
+         then false
+         else 
+      (if ((pre (not main_ccont)) and 
+         PosEdge_Y11)
+         then true
+         else (pre main_ccont))));
+
+   MoreThanTwoSec_Y1 = (false -> ((pre (false -> (MoreThanTwoSec_rlt__PRE1 and 
+      accok))) and 
+      accok));
+
+   MoreThanTwoSec_rlt__PRE1 = (pre accok);
+
+   MoreThanOneSec_Y1 = (false -> ((pre sdok) and 
+      sdok));
+
+   main_ccall = (((((((((main_ccont and 
+      (not bpa)) and 
+      battok) and 
+      gearok) and 
+      qfok) and 
+      MoreThanOneSec_Y1) and 
+      (35 <= vs)) and 
+      (vs <= 200)) and 
+      MoreThanTwoSec_Y1) and 
+      (not cccanc));
+
+   main_cca = (false -> 
+      (if (main_rlt_one_button_accept_oba and 
+         main_ccall)
+         then true
+         else 
+      (if (not main_ccall)
+         then false
+         else (pre main_cca))));
+
+   one_button_accept_cca = (pre main_cca);
+
+   prev_no_button_pnb = (true -> (pre (((not ccseti) and 
+      (not ccsetd)) and 
+      (not ccr))));
+
+   AtLeastOnceSince_XsinceY = 
+      (if PosEdge_Y21
+         then one_button_accept_cca
+         else (true -> (one_button_accept_cca or 
+               (pre AtLeastOnceSince_XsinceY))));
+
+   PosEdge_Y21 = (false -> (main_ccont and 
+      (not (pre main_ccont))));
+
+   main_rlt_one_button_accept_oba = 
+      (if (prev_no_button_pnb and 
+         ((((ccseti and 
+         (not ccsetd)) and 
+         (not ccr)) or 
+         (((not ccseti) and 
+         ccsetd) and 
+         (not ccr))) or 
+         (((not ccseti) and 
+         (not ccsetd)) and 
+         ccr)))
+         then 
+               (if (not ccr)
+                  then true
+                  else AtLeastOnceSince_XsinceY)
+         else false);
+
+   PosEdge_Y11 = (false -> (cconoff and 
+      (not (pre cconoff))));
+
+   PosEdge_Y6 = (false -> (cconoff and 
+      (not (pre cconoff))));
+
+   Edge_Y2 = (false -> (((igsw and 
+      (not (pre igsw))) and 
+      (not igsw)) and 
+      (pre igsw)));
+
+   OK = (((p1 and 
+      p2) and 
+      p3) and 
+      p4);
+
+   Edge_Y1 = (false -> (((igsw and 
+      (not (pre igsw))) and 
+      (not igsw)) and 
+      (pre igsw)));
+
+   PosEdge_Y5 = (false -> (cconoff and 
+      (not (pre cconoff))));
+
+   Edge_Y = (false -> (((igsw and 
+      (not (pre igsw))) and 
+      (not igsw)) and 
+      (pre igsw)));
+
+   PosEdge_Y4 = (false -> (main_ccont and 
+      (not (pre main_ccont))));
+
+   MoreThanTwoSec_Y = (false -> ((pre (false -> (MoreThanTwoSec_rlt__PRE and 
+      accok))) and 
+      accok));
+
+   MoreThanTwoSec_rlt__PRE = (pre accok);
+
+   MoreThanOneSec_Y = (false -> ((pre sdok) and 
+      sdok));
+
+   PosEdge_Y3 = (false -> (ccr and 
+      (not (pre ccr))));
+
+   PosEdge_Y2 = (false -> (ccsetd and 
+      (not (pre ccsetd))));
+
+   PosEdge_Y1 = (false -> (ccseti and 
+      (not (pre ccseti))));
+
+   PosEdge_Y = (false -> (main_cca and 
+      (not (pre main_cca))));
+
+tel;
+
+

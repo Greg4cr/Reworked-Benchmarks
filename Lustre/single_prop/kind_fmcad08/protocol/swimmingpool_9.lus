@@ -1,96 +1,228 @@
---
--- Source: David Merchat (node swimingpool)
---
 
-node First( X : int ) returns ( First : int );
-let
-    First = X -> pre First;
-tel
+node top(e1: bool; 
+      e2: bool; 
+      e3: bool; 
+      e4: bool; 
+      e5: bool; 
+      e6: bool; 
+      init_p1: int; 
+      init_p2: int)
+   returns (OK: bool);
 
-node Sofar( X : bool ) returns ( Sofar : bool );
-let
-    Sofar = X -> X and pre Sofar;
-tel
-
-node excludes6( X1, X2, X3, X4, X5, X6 : bool ) returns ( excludes : bool );
-let
-    excludes = not X1 and not X2 and not X3 and not X4 and not X5 and not X6 or
-                  X1 and not X2 and not X3 and not X4 and not X5 and not X6 or
-              not X1 and     X2 and not X3 and not X4 and not X5 and not X6 or
-              not X1 and not X2 and     X3 and not X4 and not X5 and not X6 or
-              not X1 and not X2 and not X3 and     X4 and not X5 and not X6 or
-              not X1 and not X2 and not X3 and not X4 and     X5 and not X6 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and     X6;
-tel
-
-node swimingpool(e1, e2, e3, e4, e5, e6 : bool;init_p1, init_p2 : int)returns 
-(x1, x2, x3, x4, x5, x6, x7, p1, p2 : int);
 var
-	g1, g2, g3, g4, g5, g6 : bool;
-let
+   swimingpool_g1: bool; 
+   swimingpool_g2: bool; 
+   swimingpool_g3: bool; 
+   swimingpool_g4: bool; 
+   swimingpool_g5: bool; 
+   swimingpool_g6: bool; 
+   swimingpool_x1: int; 
+   swimingpool_x2: int; 
+   swimingpool_x3: int; 
+   swimingpool_x4: int; 
+   swimingpool_x5: int; 
+   swimingpool_x6: int; 
+   swimingpool_x7: int; 
+   swimingpool_p1: int; 
+   swimingpool_p2: int; 
+   First_First3: int; 
+   First_First2: int; 
+   First_First1: int; 
+   First_First: int; 
+   Sofar_Sofar: bool; 
+   rlt_excludes6_excludes: bool;
 
-	g1 = false -> pre x6>=1;
-	g2 = false -> pre x1>=1 and pre x7>=1;
-	g3 = false -> pre x2>=1;
-	g4 = false -> pre x3>=1 and pre x6>=1;
-	g5 = false -> pre x4>=1;
-	g6 = false -> pre x5>=1;
 
-	x1 = 0 -> 
-	if(e1) then if(g1) then pre x1+1 else pre x1 else 
-	if(e2) then if(g2) then pre x1-1 else pre x1 else 
-	pre x1;
+let 
+   swimingpool_g1 = (false -> ((pre swimingpool_x6) >= 1));
 
-	x2 = 0 -> 
-	if(e2) then if(g2) then pre x2+1 else pre x2 else 
-	if(e3) then if(g3) then pre x2-1 else pre x2 else 
-	pre x2;
+   swimingpool_g2 = (false -> (((pre swimingpool_x1) >= 1) and 
+      ((pre swimingpool_x7) >= 1)));
 
-	x3 = 0 -> 
-	if(e3) then if(g3) then pre x3+1 else pre x3 else 
-	if(e4) then if(g4) then pre x3-1 else pre x3 else 
-	pre x3;
+   swimingpool_g3 = (false -> ((pre swimingpool_x2) >= 1));
 
-	x4 = 0 -> 
-	if(e4) then if(g4) then pre x4+1 else pre x4 else 
-	if(e5) then if(g4) then pre x4-1 else pre x4 else 
-	pre x4;
+   swimingpool_g4 = (false -> (((pre swimingpool_x3) >= 1) and 
+      ((pre swimingpool_x6) >= 1)));
 
-	x5 = 0 -> 
-	if(e5) then if(g5) then pre x5+1 else pre x5 else 
-	if(e6) then if(g6) then pre x5-1 else pre x5 else 
-	pre x5;
+   swimingpool_g5 = (false -> ((pre swimingpool_x4) >= 1));
 
-	x6 = p1 -> 
-	if(e1) then if(g1) then pre x6-1 else pre x6 else 
-	if(e3) then if(g3) then pre x6+1 else pre x6 else 
-	if(e4) then if(g4) then pre x6-1 else pre x6 else 
-	if(e6) then if(g6) then pre x6+1 else pre x6 else 
-	pre x6;
+   swimingpool_g6 = (false -> ((pre swimingpool_x5) >= 1));
 
-	x7 = p2 -> 
-	if(e2) then if(g2) then pre x7-1 else pre x7 else 
-	if(e5) then if(g5) then pre x7+1 else pre x7 else 
-	pre x7;
+   swimingpool_x1 = (0 -> 
+      (if e1
+         then 
+               (if swimingpool_g1
+                  then ((pre swimingpool_x1) + 1)
+                  else (pre swimingpool_x1))
+         else 
+      (if e2
+         then 
+               (if swimingpool_g2
+                  then ((pre swimingpool_x1) - 1)
+                  else (pre swimingpool_x1))
+         else (pre swimingpool_x1))));
 
-	p1 = init_p1 -> 
-	pre p1;
+   swimingpool_x2 = (0 -> 
+      (if e2
+         then 
+               (if swimingpool_g2
+                  then ((pre swimingpool_x2) + 1)
+                  else (pre swimingpool_x2))
+         else 
+      (if e3
+         then 
+               (if swimingpool_g3
+                  then ((pre swimingpool_x2) - 1)
+                  else (pre swimingpool_x2))
+         else (pre swimingpool_x2))));
 
-	p2 = init_p2 -> 
-	pre p2;
+   swimingpool_x3 = (0 -> 
+      (if e3
+         then 
+               (if swimingpool_g3
+                  then ((pre swimingpool_x3) + 1)
+                  else (pre swimingpool_x3))
+         else 
+      (if e4
+         then 
+               (if swimingpool_g4
+                  then ((pre swimingpool_x3) - 1)
+                  else (pre swimingpool_x3))
+         else (pre swimingpool_x3))));
 
-tel
+   swimingpool_x4 = (0 -> 
+      (if e4
+         then 
+               (if swimingpool_g4
+                  then ((pre swimingpool_x4) + 1)
+                  else (pre swimingpool_x4))
+         else 
+      (if e5
+         then 
+               (if swimingpool_g4
+                  then ((pre swimingpool_x4) - 1)
+                  else (pre swimingpool_x4))
+         else (pre swimingpool_x4))));
 
---@ ensures OK;
-node top(e1, e2, e3, e4, e5, e6 : bool;init_p1, init_p2 : int)
-returns ( OK : bool );
-    var x1, x2, x3, x4, x5, x6, x7, p1, p2 : int;
-        env : bool;
-let
-    (x1, x2, x3, x4, x5, x6, x7, p1, p2) =
-        swimingpool(e1, e2, e3, e4, e5, e6, init_p1, init_p2);
-    env = Sofar( excludes6( e1, e2, e3, e4, e5, e6 ) ) and
-          0 <= First(init_p1) and 0 <= First(init_p2) and First(init_p1) < 1000 and First(init_p2) < 1000;
-    OK = env => x5 < 7;
-    --%MAIN;
-tel
+   swimingpool_x5 = (0 -> 
+      (if e5
+         then 
+               (if swimingpool_g5
+                  then ((pre swimingpool_x5) + 1)
+                  else (pre swimingpool_x5))
+         else 
+      (if e6
+         then 
+               (if swimingpool_g6
+                  then ((pre swimingpool_x5) - 1)
+                  else (pre swimingpool_x5))
+         else (pre swimingpool_x5))));
+
+   swimingpool_x6 = (swimingpool_p1 -> 
+      (if e1
+         then 
+               (if swimingpool_g1
+                  then ((pre swimingpool_x6) - 1)
+                  else (pre swimingpool_x6))
+         else 
+      (if e3
+         then 
+               (if swimingpool_g3
+                  then ((pre swimingpool_x6) + 1)
+                  else (pre swimingpool_x6))
+         else 
+      (if e4
+         then 
+               (if swimingpool_g4
+                  then ((pre swimingpool_x6) - 1)
+                  else (pre swimingpool_x6))
+         else 
+      (if e6
+         then 
+               (if swimingpool_g6
+                  then ((pre swimingpool_x6) + 1)
+                  else (pre swimingpool_x6))
+         else (pre swimingpool_x6))))));
+
+   swimingpool_x7 = (swimingpool_p2 -> 
+      (if e2
+         then 
+               (if swimingpool_g2
+                  then ((pre swimingpool_x7) - 1)
+                  else (pre swimingpool_x7))
+         else 
+      (if e5
+         then 
+               (if swimingpool_g5
+                  then ((pre swimingpool_x7) + 1)
+                  else (pre swimingpool_x7))
+         else (pre swimingpool_x7))));
+
+   swimingpool_p1 = (init_p1 -> (pre swimingpool_p1));
+
+   swimingpool_p2 = (init_p2 -> (pre swimingpool_p2));
+
+   OK = ((not ((((Sofar_Sofar and 
+      (0 <= First_First)) and 
+      (0 <= First_First1)) and 
+      (First_First2 < 1000)) and 
+      (First_First3 < 1000))) or 
+      (swimingpool_x5 < 7));
+
+   First_First3 = (init_p2 -> (pre First_First3));
+
+   First_First2 = (init_p1 -> (pre First_First2));
+
+   First_First1 = (init_p2 -> (pre First_First1));
+
+   First_First = (init_p1 -> (pre First_First));
+
+   Sofar_Sofar = (rlt_excludes6_excludes -> (rlt_excludes6_excludes and 
+      (pre Sofar_Sofar)));
+
+   rlt_excludes6_excludes = ((((((((((((not e1) and 
+      (not e2)) and 
+      (not e3)) and 
+      (not e4)) and 
+      (not e5)) and 
+      (not e6)) or 
+      (((((e1 and 
+      (not e2)) and 
+      (not e3)) and 
+      (not e4)) and 
+      (not e5)) and 
+      (not e6))) or 
+      ((((((not e1) and 
+      e2) and 
+      (not e3)) and 
+      (not e4)) and 
+      (not e5)) and 
+      (not e6))) or 
+      ((((((not e1) and 
+      (not e2)) and 
+      e3) and 
+      (not e4)) and 
+      (not e5)) and 
+      (not e6))) or 
+      ((((((not e1) and 
+      (not e2)) and 
+      (not e3)) and 
+      e4) and 
+      (not e5)) and 
+      (not e6))) or 
+      ((((((not e1) and 
+      (not e2)) and 
+      (not e3)) and 
+      (not e4)) and 
+      e5) and 
+      (not e6))) or 
+      ((((((not e1) and 
+      (not e2)) and 
+      (not e3)) and 
+      (not e4)) and 
+      (not e5)) and 
+      e6));
+
+tel;
+
+

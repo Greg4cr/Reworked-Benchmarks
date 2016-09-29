@@ -1,93 +1,270 @@
 
-node Sofar( X : bool ) returns ( Sofar : bool );
-let
-    Sofar = X -> X and pre Sofar;
-tel
+node top(e1: bool; 
+      e2: bool; 
+      e3: bool; 
+      e4: bool; 
+      e5: bool; 
+      e6: bool; 
+      e7: bool; 
+      e8: bool; 
+      i_invalid: int)
+   returns (OK: bool);
 
-node excludes8( X1, X2, X3, X4, X5, X6, X7, X8 : bool ) returns ( excludes : bool );
-let
-    excludes = not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 or
-                  X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 or
-              not X1 and     X2 and not X3 and not X4 and not X5 and not X6 and not X7 and not X8 or
-              not X1 and not X2 and     X3 and not X4 and not X5 and not X6 and not X7 and not X8 or
-              not X1 and not X2 and not X3 and     X4 and not X5 and not X6 and not X7 and not X8 or
-              not X1 and not X2 and not X3 and not X4 and     X5 and not X6 and not X7 and not X8 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and     X6 and not X7 and not X8 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and     X7 and not X8 or
-              not X1 and not X2 and not X3 and not X4 and not X5 and not X6 and not X7 and     X8;
-tel
-
-
-node firefly(e1, e2, e3, e4, e5, e6, e7, e8 : bool; i_invalid : int) 
-	returns(invalid, dirty, exclusive, shared : int);
 var
+   firefly_garde1: bool; 
+   firefly_garde2: bool; 
+   firefly_garde3: bool; 
+   firefly_garde4: bool; 
+   firefly_garde5: bool; 
+   firefly_garde6: bool; 
+   firefly_garde7: bool; 
+   firefly_garde8: bool; 
+   firefly_mem_invalid: int; 
+   firefly_invalid: int; 
+   firefly_dirty: int; 
+   firefly_exclusive: int; 
+   firefly_shared: int; 
+   Sofar_X: bool; 
+   Sofar_Sofar: bool;
 
-	garde1, garde2, garde3, garde4, garde5, garde6, garde7, garde8 : bool;
-	mem_invalid : int;
 
-let
---	assert #(e1, e2, e3, e4, e5, e6, e7, e8);
---	assert i_invalid > 0;
+let 
+   firefly_mem_invalid = (i_invalid -> (pre firefly_mem_invalid));
 
-	mem_invalid = i_invalid -> pre mem_invalid;
+   firefly_garde1 = (((((pre firefly_invalid) >= 1) and 
+      ((pre firefly_dirty) = 0)) and 
+      ((pre firefly_shared) = 0)) and 
+      ((pre firefly_exclusive) = 0));
 
-	garde1 = pre invalid>=1 and pre dirty=0 and pre shared=0 and pre exclusive=0 ;
-	garde2 = pre invalid>=1 and pre dirty>=1;
-	garde3 = pre invalid>=1 and pre shared+pre exclusive>=1;
-	garde4 = pre exclusive>=1;
-	garde5 = pre shared=1;
-	garde6 = pre invalid>=1 and pre dirty=0 and pre shared=0 and pre exclusive=0;
-	garde7 = pre invalid>=1 and pre dirty>=1;
-	garde8 = pre invalid>=1 and pre shared+pre exclusive>=1;
+   firefly_garde2 = (((pre firefly_invalid) >= 1) and 
+      ((pre firefly_dirty) >= 1));
 
-	invalid = mem_invalid ->
-	if(e1) then if(garde1) then pre invalid-1 else pre invalid else
-	if(e2) then if(garde2) then pre invalid-1 else pre invalid else
-	if(e3) then if(garde3) then pre invalid-1 else pre invalid else
-	if(e6) then if(garde6) then pre invalid-1 else pre invalid else
-	if(e7) then if(garde7) then pre invalid-1 else pre invalid else
-	if(e8) then if(garde8) then pre invalid-1 else pre invalid else
-	pre invalid;
-	
+   firefly_garde3 = (((pre firefly_invalid) >= 1) and 
+      (((pre firefly_shared) + (pre firefly_exclusive)) >= 1));
 
-	dirty = 0 -> 
-	if(e2) then if(garde2) then pre dirty-1 else pre dirty else
-	if(e4) then if(garde4) then pre dirty+1 else pre dirty else
-	if(e6) then if(garde6) then 1 else pre dirty else
-	if(e7) then if(garde7) then pre dirty-1 else pre dirty else
-	pre dirty;
+   firefly_garde4 = ((pre firefly_exclusive) >= 1);
 
-	exclusive = 0 -> 
-	if(e1) then if(garde1) then pre exclusive+1 else pre exclusive else
-	if(e3) then if(garde3) then 0 else pre exclusive else 
-	if(e4) then if(garde4) then pre exclusive-1 else pre exclusive else
-	if(e5) then if(garde5) then pre exclusive+1 else pre exclusive else
-	if(e8) then if(garde8) then 0 else pre exclusive else
-	pre exclusive;
+   firefly_garde5 = ((pre firefly_shared) = 1);
 
-	shared = 0 ->
-	if(e2) then if(garde2) then pre shared+2 else pre shared else
-	if(e3) then if(garde3) then pre shared + pre exclusive + 1 else pre shared else
-	if(e5) then if(garde5) then pre 0 else pre shared else
-	if(e7) then if(garde7) then pre shared+2 else pre shared else
-	if(e8) then if(garde8) then pre shared + pre exclusive + 1 else pre shared else
-	pre shared;
+   firefly_garde6 = (((((pre firefly_invalid) >= 1) and 
+      ((pre firefly_dirty) = 0)) and 
+      ((pre firefly_shared) = 0)) and 
+      ((pre firefly_exclusive) = 0));
 
-tel
+   firefly_garde7 = (((pre firefly_invalid) >= 1) and 
+      ((pre firefly_dirty) >= 1));
 
---@ ensures OK;
-node top(e1, e2, e3, e4, e5, e6, e7, e8 : bool; i_invalid : int) 
-	returns( OK : bool );
-    var invalid, dirty, exclusive, shared : int;
-        env : bool;
-let
-    ( invalid, dirty, exclusive, shared ) =
-        firefly( e1, e2, e3, e4, e5, e6, e7, e8, i_invalid );
+   firefly_garde8 = (((pre firefly_invalid) >= 1) and 
+      (((pre firefly_shared) + (pre firefly_exclusive)) >= 1));
 
-    env = Sofar( excludes8( e1, e2, e3, e4, e5, e6, e7, e8 ) and
-                 i_invalid >= 0 );
+   firefly_invalid = (firefly_mem_invalid -> 
+      (if e1
+         then 
+               (if firefly_garde1
+                  then ((pre firefly_invalid) - 1)
+                  else (pre firefly_invalid))
+         else 
+      (if e2
+         then 
+               (if firefly_garde2
+                  then ((pre firefly_invalid) - 1)
+                  else (pre firefly_invalid))
+         else 
+      (if e3
+         then 
+               (if firefly_garde3
+                  then ((pre firefly_invalid) - 1)
+                  else (pre firefly_invalid))
+         else 
+      (if e6
+         then 
+               (if firefly_garde6
+                  then ((pre firefly_invalid) - 1)
+                  else (pre firefly_invalid))
+         else 
+      (if e7
+         then 
+               (if firefly_garde7
+                  then ((pre firefly_invalid) - 1)
+                  else (pre firefly_invalid))
+         else 
+      (if e8
+         then 
+               (if firefly_garde8
+                  then ((pre firefly_invalid) - 1)
+                  else (pre firefly_invalid))
+         else (pre firefly_invalid))))))));
 
-    OK = env => exclusive < 2;
+   firefly_dirty = (0 -> 
+      (if e2
+         then 
+               (if firefly_garde2
+                  then ((pre firefly_dirty) - 1)
+                  else (pre firefly_dirty))
+         else 
+      (if e4
+         then 
+               (if firefly_garde4
+                  then ((pre firefly_dirty) + 1)
+                  else (pre firefly_dirty))
+         else 
+      (if e6
+         then 
+               (if firefly_garde6
+                  then 1
+                  else (pre firefly_dirty))
+         else 
+      (if e7
+         then 
+               (if firefly_garde7
+                  then ((pre firefly_dirty) - 1)
+                  else (pre firefly_dirty))
+         else (pre firefly_dirty))))));
 
-    --%MAIN;
-tel
+   firefly_exclusive = (0 -> 
+      (if e1
+         then 
+               (if firefly_garde1
+                  then ((pre firefly_exclusive) + 1)
+                  else (pre firefly_exclusive))
+         else 
+      (if e3
+         then 
+               (if firefly_garde3
+                  then 0
+                  else (pre firefly_exclusive))
+         else 
+      (if e4
+         then 
+               (if firefly_garde4
+                  then ((pre firefly_exclusive) - 1)
+                  else (pre firefly_exclusive))
+         else 
+      (if e5
+         then 
+               (if firefly_garde5
+                  then ((pre firefly_exclusive) + 1)
+                  else (pre firefly_exclusive))
+         else 
+      (if e8
+         then 
+               (if firefly_garde8
+                  then 0
+                  else (pre firefly_exclusive))
+         else (pre firefly_exclusive)))))));
+
+   firefly_shared = (0 -> 
+      (if e2
+         then 
+               (if firefly_garde2
+                  then ((pre firefly_shared) + 2)
+                  else (pre firefly_shared))
+         else 
+      (if e3
+         then 
+               (if firefly_garde3
+                  then (((pre firefly_shared) + (pre firefly_exclusive)) + 1)
+                  else (pre firefly_shared))
+         else 
+      (if e5
+         then 
+               (if firefly_garde5
+                  then (pre 0)
+                  else (pre firefly_shared))
+         else 
+      (if e7
+         then 
+               (if firefly_garde7
+                  then ((pre firefly_shared) + 2)
+                  else (pre firefly_shared))
+         else 
+      (if e8
+         then 
+               (if firefly_garde8
+                  then (((pre firefly_shared) + (pre firefly_exclusive)) + 1)
+                  else (pre firefly_shared))
+         else (pre firefly_shared)))))));
+
+   Sofar_X = (((((((((((((((((not e1) and 
+      (not e2)) and 
+      (not e3)) and 
+      (not e4)) and 
+      (not e5)) and 
+      (not e6)) and 
+      (not e7)) and 
+      (not e8)) or 
+      (((((((e1 and 
+      (not e2)) and 
+      (not e3)) and 
+      (not e4)) and 
+      (not e5)) and 
+      (not e6)) and 
+      (not e7)) and 
+      (not e8))) or 
+      ((((((((not e1) and 
+      e2) and 
+      (not e3)) and 
+      (not e4)) and 
+      (not e5)) and 
+      (not e6)) and 
+      (not e7)) and 
+      (not e8))) or 
+      ((((((((not e1) and 
+      (not e2)) and 
+      e3) and 
+      (not e4)) and 
+      (not e5)) and 
+      (not e6)) and 
+      (not e7)) and 
+      (not e8))) or 
+      ((((((((not e1) and 
+      (not e2)) and 
+      (not e3)) and 
+      e4) and 
+      (not e5)) and 
+      (not e6)) and 
+      (not e7)) and 
+      (not e8))) or 
+      ((((((((not e1) and 
+      (not e2)) and 
+      (not e3)) and 
+      (not e4)) and 
+      e5) and 
+      (not e6)) and 
+      (not e7)) and 
+      (not e8))) or 
+      ((((((((not e1) and 
+      (not e2)) and 
+      (not e3)) and 
+      (not e4)) and 
+      (not e5)) and 
+      e6) and 
+      (not e7)) and 
+      (not e8))) or 
+      ((((((((not e1) and 
+      (not e2)) and 
+      (not e3)) and 
+      (not e4)) and 
+      (not e5)) and 
+      (not e6)) and 
+      e7) and 
+      (not e8))) or 
+      ((((((((not e1) and 
+      (not e2)) and 
+      (not e3)) and 
+      (not e4)) and 
+      (not e5)) and 
+      (not e6)) and 
+      (not e7)) and 
+      e8)) and 
+      (i_invalid >= 0));
+
+   Sofar_Sofar = (Sofar_X -> (Sofar_X and 
+      (pre Sofar_Sofar)));
+
+   OK = ((not Sofar_Sofar) or 
+      (firefly_exclusive < 2));
+
+tel;
+
+
