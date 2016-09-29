@@ -108,6 +108,5 @@ let
                             e11, e12 ) and
                  X4 < 32767);
     OK = env => X4 >= 0;
-    --%PROPERTY OK;
     --%MAIN;
 tel

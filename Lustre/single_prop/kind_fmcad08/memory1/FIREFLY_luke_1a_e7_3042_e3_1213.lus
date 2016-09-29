@@ -71,5 +71,4 @@ let
                  i_invalid >= 0 );
     OK = env => exclusive < 2;
   --%MAIN;
-  --%PROPERTY  OK;
 tel

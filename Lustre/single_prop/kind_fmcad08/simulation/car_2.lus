@@ -46,6 +46,5 @@ let
   (toofast, stop, bump, dist, speed, time, move, second, meter) = voiture(m,s);
   env = Sofar( excludes2( m, s ) );
   OK = env => dist < 11;
-  --%PROPERTY OK;
   --%MAIN;
 tel

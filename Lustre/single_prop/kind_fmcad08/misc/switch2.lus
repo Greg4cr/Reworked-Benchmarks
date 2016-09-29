@@ -21,5 +21,4 @@ let
   level1 = SWITCH1(set,treset,initial);
   OK = if not(set and treset) then(level = level1) else true;
 --  assert not(set and treset);
-  --%PROPERTY OK;
 tel

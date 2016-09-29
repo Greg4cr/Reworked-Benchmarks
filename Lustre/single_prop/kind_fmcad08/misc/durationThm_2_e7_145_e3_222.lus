@@ -16,5 +16,4 @@ let
     env = Sofar((k>=1) and (Age(p)>=k => q)  and (Age(r)>=k => t));
     OK = env => ((Age(p and r)>=k) => (q and t));
   --%MAIN;
-  --%PROPERTY  OK;
 tel

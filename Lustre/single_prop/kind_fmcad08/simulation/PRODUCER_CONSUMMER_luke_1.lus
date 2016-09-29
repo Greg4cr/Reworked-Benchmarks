@@ -59,6 +59,5 @@ let
           First( a_init ) > 0;
     OK = env and (not etat1 -> true) =>
          (true -> pre etat1 and etat2 => o1 = pre o1 + 1);
-    --%PROPERTY OK;
     --%MAIN;
 tel

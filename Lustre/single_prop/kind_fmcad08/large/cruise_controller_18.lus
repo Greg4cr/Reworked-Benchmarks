@@ -1348,8 +1348,6 @@ let
   OK = ( not (mode = 5) or ( desiredSpeed <= (0.0 -> pre desiredSpeed) ) ) ;
   
 
-  --%PROPERTY OK;
-  --%MAIN;
 
 tel
 

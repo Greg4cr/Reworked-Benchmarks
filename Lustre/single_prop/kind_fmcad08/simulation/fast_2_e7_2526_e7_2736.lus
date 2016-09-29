@@ -94,5 +94,4 @@ let
                       ccr, vs);
   --%MAIN;
     OK = p1 and p2 and p3 and p4;
-    --%PROPERTY OK;
 tel

@@ -31,5 +31,4 @@ let
          and if moving then MaySafelyMove else true)
          else true;
   --%MAIN;
-  --%PROPERTY  OK;
 tel

@@ -1347,8 +1347,6 @@ let
 
   OK = not ( ( desiredSpeed > 0.0 ) and ( desiredSpeed < 15.0 ) );
 
-  --%PROPERTY OK;
-  --%MAIN;
 
 tel
 

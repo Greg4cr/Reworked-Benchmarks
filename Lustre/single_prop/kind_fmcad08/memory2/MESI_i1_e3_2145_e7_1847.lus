@@ -56,5 +56,4 @@ let
     OK = env => (true -> (modified_me+exclusive_me+shared_me+invalid_me) =
                          pre(modified_me+exclusive_me+shared_me+invalid_me));
   --%MAIN;
-  --%PROPERTY  OK;
 tel

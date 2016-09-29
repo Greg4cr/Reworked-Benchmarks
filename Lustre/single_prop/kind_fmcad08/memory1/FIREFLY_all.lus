@@ -101,7 +101,6 @@ let
          invalid + dirty + exclusive + shared <= procs and
          invalid >= 0 and
          invalid <= procs;
-    --%PROPERTY OK;
     --%MAIN;
 
 tel

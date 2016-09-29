@@ -32,5 +32,4 @@ let
   --cannot go directly from early to late (valid)
 
   -- if was early, will not next be late; correct
-  --%PROPERTY OK; 
 tel

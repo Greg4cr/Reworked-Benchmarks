@@ -684,5 +684,4 @@ let
       AND(not(pump_failure_detection_0),not(pump_failure_detection_1),not(pump_failure_detection_2),not(pump_failure_detection_3)) and 
       AND(not(pump_control_failure_detection_0),not(pump_control_failure_detection_1),not(pump_control_failure_detection_2),not(pump_control_failure_detection_3))); 
   --%MAIN;
-  --%PROPERTY  OK;
 tel

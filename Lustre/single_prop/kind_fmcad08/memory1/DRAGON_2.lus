@@ -107,6 +107,5 @@ let
                 init_invalid > 0 );
     OK = env => (true -> (exclusive+shared+shared_dirty+dirty+invalid) =
                          pre(exclusive+shared+shared_dirty+dirty+invalid));
-    --%PROPERTY OK;
     --%MAIN;
 tel

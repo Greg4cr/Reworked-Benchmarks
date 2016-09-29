@@ -89,6 +89,5 @@ let
 
     OK = env => exclusive < 2;
 
-    --%PROPERTY OK;
     --%MAIN;
 tel

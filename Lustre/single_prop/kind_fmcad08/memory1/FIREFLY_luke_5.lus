@@ -98,6 +98,5 @@ let
     R5 = env => shared <= procs;
     OK = RT and R5;
 
-    --%PROPERTY OK;
     --%MAIN;
 tel

@@ -27,6 +27,5 @@ let
   Total = Store( Delta );
   
   OK = Sofar( -1 <= Delta and Delta <= 1 ) => 0 <= Total and Total <= 20; 
-  --%PROPERTY OK;
   --%MAIN;
 tel

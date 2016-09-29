@@ -91,6 +91,5 @@ let
     env = Sofar( excludes8( e1, e2, e3, e4, e5, e6, e7, e8 ) and
                  i_invalid >= 0 );
     OK = env => invalid + dirty + exclusive + shared = First( i_invalid );
-    --%PROPERTY OK;
     --%MAIN;
 tel

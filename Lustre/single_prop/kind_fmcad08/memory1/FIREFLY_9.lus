@@ -95,6 +95,5 @@ let
     procs = First( i_invalid );
 
     OK = env => invalid <= procs;
-    --%PROPERTY OK;
     --%MAIN;
 tel

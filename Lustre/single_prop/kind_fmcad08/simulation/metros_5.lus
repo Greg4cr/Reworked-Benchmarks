@@ -58,6 +58,5 @@ let
   OK = Sofar( ast )
        => true -> (((pre(nB0) - pre (nB1)) <= 30) and
                   ((pre(nB1) - pre (nB0)) <= 30));
-    --%PROPERTY OK;
     --%MAIN;
 tel

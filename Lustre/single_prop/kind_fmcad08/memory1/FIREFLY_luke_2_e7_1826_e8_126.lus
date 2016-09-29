@@ -71,5 +71,4 @@ let
                  i_invalid >= 0 );
     OK = env => dirty < 2;
   --%MAIN;
-  --%PROPERTY  OK;
 tel

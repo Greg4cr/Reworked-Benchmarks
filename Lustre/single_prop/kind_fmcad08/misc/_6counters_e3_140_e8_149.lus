@@ -24,5 +24,4 @@ let
   OK = a=b;
   a = int6I(x);
   b = bool6(x);
-  --%PROPERTY OK;
 tel

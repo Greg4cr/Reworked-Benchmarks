@@ -83,5 +83,4 @@ let
          invalid >= 0 and
          invalid <= procs;
   --%MAIN;
-  --%PROPERTY  OK;
 tel

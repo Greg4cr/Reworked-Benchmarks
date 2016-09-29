@@ -97,7 +97,6 @@ let
                 init_a3 >= 0 and
                 init_t >= 0 )
          => not erreur_ticket3i;
-    --%PROPERTY OK;
     --%MAIN;
          
 tel

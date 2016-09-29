@@ -84,5 +84,4 @@ let
     OK = if PosEdge(cca) then PosEdge(ccseti) or
                 PosEdge(ccsetd) or PosEdge(ccr) else true;
   --%MAIN;
-  --%PROPERTY  OK;
 tel

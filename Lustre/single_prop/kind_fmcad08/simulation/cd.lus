@@ -39,6 +39,5 @@ let
   realistic =  Environment(diff,plus,minus);
 
   OK = Sofar( realistic and 0 <= speed and speed < 16 ) => Property(speed);
-  --%PROPERTY OK;
   --%MAIN;
 tel

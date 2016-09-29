@@ -101,5 +101,4 @@ let
     OK = env => exclusive + shared + shared_dirty + dirty + invalid =
                 First( init_invalid );
   --%MAIN;
-  --%PROPERTY  OK;
 tel

@@ -26,5 +26,4 @@ let
   OK = not (late and early);
   (late,early) = speed(beacon,second);
   --%MAIN;
-  --%PROPERTY OK;
 tel

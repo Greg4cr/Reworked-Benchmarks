@@ -121,7 +121,6 @@ let
       exclusive + shared + shared_dirty + dirty + invalid =
       First( init_invalid ) and
       exclusive >= 0;
-    --%PROPERTY OK;
     --%MAIN;
 
 tel

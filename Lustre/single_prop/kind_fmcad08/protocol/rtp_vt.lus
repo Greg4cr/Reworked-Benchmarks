@@ -112,6 +112,5 @@ let
     R3 = env => (true -> pre X2 < 2 => X2 < 2);
     R4 = env => X2 < 2;
     OK = R1 and R2 and R3 and R4;
-    --%PROPERTY OK;
     --%MAIN;
 tel

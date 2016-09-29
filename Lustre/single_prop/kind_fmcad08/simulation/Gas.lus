@@ -46,6 +46,5 @@ let
 
      OK = env => ( (Age(not P1) <= 600) or
                    (2*Dursince(P1,leak) <= Age(not P1)));
-     --%PROPERTY OK;
      --%MAIN;
  tel

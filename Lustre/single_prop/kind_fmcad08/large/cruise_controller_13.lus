@@ -1347,8 +1347,6 @@ let
 
   OK = ( not ( (mode = 1) or (mode = 2) ) or cruise_controller_CruiseController_SetDesiredSpeed_IncreaseDesiredSpeed = 0.0 );
 
-  --%PROPERTY OK;
-  --%MAIN;
 
 tel
 

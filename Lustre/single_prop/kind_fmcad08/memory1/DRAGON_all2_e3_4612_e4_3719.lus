@@ -118,5 +118,4 @@ let
     R14 = env => invalid <= First( init_invalid ); 
   --%MAIN;
     OK = R1 and R2 and R3 and R4 and R5 and R6 and R7 and R8 and R9 and R10 and R11 and R12 and R13 and R14;
-    --%PROPERTY OK;
 tel

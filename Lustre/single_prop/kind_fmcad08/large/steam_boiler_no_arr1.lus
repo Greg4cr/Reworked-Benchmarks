@@ -57,7 +57,6 @@ var property1,property2:bool;
 let 
   property1=FEDGE1(S1)=FEDGE2(S1); 
 
---assert(S2=not(S1)); 
   property2= FEDGE1(S1)=REDGE(S2); 
 
   property_ok=
@@ -819,7 +818,6 @@ let
       not(steam_outcome_failure_detection) and 
       AND(not(pump_failure_detection_0),not(pump_failure_detection_1),not(pump_failure_detection_2),not(pump_failure_detection_3)) and 
       AND(not(pump_control_failure_detection_0),not(pump_control_failure_detection_1),not(pump_control_failure_detection_2),not(pump_control_failure_detection_3))); 
-  --%PROPERTY OK;
   --%MAIN;
 tel
 

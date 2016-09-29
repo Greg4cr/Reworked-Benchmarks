@@ -56,5 +56,4 @@ let
                  modified_me >= 0 );
     OK = env => modified_me <= 1 or shared_me <= 1;
   --%MAIN;
-  --%PROPERTY  OK;
 tel

@@ -37,5 +37,4 @@ let
   b = loop6counter(x);
   d = intloop6counter(x);
   OK = not x or b = d;
-  --%PROPERTY OK;
 tel

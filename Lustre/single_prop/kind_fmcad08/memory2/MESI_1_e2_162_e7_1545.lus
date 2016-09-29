@@ -56,5 +56,4 @@ let
                  modified_me >= 0 );
     OK = env => not ( modified_me > 2 );
   --%MAIN;
-  --%PROPERTY  OK;
 tel

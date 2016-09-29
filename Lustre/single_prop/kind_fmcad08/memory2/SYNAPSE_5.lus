@@ -59,6 +59,5 @@ let
     env = Sofar( excludes3(e_s1, e_s2, e_s3) and init_invalid_s >= 0 );
 
     OK = env => valid_s <= First( init_invalid_s );
-    --%PROPERTY OK;
     --%MAIN;
 tel

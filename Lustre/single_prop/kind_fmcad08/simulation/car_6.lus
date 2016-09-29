@@ -48,6 +48,5 @@ let
   env = Sofar( excludes2( m, s ) );
 
   OK = env => true -> not pre bump;
-  --%PROPERTY OK;
   --%MAIN;
 tel

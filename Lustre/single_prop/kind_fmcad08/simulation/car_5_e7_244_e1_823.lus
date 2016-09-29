@@ -37,5 +37,4 @@ let
   env = Sofar( excludes2( m, s ) );
   OK = env => (dist > 9 => not( move and meter));
   --%MAIN;
-  --%PROPERTY  OK;
 tel

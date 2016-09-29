@@ -85,6 +85,5 @@ let
     env = Sofar( excludes8( e1, e2, e3, e4, e5, e6, e7, e8 ) and
                  i_invalid >= 0 and i_invalid < 5 );
     OK = env => dirty <= 1;
-    --%PROPERTY OK;
     --%MAIN;
 tel

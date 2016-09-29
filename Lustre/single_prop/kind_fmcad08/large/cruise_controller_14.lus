@@ -1347,8 +1347,6 @@ let
 
   OK = ( not ( (mode = 1) or (mode = 2) ) or ( chart_CruiseController_ModeLogic_mode_logic_setDesiredSpeed = 1 ) = cruise_controller_CruiseController_SetDesiredSpeed_setDesiredSpeed);
 
-  --%PROPERTY OK;
-  --%MAIN;
 
 tel
 

@@ -34,6 +34,5 @@ let
     OK = not ( late and early ) and
            (true -> not ( late and pre early )) and
            (true -> not ( pre late and early ));
-    --%PROPERTY OK;
     --%MAIN;
 tel

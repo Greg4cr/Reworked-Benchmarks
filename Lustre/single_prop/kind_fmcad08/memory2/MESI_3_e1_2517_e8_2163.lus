@@ -60,5 +60,4 @@ let
     OK = env => (Abs(modified_me)+Abs(exclusive_me)+
                  Abs(shared_me)+Abs(invalid_me)) <= 3;
   --%MAIN;
-  --%PROPERTY  OK;
 tel

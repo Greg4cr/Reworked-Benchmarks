@@ -88,5 +88,4 @@ let
                      0 <= p3 and p3 <= 3 and
                      p1 +1+ p2 + p3 <= 9;
   --%MAIN;
-  --%PROPERTY  OK;
 tel

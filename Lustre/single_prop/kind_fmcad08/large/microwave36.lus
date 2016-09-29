@@ -1206,7 +1206,6 @@ let
       (RIGHT_DIGIT = 7))));
 
 
-  --%PROPERTY OK;
   --%MAIN;
 
 tel

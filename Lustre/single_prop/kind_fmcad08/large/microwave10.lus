@@ -1518,7 +1518,6 @@ let
       KP_CLEAR)) or 
       (MIDDLE_DIGIT = 0));
 
-  --%PROPERTY OK;
   --%MAIN;
 
 tel

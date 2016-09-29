@@ -100,7 +100,6 @@ let
     A3 = env => exclusive >= 0; --done
     R4 = env => shared <= procs; --done(not provable in luke-*)
     OK = A1 and A2 and A3 and R4;
-    --%PROPERTY OK;
     --%MAIN;
 
 tel

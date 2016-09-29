@@ -48,6 +48,5 @@ let
          ( not etat1 -> true ) and
          First( a_init ) > 0;
    OK = env => i >= 0;
-    --%PROPERTY OK;
     --%MAIN;
 tel

@@ -75,5 +75,4 @@ let
           0 <= First(init_p1) and 0 <= First(init_p2) and First(init_p1) < 1000 and First(init_p2) < 1000;
     OK = env => x5 < 1;
   --%MAIN;
-  --%PROPERTY  OK;
 tel

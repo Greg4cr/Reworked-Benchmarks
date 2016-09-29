@@ -87,6 +87,5 @@ let
     OK = env =>
          ( true -> invalid+dirty+exclusive+shared =
                    pre(invalid+dirty+exclusive+shared));
-    --%PROPERTY OK;
     --%MAIN;
 tel

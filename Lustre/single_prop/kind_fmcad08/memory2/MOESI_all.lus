@@ -75,6 +75,5 @@ let
            (true ->
             (modified_mo+exclusive_mo+shared_mo+invalid_mo+owned_mo) =
             pre(modified_mo+exclusive_mo+shared_mo+invalid_mo+owned_mo));
-    --%PROPERTY OK;
     --%MAIN;
 tel

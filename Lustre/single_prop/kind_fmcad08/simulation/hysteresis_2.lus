@@ -32,6 +32,5 @@ node top( beacon, second : bool ) returns ( OK : bool );
 let
     ( late, early ) = speed( beacon, second );
     OK = true -> not ( late and pre early );
-    --%PROPERTY OK;
     --%MAIN;
 tel

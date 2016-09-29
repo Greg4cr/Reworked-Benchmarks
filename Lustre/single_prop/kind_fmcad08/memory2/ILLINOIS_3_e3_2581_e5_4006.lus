@@ -78,5 +78,4 @@ let
                  init_invalid > 0 );
     OK = env => invalid -1- dirty + exclusive + shared = First( init_invalid );
   --%MAIN;
-  --%PROPERTY  OK;
 tel

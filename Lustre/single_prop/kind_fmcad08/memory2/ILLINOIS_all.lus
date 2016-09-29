@@ -97,6 +97,5 @@ let
                  pre ( invalid + dirty + exclusive + shared ) ) and
         invalid + dirty + exclusive + shared = First( init_invalid ) and
         exclusive >= 0;
-    --%PROPERTY OK;
     --%MAIN;
 tel

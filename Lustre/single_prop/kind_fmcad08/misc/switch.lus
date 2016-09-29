@@ -22,5 +22,4 @@ let
     (level = level1)
     else true;
   --assert not(set and treset);
-  --%PROPERTY OK;
 tel

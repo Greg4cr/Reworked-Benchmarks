@@ -94,5 +94,4 @@ let
                  X8 < 32767);
     OK = env => X8 >= 0;
   --%MAIN;
-  --%PROPERTY  OK;
 tel

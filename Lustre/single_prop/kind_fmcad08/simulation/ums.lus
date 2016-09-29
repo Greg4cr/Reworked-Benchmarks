@@ -88,6 +88,5 @@ let
 
    OK = env => no_collision and exclusive_req and
                      no_derail_AB and no_derail_BC;
-   --%PROPERTY OK;
    --%MAIN;
 tel

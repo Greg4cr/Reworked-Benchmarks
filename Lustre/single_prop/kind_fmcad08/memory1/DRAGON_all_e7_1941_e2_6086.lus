@@ -107,5 +107,4 @@ let
       First( init_invalid ) and
       exclusive >= 0;
   --%MAIN;
-  --%PROPERTY  OK;
 tel

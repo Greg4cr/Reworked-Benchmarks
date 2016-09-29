@@ -114,6 +114,5 @@ let
                 X2 >= 0 and X3 >= 0 and X4 >= 0 and 
                 X5 >= 0 and X6 >= 0 and X7 >= 0 and
                 X8 >= 0 and X9 >= 0;
-    --%PROPERTY OK;
     --%MAIN;
 tel

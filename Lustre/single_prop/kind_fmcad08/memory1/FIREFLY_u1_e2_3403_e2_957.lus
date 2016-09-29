@@ -75,5 +75,4 @@ let
                dirty >= 2 and
                shared >= 0 );
   --%MAIN;
-  --%PROPERTY  OK;
 tel

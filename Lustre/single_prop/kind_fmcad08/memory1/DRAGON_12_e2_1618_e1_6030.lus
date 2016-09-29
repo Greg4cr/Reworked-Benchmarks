@@ -100,5 +100,4 @@ let
                 init_invalid > 0);
     OK = env => shared_dirty <= First( init_invalid );
   --%MAIN;
-  --%PROPERTY  OK;
 tel

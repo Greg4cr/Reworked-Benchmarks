@@ -115,6 +115,5 @@ let
                             e11, e12 ) and
                 init_invalid > 0);
     OK = env => invalid <= First( init_invalid );
-    --%PROPERTY OK;
     --%MAIN;
 tel

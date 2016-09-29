@@ -77,5 +77,4 @@ let
     procs = First( i_invalid );
     OK = env => shared >= 0;
   --%MAIN;
-  --%PROPERTY  OK;
 tel 

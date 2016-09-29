@@ -96,5 +96,4 @@ let
                 init_invalid > 0);
     OK = env => dirty >= 0;
   --%MAIN;
-  --%PROPERTY  OK;
 tel

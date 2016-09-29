@@ -106,6 +106,5 @@ let
                             e11, e12 ) and
                 init_invalid > 0 );
     OK = env => exclusive >= 0;
-    --%PROPERTY OK;
     --%MAIN;
 tel

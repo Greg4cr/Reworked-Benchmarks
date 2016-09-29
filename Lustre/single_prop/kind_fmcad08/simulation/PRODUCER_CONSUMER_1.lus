@@ -51,7 +51,6 @@ let
    OK = env => o1 >= 0;
    --OK = env => o2 >= 0;
 
-   --%PROPERTY OK;
    --%MAIN;
    
 tel

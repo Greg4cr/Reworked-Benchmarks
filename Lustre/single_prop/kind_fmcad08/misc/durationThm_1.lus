@@ -27,6 +27,5 @@ let
     m = im -> pre m;
     env = Sofar((k>=1 and m>=1) and (Age(p)>=k => q)  and (Age(q)>=m => r));
     OK = env => (true -> ( (Age(p)>=k+m) => r ));
-    --%PROPERTY OK;
     --%MAIN;
 tel

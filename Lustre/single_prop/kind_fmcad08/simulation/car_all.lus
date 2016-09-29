@@ -41,6 +41,5 @@ let
   env = Sofar( excludes2( m, s ) and dist < 32767);
 
   OK = env => dist >= 0 and dist < 11 and speed < 4 and speed >= 0;
-  --%PROPERTY OK;
   --%MAIN;
 tel

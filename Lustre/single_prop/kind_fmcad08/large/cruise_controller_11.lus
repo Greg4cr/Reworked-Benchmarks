@@ -1347,8 +1347,6 @@ let
 
   OK = ((mode = 4) or (mode = 5) or (mode = 6) or (cruiseThrottle = 0.0) );
 
-  --%PROPERTY OK;
-  --%MAIN;
 
 tel
 

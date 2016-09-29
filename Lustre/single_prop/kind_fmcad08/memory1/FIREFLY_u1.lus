@@ -89,6 +89,5 @@ let
                exclusive >= 0 and
                dirty >= 2 and
                shared >= 0 );
-    --%PROPERTY OK;
     --%MAIN;
 tel

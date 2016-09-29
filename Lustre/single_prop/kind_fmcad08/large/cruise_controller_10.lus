@@ -1347,8 +1347,6 @@ let
 
   OK = ( cruise_controller_CruiseController_ModeLogic_safetyCondition_safetyCondition or (cruiseThrottle = 0.0) );
 
-  --%PROPERTY OK;
-  --%MAIN;
 
 tel
 

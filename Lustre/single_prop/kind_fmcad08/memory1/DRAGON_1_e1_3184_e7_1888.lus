@@ -95,5 +95,4 @@ let
                 init_invalid > 0 )
          => not erreur;
   --%MAIN;
-  --%PROPERTY  OK;
 tel

@@ -85,6 +85,5 @@ let
                  i_invalid >= 0 and i_invalid < 5 );
 
     OK = env => invalid >= 0;
-    --%PROPERTY OK;
     --%MAIN;
 tel

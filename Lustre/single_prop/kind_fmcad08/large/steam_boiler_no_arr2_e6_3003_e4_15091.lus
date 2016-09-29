@@ -651,5 +651,4 @@ let
     (op_mode=3 and pre(op_mode)=3 =>
     not(dangerous_level(q))); 
   --%MAIN;
-  --%PROPERTY  OK;
 tel

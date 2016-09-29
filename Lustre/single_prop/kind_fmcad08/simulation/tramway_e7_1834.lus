@@ -92,5 +92,4 @@ let
   (open_door, close_door, door_ok) =
     controller(request_door, warning_start, in_station, door_is_open);
   --%MAIN;
-  --%PROPERTY  OK;
 tel

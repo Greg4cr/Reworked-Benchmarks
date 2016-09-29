@@ -154,6 +154,5 @@ let
                       gearok, qfok, sdok, accok, ccseti, ccsetd,
                       ccr, vs);
     OK = p1 and p2 and p3 and p4;
-    --%PROPERTY OK;
     --%MAIN;
 tel

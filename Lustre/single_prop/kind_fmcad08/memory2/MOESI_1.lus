@@ -71,6 +71,5 @@ let
     OK = Sofar( excludes4(etat_mo1, etat_mo2, etat_mo3, etat_mo4)
                 and init_invalid_mo > 0 )
          => not erreur_mo;
-    --%PROPERTY OK;
     --%MAIN;
 tel

@@ -82,5 +82,4 @@ let
     R4 = env => shared <= procs; 
   --%MAIN;
     OK = A1 and A2 and A3 and R4;
-    --%PROPERTY OK;
 tel

@@ -61,6 +61,5 @@ let
    OK = env => o1 + o2 <= First( a );
    --OK = env => (true -> pre etat1 and etat2 => (o1 = pre o1+1 or o1 = pre o1));
    --OK = env => i >= 0;
-    --%PROPERTY OK;
     --%MAIN;
 tel

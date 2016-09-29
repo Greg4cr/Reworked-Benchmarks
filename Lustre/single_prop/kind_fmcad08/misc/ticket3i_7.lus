@@ -101,6 +101,5 @@ let
                      0 <= p2 and p2 <= 3 and
                      0 <= p3 and p3 <= 3 and
                      p1 + p2 + p3 <= 9;
-    --%PROPERTY OK;
     --%MAIN;
 tel

@@ -1347,8 +1347,6 @@ let
 
   OK = ( desiredSpeed = (0.0 -> pre desiredSpeed) ) or ( desiredSpeed = carSpeed ) or (desiredSpeed = 0.0);
 
-  --%PROPERTY OK;
-  --%MAIN;
 
 tel
 

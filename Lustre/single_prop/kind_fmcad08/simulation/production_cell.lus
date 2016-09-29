@@ -42,7 +42,6 @@ let
          and if moving then MaySafelyMove else true)
          else true;
   --%MAIN;
-  --%PROPERTY OK;
 
 --  assert #(redge(TryToMove1), redge(TryToMove2));
 --  OK = #(start1, start2, stop) and

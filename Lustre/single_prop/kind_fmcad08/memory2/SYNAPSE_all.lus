@@ -61,6 +61,5 @@ let
                   (true -> invalid_s+valid_s+dirty_s = pre(invalid_s+valid_s+dirty_s)) and
                   invalid_s+valid_s+dirty_s = First( init_invalid_s ) and
                   (dirty_s<1 or valid_s<1);
-    --%PROPERTY OK;
     --%MAIN;
 tel

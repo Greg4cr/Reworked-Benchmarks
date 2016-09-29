@@ -59,5 +59,4 @@ let
                   exclusive_me >= 0 and
                   (modified_me <= 1 or shared_me <= 1);
   --%MAIN;
-  --%PROPERTY  OK;
 tel

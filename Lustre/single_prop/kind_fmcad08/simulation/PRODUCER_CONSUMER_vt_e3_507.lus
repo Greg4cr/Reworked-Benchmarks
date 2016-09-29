@@ -49,5 +49,4 @@ let
          First( a_init ) > 0;
    OK = env => o1 - o2 <= First( a );
   --%MAIN;
-  --%PROPERTY  OK;
 tel

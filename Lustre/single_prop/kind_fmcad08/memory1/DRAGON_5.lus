@@ -107,6 +107,5 @@ let
                             e11, e12 ) and
                 init_invalid > 0 );
     OK = env => dirty < 1 or  shared < 1;
-    --%PROPERTY OK;
     --%MAIN;
 tel

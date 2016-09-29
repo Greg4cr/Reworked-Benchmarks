@@ -52,5 +52,4 @@ let
   pOK = true -> not (pre avance0 and retard0 or pre retard0 and avance0);
   OK = Sofar( ast and nB0 < 1  and nB1 < 1 and nS < 1 and diff0 < 32767 ) => (true -> pre pOK);
   --%MAIN;
-  --%PROPERTY  OK;
 tel

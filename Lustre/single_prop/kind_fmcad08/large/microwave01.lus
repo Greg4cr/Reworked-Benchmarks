@@ -1571,8 +1571,6 @@ let
    rltTruncByConv = ((microwave_microwave_TIME_ON_DISPLAY_SECONDS_TO_MINUTES__QUOTIENT >= 0) and 
       (microwave_microwave_TIME_ON_DISPLAY_SECONDS_TO_MINUTES__QUOTIENT <= 256));
 
-  --%PROPERTY OK;
-  --%MAIN;
 
 tel
 

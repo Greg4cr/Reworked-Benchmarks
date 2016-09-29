@@ -24,5 +24,4 @@ let
   b = greycounter(x);
   d = intloopcounter(x);
   OK = b = d;
-  --%PROPERTY OK;
 tel

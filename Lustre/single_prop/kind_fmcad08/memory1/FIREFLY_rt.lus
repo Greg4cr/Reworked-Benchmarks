@@ -89,7 +89,6 @@ let
     A2 = dirty >= 0;
     RT = env => dirty < 2;
     OK = A1 and A2 and RT;
-    --%PROPERTY OK;
     --%MAIN;
 
 tel

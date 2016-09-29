@@ -70,6 +70,5 @@ let
     env = Sofar( excludes4( etat_me1, etat_me2, etat_me3, etat_me4 ) );
     OK = env => (Abs(modified_me)+Abs(exclusive_me)+
                  Abs(shared_me)+Abs(invalid_me)) <= 3;
-    --%PROPERTY OK;
     --%MAIN;
 tel

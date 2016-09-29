@@ -105,6 +105,5 @@ let
                             e11, e12 ) and
                 init_invalid > 0 )
          => not erreur;
-    --%PROPERTY OK;
     --%MAIN;
 tel

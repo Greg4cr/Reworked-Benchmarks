@@ -61,5 +61,4 @@ let
                 and init_invalid_mo > 0 )
          => not erreur_mo;
   --%MAIN;
-  --%PROPERTY  OK;
 tel

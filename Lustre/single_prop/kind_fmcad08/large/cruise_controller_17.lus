@@ -1348,8 +1348,6 @@ let
   OK = ( not (mode = 4) or ( cruiseThrottle =  (0.0 -> pre cruiseThrottle) ) ) ;
   
 
-  --%PROPERTY OK;
-  --%MAIN;
 
 tel
 

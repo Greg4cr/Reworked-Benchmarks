@@ -1348,8 +1348,6 @@ let
   OK = ( not ( chart_CruiseController_ModeLogic_mode_logic_setDesiredSpeed = 1 ) or ( (mode = 4) ) ) ;
   
 
-  --%PROPERTY OK;
-  --%MAIN;
 
 tel
 

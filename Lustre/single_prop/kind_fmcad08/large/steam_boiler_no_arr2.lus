@@ -58,7 +58,6 @@ var property1,property2:bool;
 let 
   property1=FEDGE1(S1)=FEDGE2(S1); 
 
---  assert(S2=not(S1)); 
   property2=FEDGE1(S1)=REDGE(S2);
 
   property_ok=if (S2=not(S1)) then
@@ -782,7 +781,6 @@ let
     true ->
     (op_mode=3 and pre(op_mode)=3 =>
     not(dangerous_level(q))); 
-  --%PROPERTY OK;
   --%MAIN;
 tel
 

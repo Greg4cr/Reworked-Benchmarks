@@ -71,5 +71,4 @@ let
                  i_invalid >= 0 );
     OK = env => not ( dirty > 1 and shared > 1 );
   --%MAIN;
-  --%PROPERTY  OK;
 tel

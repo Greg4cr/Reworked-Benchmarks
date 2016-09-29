@@ -89,6 +89,5 @@ let
 
     OK = env => not ( dirty > 1 and shared > 1 );
 
-    --%PROPERTY OK;
     --%MAIN;
 tel

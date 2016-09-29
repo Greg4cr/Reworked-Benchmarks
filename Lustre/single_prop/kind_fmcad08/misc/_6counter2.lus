@@ -10,5 +10,4 @@ let
            (pre(b) and not pre(a));
   c = false -> (pre(c) and not pre(a)) or (pre(b) and pre(a));
   OK= (c and a);
-  --%PROPERTY OK;
 tel

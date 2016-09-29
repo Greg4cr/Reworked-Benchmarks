@@ -63,6 +63,5 @@ let
     R2 = env => (true -> invalid_s+valid_s+dirty_s = pre(invalid_s+valid_s+dirty_s));
     R3 = env => invalid_s+valid_s+dirty_s = First( init_invalid_s );
     OK = R2 and R1 and R3;
-    --%PROPERTY OK;
     --%MAIN;
 tel

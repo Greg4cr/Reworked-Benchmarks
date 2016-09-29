@@ -98,6 +98,5 @@ let
                  init_a3 >= 0 and
                  init_t >= 0 );
     OK = env => 0 <= p1 and p1 <= 3;
-    --%PROPERTY OK;
     --%MAIN;
 tel

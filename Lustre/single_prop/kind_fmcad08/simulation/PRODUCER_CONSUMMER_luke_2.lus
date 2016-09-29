@@ -58,6 +58,5 @@ let
     env = Sofar( excludes3( etat1, etat2, etat3 ) ) and
           First( a_init ) > 0;
     OK = env => o1+o2 <= a;
-    --%PROPERTY OK;
     --%MAIN;
 tel

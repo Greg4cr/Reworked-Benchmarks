@@ -106,6 +106,5 @@ let
     OK = Sofar( excludes12( e01, e02, e03, e04, e05, e06, e07, e08, e09, e10,
                             e11, e12 ) )
          => not erreur;
-    --%PROPERTY OK;
     --%MAIN;
 tel

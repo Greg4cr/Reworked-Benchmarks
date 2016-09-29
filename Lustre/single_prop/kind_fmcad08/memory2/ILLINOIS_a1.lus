@@ -89,6 +89,5 @@ let
     A3 = env => exclusive >= 0;
     R3 = env => dirty < 2;
     OK = A1 and A1 and A3 and R3;
-    --%PROPERTY OK;
     --%MAIN;
 tel
